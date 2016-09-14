@@ -10,7 +10,7 @@ In this project you get:
 
 * A Gradle build file with pre-built Gradle wrapper
 * A tiny home page at src/ratpack/templates/index.html (it's a template)
-* A routing file at src/ratpack/Ratpack.groovy
+* A routing file at src/ratpack/com.ohagner.deviations.Ratpack.groovy
 * Reloading enabled in build.gradle
 * A standard project structure:
 
@@ -20,7 +20,7 @@ In this project you get:
           |
           +- ratpack
           |     |
-          |     +- Ratpack.groovy
+          |     +- com.ohagner.deviations.Ratpack.groovy
           |     +- ratpack.properties
           |     +- public // Static assets in here
           |          |

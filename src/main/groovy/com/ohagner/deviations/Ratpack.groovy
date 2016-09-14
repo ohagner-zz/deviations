@@ -1,16 +1,31 @@
+package com.ohagner.deviations
+
+import com.mongodb.DB
+import com.mongodb.DBCollection
+import com.mongodb.DBObject
+import com.mongodb.util.JSON
 import com.ohagner.deviations.domain.User
-import groovy.json.JsonOutput
-import groovy.util.logging.Slf4j
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.registry.Registry
+import com.gmongo.*
 
-import static ratpack.groovy.Groovy.groovyHandler
 import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 
+
+
 Logger log = LoggerFactory.getLogger("Ratpack")
+
+GMongo mongo = new GMongo()
+DB db = mongo.getDB('test')
+DBCollection users = db.getCollection("users")
+users.remove([:])
+User user = new User(firstName: "Olle", lastName: "Hagner", emailAddress: "olle.hagner@gmail.com", username:"ohagner")
+users.insert(JSON.parse(user.toJson()))
+
+
 
 ratpack {
     bindings {
@@ -36,7 +51,9 @@ ratpack {
         prefix(":username") {
             all {
                 String username = pathTokens.username
-                next(Registry.single(User, new User(firstName: username)))
+                DBObject userObject = users.findOne(username:username)
+                User callingUser = User.fromJson(JSON.serialize(userObject))
+                callingUser ? next(Registry.single(User, callingUser)) : next()
             }
             path("") {
                 context.byMethod {
@@ -47,7 +64,13 @@ ratpack {
                         render json(["message": "Delete user"])
                     }
                     get {
-                        render json(["message": "Retrieve user"])
+                        Optional<User> found = context.maybeGet(User)
+                        if(found.isPresent()) {
+                            render json(found.get())
+                        } else {
+                            log.info "NOT FOUND"
+                            clientError(404)
+                        }
                     }
                     put {
                         render json(["message": "Update user"])

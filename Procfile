@@ -1,1 +1,1 @@
-web: java -jar -Dport=$PORT build/libs/deviations.jar
+web: java -jar -Dport=$PORT build/libs/deviations-all.jar

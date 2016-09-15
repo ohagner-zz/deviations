@@ -1,4 +1,4 @@
-package com.ohagner.deviations
+
 
 import com.mongodb.DB
 import com.mongodb.DBCollection

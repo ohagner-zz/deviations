@@ -15,7 +15,7 @@ class User {
     String emailAddress
 
     static User fromJson(String json) {
-        mapper.readValue(json, this)
+        mapper.readValue(json, User)
     }
 
     String toJson() {

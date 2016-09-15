@@ -3,11 +3,14 @@ package com.ohagner.deviations
 import com.mongodb.DB
 import com.mongodb.DBCollection
 import com.mongodb.DBObject
+import com.mongodb.WriteResult
 import com.mongodb.util.JSON
 import com.ohagner.deviations.domain.User
+import com.ohagner.deviations.handler.UserHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.groovy.template.MarkupTemplateModule
+import ratpack.http.TypedData
 import ratpack.registry.Registry
 import com.gmongo.*
 
@@ -15,14 +18,13 @@ import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 
 
-
-Logger log = LoggerFactory.getLogger("Ratpack")
+Logger log = LoggerFactory.getLogger("Deviations-Main")
 
 GMongo mongo = new GMongo()
 DB db = mongo.getDB('test')
 DBCollection users = db.getCollection("users")
 users.remove([:])
-User user = new User(firstName: "Olle", lastName: "Hagner", emailAddress: "olle.hagner@gmail.com", username:"ohagner")
+User user = new User(firstName: "Olle", lastName: "Hagner", emailAddress: "olle.hagner@gmail.com", username: "ohagner")
 users.insert(JSON.parse(user.toJson()))
 
 
@@ -48,35 +50,46 @@ ratpack {
                 render json(["message": "Get all deviations for transport and lineNumber"])
             }
         }
-        prefix(":username") {
+        path("users") {
+            byMethod {
+                get {
+                    render json(["message": "Get all users"])
+                }
+                post {
+                    request.getBody().then {
+                        String request = it.text
+                        log.info "Request: $request"
+                        User requestUser = User.fromJson(request)
+                        boolean userExists = users.count(username: requestUser.username) > 0
+                        if (userExists) {
+                            response.status(400)
+                            render json(["message": "User already exists"])
+                        } else {
+                            User newUser
+                            //validate user
+                            String userJson = requestUser.toJson()
+                            log.info "UserJson: $userJson"
+                            DBObject mongoUser = JSON.parse(userJson)
+                            log.info "DBObject is null : ${mongoUser == null}"
+                            WriteResult result = users.insert(mongoUser)
+                            if (result.getN() == 1) {
+                                log.info "Successfully created user"
+                            }
+                            render json(User.fromJson(JSON.serialize(users.findOne(username: requestUser.username))))
+                        }
+                    }
+                }
+            }
+        }
+        prefix("users/:username") {
             all {
                 String username = pathTokens.username
-                DBObject userObject = users.findOne(username:username)
+                DBObject userObject = users.findOne(username: username)
                 User callingUser = User.fromJson(JSON.serialize(userObject))
                 callingUser ? next(Registry.single(User, callingUser)) : next()
             }
             path("") {
-                context.byMethod {
-                    post {
-                        render json(["message": "Create user"])
-                    }
-                    delete {
-                        render json(["message": "Delete user"])
-                    }
-                    get {
-                        Optional<User> found = context.maybeGet(User)
-                        if(found.isPresent()) {
-                            render json(found.get())
-                        } else {
-                            log.info "NOT FOUND"
-                            clientError(404)
-                        }
-                    }
-                    put {
-                        render json(["message": "Update user"])
-                    }
-
-                }
+                insert(new UserHandler(users))
             }
             prefix("watches") {
                 path("") {
@@ -107,7 +120,6 @@ ratpack {
                 render json(["message": "Perform check"])
             }
         }
-
 
         files { dir "public" }
     }

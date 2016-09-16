@@ -1,41 +1,55 @@
-
-
 import com.mongodb.DB
-import com.mongodb.DBCollection
 import com.mongodb.DBObject
 import com.mongodb.WriteResult
 import com.mongodb.util.JSON
+import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.handler.UserHandler
+import com.ohagner.deviations.module.MongoModule
+import com.ohagner.deviations.repository.UserRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.groovy.template.MarkupTemplateModule
-import ratpack.http.TypedData
 import ratpack.registry.Registry
-import com.gmongo.*
+import ratpack.server.BaseDir
 
 import static ratpack.groovy.Groovy.ratpack
 import static ratpack.jackson.Jackson.json
 
-
 Logger log = LoggerFactory.getLogger("Deviations-Main")
 
-GMongo mongo = new GMongo()
-DB db = mongo.getDB('test')
-DBCollection users = db.getCollection("users")
-users.remove([:])
-User user = new User(firstName: "Olle", lastName: "Hagner", emailAddress: "olle.hagner@gmail.com", username: "ohagner")
-users.insert(JSON.parse(user.toJson()))
-
-
-
 ratpack {
+
+    serverConfig {
+        baseDir(BaseDir.find())
+        props("config/app.properties")
+//        env()
+        require("/mongo", MongoConfig)
+    }
+
     bindings {
+        module MongoModule
         module MarkupTemplateModule
     }
 
+//    String mongoUri = context.get(MongoConfig).connectionUri
+//    log.info "MongoUri is: $mongoUri"
+//    System.getenv().each {key, value ->
+//        log.info "$key : $value"
+//    }
+//    try {
+//        db = GMongo.connect(new MongoClientURI(mongoUri))
+//    } catch(Exception e) {
+//        log.error "Failed to initialize DB"
+//    }
+//    DBCollection users = db.getCollection("users")
+//    users.remove([:])
+//    User user = new User(firstName: "Olle", lastName: "Hagner", emailAddress: "olle.hagner@gmail.com", username: "ohagner")
+//    users.insert(JSON.parse(user.toJson()))
+
     handlers {
         all() {
+
             context.response.contentType("application/json")
             next()
         }
@@ -50,7 +64,7 @@ ratpack {
                 render json(["message": "Get all deviations for transport and lineNumber"])
             }
         }
-        path("users") {
+        path("users") { UserRepository userRepository ->
             byMethod {
                 get {
                     render json(["message": "Get all users"])
@@ -60,36 +74,27 @@ ratpack {
                         String request = it.text
                         log.info "Request: $request"
                         User requestUser = User.fromJson(request)
-                        boolean userExists = users.count(username: requestUser.username) > 0
-                        if (userExists) {
+
+                        if (userRepository.userExists(requestUser.username)) {
                             response.status(400)
                             render json(["message": "User already exists"])
                         } else {
-                            User newUser
                             //validate user
-                            String userJson = requestUser.toJson()
-                            log.info "UserJson: $userJson"
-                            DBObject mongoUser = JSON.parse(userJson)
-                            log.info "DBObject is null : ${mongoUser == null}"
-                            WriteResult result = users.insert(mongoUser)
-                            if (result.getN() == 1) {
-                                log.info "Successfully created user"
-                            }
-                            render json(User.fromJson(JSON.serialize(users.findOne(username: requestUser.username))))
+                            User createdUser = userRepository.create(requestUser)
+                            render createdUser.toJson()
                         }
                     }
                 }
             }
         }
         prefix("users/:username") {
-            all {
+            all { UserRepository userRepository ->
                 String username = pathTokens.username
-                DBObject userObject = users.findOne(username: username)
-                User callingUser = User.fromJson(JSON.serialize(userObject))
+                User callingUser= userRepository.findByUsername(username)
                 callingUser ? next(Registry.single(User, callingUser)) : next()
             }
             path("") {
-                insert(new UserHandler(users))
+                insert(new UserHandler())
             }
             prefix("watches") {
                 path("") {

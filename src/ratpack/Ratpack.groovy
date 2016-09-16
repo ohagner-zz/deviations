@@ -1,7 +1,3 @@
-import com.mongodb.DB
-import com.mongodb.DBObject
-import com.mongodb.WriteResult
-import com.mongodb.util.JSON
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.handler.UserHandler
@@ -23,7 +19,7 @@ ratpack {
     serverConfig {
         baseDir(BaseDir.find())
         props("config/app.properties")
-//        env()
+        env()
         require("/mongo", MongoConfig)
     }
 
@@ -32,20 +28,6 @@ ratpack {
         module MarkupTemplateModule
     }
 
-//    String mongoUri = context.get(MongoConfig).connectionUri
-//    log.info "MongoUri is: $mongoUri"
-//    System.getenv().each {key, value ->
-//        log.info "$key : $value"
-//    }
-//    try {
-//        db = GMongo.connect(new MongoClientURI(mongoUri))
-//    } catch(Exception e) {
-//        log.error "Failed to initialize DB"
-//    }
-//    DBCollection users = db.getCollection("users")
-//    users.remove([:])
-//    User user = new User(firstName: "Olle", lastName: "Hagner", emailAddress: "olle.hagner@gmail.com", username: "ohagner")
-//    users.insert(JSON.parse(user.toJson()))
 
     handlers {
         all() {

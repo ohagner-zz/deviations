@@ -31,7 +31,6 @@ ratpack {
 
     handlers {
         all() {
-
             context.response.contentType("application/json")
             next()
         }
@@ -49,7 +48,7 @@ ratpack {
         path("users") { UserRepository userRepository ->
             byMethod {
                 get {
-                    render json(["message": "Get all users"])
+                    render json(userRepository.retrieveAll())
                 }
                 post {
                     request.getBody().then {
@@ -63,6 +62,7 @@ ratpack {
                         } else {
                             //validate user
                             User createdUser = userRepository.create(requestUser)
+                            response.status(201)
                             render createdUser.toJson()
                         }
                     }

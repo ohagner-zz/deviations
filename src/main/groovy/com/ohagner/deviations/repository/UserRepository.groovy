@@ -1,6 +1,8 @@
 package com.ohagner.deviations.repository
 
+import com.mongodb.BasicDBObject
 import com.mongodb.DBCollection
+import com.mongodb.DBCursor
 import com.mongodb.DBObject
 import com.mongodb.WriteResult
 import com.mongodb.util.JSON
@@ -17,8 +19,16 @@ final class UserRepository {
     }
 
     User findByUsername(String username) {
-        DBObject userObject = users.findOne(username: username)
+        log.debug "Retrieving data for user $username"
+        DBObject userObject = users.findOne(new BasicDBObject(username: username))
         return User.fromJson(JSON.serialize(userObject))
+
+    }
+
+    List<User> retrieveAll() {
+        DBCursor cursor = users.find()
+        List<User> users = cursor.iterator().collect { User.fromJson(JSON.serialize(it)) }
+        return users
     }
 
     User create(User user) {
@@ -35,7 +45,7 @@ final class UserRepository {
     }
 
     boolean userExists(String username) {
-        return users.count(username: username) > 0
+        return users.count(new BasicDBObject(username: username)) > 0
     }
 
 }

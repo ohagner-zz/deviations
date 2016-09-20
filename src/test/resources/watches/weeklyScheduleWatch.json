@@ -1,0 +1,33 @@
+{
+  "name": "name",
+  "user": "user",
+  "notifyMaxHoursBefore": 2,
+  "schedule": {
+    "timeOfEvent": "10:45",
+    "type": "WEEKLY",
+    "weekDays": [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY"
+    ],
+    "timeToArchive": false
+  },
+  "transports": [
+    {
+      "line": "35",
+      "transportMode": "TRAIN"
+    },
+    {
+      "line": "807B",
+      "transportMode": "BUS"
+    }
+  ],
+  "notifications": [
+    "EMAIL",
+    "LOG"
+  ],
+  "created": "2016-10-10T10:10:00",
+  "lastUpdated": "2016-10-10T10:10:00"
+}

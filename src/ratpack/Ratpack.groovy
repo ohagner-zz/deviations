@@ -78,6 +78,15 @@ ratpack {
             path("") {
                 insert(new UserHandler())
             }
+            all {
+                Optional<User> user = context.maybeGet(User)
+                if(!user.isPresent()) {
+                    log.info "Not found"
+                    response.status(404)
+                    render json(["message": "Not found"])
+                }
+                next()
+            }
             prefix("watches") {
                 path("") {
                     context.byMethod {

@@ -15,6 +15,7 @@ final class UserRepository {
     DBCollection users
 
     UserRepository(DBCollection collection) {
+        log.info "UserRepository initialized"
         users = collection
     }
 
@@ -42,6 +43,12 @@ final class UserRepository {
 
     void delete(User user) {
         users.remove(JSON.parse(user.toJson()))
+    }
+
+    User update(String username, User update) {
+        DBObject mongoUpdate = JSON.parse(update.toJson())
+        DBObject updatedUser = users.findAndModify(new BasicDBObject(username:username), mongoUpdate)
+        return User.fromJson(JSON.serialize(updatedUser))
     }
 
     boolean userExists(String username) {

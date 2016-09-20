@@ -1,0 +1,27 @@
+{
+  "name": "name",
+  "user": "user",
+  "notifyMaxHoursBefore": 2,
+  "schedule": {
+    "dateOfEvent": "2016-10-10",
+    "timeOfEvent": "10:10",
+    "type": "SINGLE",
+    "timeToArchive": false
+  },
+  "transports": [
+    {
+      "line": "35",
+      "transportMode": "TRAIN"
+    },
+    {
+      "line": "807B",
+      "transportMode": "BUS"
+    }
+  ],
+  "notifications": [
+    "EMAIL",
+    "LOG"
+  ],
+  "created": "2016-10-10T10:10:00",
+  "lastUpdated": "2016-10-10T10:10:00"
+}

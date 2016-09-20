@@ -12,7 +12,6 @@ import static ratpack.jackson.Jackson.json
 class UserHandler extends GroovyHandler {
 
 
-
     @Override
     void handle(GroovyContext ctx) throws Exception {
         ctx.with {
@@ -26,21 +25,36 @@ class UserHandler extends GroovyHandler {
                         render json(user.get())
                     } else {
                         log.info "NOT FOUND"
-                        clientError(404)
+                        response.status(404)
+                        render json(["message": "Not found"])
                     }
-
-                    render json(["message": "Delete user"])
                 }
                 get {
                     if (user.isPresent()) {
                         render json(user.get())
                     } else {
-                        log.info "NOT FOUND"
-                        clientError(404)
+                        log.info "USER NOT FOUND"
+                        response.status(404)
+                        render json(["message": "Not found"])
                     }
                 }
                 put {
-                    render json(["message": "Update user"])
+                    UserRepository userRepository = context.get(UserRepository)
+                    if(user.isPresent()) {
+                        User current = user.get()
+                        request.getBody().then {
+                            String request = it.text
+                            log.info "Request: $request"
+                            User update = User.fromJson(request)
+
+                            User updatedUser = userRepository.update(current.getUsername(), update)
+                            render json(updatedUser)
+                        }
+                    } else {
+                        log.info "USER NOT FOUND"
+                        response.status(404)
+                        render json(["message": "Not found"])
+                    }
                 }
 
             }

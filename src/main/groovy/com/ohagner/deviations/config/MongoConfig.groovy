@@ -2,7 +2,11 @@ package com.ohagner.deviations.config
 
 
 class MongoConfig {
-    String connectionUri
+    String host
+    int port
+    String username
+    String password
     String databaseName
     String userCollectionName
+    String watchCollectionName
 }

@@ -1,6 +1,7 @@
 package com.ohagner.deviations.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.config.DateConstants
@@ -12,6 +13,7 @@ import java.time.LocalDateTime
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Watch {
 
     private static final ObjectMapper mapper

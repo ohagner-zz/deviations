@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonIgnoreProperties("_id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 class User {
     private final static ObjectMapper mapper = new ObjectMapper()
 

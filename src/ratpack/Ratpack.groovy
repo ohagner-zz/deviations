@@ -1,8 +1,11 @@
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
+import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.handler.UserHandler
-import com.ohagner.deviations.module.MongoModule
+import com.ohagner.deviations.modules.JsonRenderingModule
+import com.ohagner.deviations.modules.MongoModule
 import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.repository.WatchRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.groovy.template.MarkupTemplateModule
@@ -21,13 +24,16 @@ ratpack {
         props("config/app.properties")
         env()
         require("/mongo", MongoConfig)
+
     }
+
+
 
     bindings {
         module MongoModule
         module MarkupTemplateModule
+        module JsonRenderingModule
     }
-
 
     handlers {
         all() {
@@ -88,13 +94,25 @@ ratpack {
                 next()
             }
             prefix("watches") {
-                path("") {
+                path("") { WatchRepository watchRepository ->
                     context.byMethod {
                         post {
-                            render json(["message": "Create watch"])
+                            Optional<User> user = context.maybeGet(User)
+                            if(!user.isPresent()) {
+                                log.info "Not found"
+                                response.status(404)
+                                render json(["message": "Not found"])
+                            } else {
+                                request.body.then { body ->
+
+                                    log.info "Creating watch for user ${user.get().username}"
+                                    Watch watch = Watch.fromJson(body.text)
+                                    render json(watchRepository.create(watch))
+                                }
+                            }
                         }
                         get {
-                            render json(["message": "Retrieve all watches for user"])
+                            render json(watchRepository.retrieveAll())
                         }
                     }
                 }

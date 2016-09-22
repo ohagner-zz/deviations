@@ -1,6 +1,6 @@
 {
   "name": "name",
-  "user": "user",
+  "username": "username",
   "notifyMaxHoursBefore": 2,
   "schedule": {
     "dateOfEvent": "2016-10-10",
@@ -18,7 +18,7 @@
       "transportMode": "BUS"
     }
   ],
-  "notifications": [
+  "notifyBy": [
     "EMAIL",
     "LOG"
   ],

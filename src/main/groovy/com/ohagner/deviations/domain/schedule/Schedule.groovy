@@ -1,6 +1,5 @@
 package com.ohagner.deviations.domain.schedule
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,6 +7,7 @@ import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 
 import java.time.LocalDateTime
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,

@@ -27,8 +27,6 @@ ratpack {
 
     }
 
-
-
     bindings {
         module MongoModule
         module MarkupTemplateModule
@@ -78,15 +76,16 @@ ratpack {
         prefix("users/:username") {
             all { UserRepository userRepository ->
                 String username = pathTokens.username
-                User callingUser= userRepository.findByUsername(username)
+                User callingUser = userRepository.findByUsername(username)
                 callingUser ? next(Registry.single(User, callingUser)) : next()
             }
             path("") {
                 insert(new UserHandler())
             }
+            //Everything below to be moved to WatchHandler of some sort
             all {
                 Optional<User> user = context.maybeGet(User)
-                if(!user.isPresent()) {
+                if (!user.isPresent()) {
                     log.info "Not found"
                     response.status(404)
                     render json(["message": "Not found"])
@@ -94,35 +93,35 @@ ratpack {
                 next()
             }
             prefix("watches") {
-                path("") { WatchRepository watchRepository ->
+                path("") { WatchRepository watchRepository, User user ->
                     context.byMethod {
                         post {
-                            Optional<User> user = context.maybeGet(User)
-                            if(!user.isPresent()) {
-                                log.info "Not found"
-                                response.status(404)
-                                render json(["message": "Not found"])
-                            } else {
-                                request.body.then { body ->
-
-                                    log.info "Creating watch for user ${user.get().username}"
-                                    Watch watch = Watch.fromJson(body.text)
+                            request.body.then { body ->
+                                log.info "Creating watch for user ${user.username}"
+                                Watch watch = Watch.fromJson(body.text)
+                                if(watchRepository.exists(user.username, watch.name)) {
+                                    response.status(400)
+                                    String message = "Unable to create watch ${watch.name}, it already exists"
+                                    render json(["message": message])
+                                } else {
+                                    watch.username = user.username
                                     render json(watchRepository.create(watch))
                                 }
                             }
                         }
                         get {
-                            render json(watchRepository.retrieveAll())
+                            render json(watchRepository.findByUsername(user.username))
                         }
                     }
                 }
-                path(":id") {
+                path(":name") { WatchRepository watchRepository, User user ->
                     context.byMethod {
                         delete {
-                            render json(["message": "Delete watch: " + pathTokens.id])
+                            watchRepository.delete(user.username, pathTokens.name)
+                            render json(["message": "Deleted watch: " + pathTokens.name])
                         }
                         get {
-                            render json(["message": "Retrieve watch for " + pathTokens.id])
+                            render json(watchRepository.findByUsernameAndName(user.username, pathTokens.name))
                         }
                     }
                 }

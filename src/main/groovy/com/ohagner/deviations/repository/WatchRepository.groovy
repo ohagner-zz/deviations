@@ -2,7 +2,6 @@ package com.ohagner.deviations.repository
 
 import com.mongodb.*
 import com.mongodb.util.JSON
-import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
 
@@ -16,11 +15,16 @@ final class WatchRepository {
         watches = collection
     }
 
-    Watch findByUsername(String username) {
+    List<Watch> findByUsername(String username) {
         log.debug "Retrieving watches for user $username"
         DBCursor cursor = watches.find(new BasicDBObject(username: username))
         List<Watch> watches = cursor.iterator().collect { Watch.fromJson(JSON.serialize(it)) }
         return watches
+    }
+
+    Watch findByUsernameAndName(String username, String watchName) {
+        DBObject watchObject = watches.findOne(new BasicDBObject(name:watchName, username:username))
+        return Watch.fromJson(JSON.serialize(watchObject))
     }
 
     List<Watch> retrieveAll() {
@@ -35,11 +39,15 @@ final class WatchRepository {
         if (result.getN() == 1) {
             log.info "Successfully created watch"
         }
-        return findByUsername(watch.user)
+        return findByUsernameAndName(watch.username, watch.name)
     }
 
-    void delete(Watch watch) {
-        watches.remove(JSON.parse(watch.toJson()))
+    void delete(String username, String watchName) {
+        watches.remove(new BasicDBObject(name:watchName, username:username))
+    }
+
+    boolean exists(String username, String watchName) {
+        return watches.count(new BasicDBObject(name:watchName, username:username)) > 0
     }
 
 }

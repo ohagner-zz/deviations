@@ -1,8 +1,6 @@
 package com.ohagner.deviations.domain
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.config.DateConstants
 import com.ohagner.deviations.domain.notifications.NotificationType
@@ -23,7 +21,8 @@ class Watch {
     }
 
     String name
-    String user
+
+    String username
 
     int notifyMaxHoursBefore
 
@@ -31,7 +30,7 @@ class Watch {
 
     List<Transport> transports
 
-    List<NotificationType> notifications
+    List<NotificationType> notifyBy
 
     @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime created
@@ -47,19 +46,23 @@ class Watch {
         return mapper.writeValueAsString(this)
     }
 
+    @JsonIgnore
+    boolean isTimeToCheck(LocalDateTime now) {
+        return schedule.isEventWithinPeriod(now, notifyMaxHoursBefore)
+    }
+
     boolean equals(o) {
         if (this.is(o)) return true
         if (getClass() != o.class) return false
 
         Watch watch = (Watch) o
-
         if (notifyMaxHoursBefore != watch.notifyMaxHoursBefore) return false
         if (created != watch.created) return false
         if (name != watch.name) return false
-        if (notifications != watch.notifications) return false
+        if (notifyBy != watch.notifyBy) return false
         if (schedule != watch.schedule) return false
         if (transports != watch.transports) return false
-        if (user != watch.user) return false
+        if (username != watch.username) return false
 
         return true
     }
@@ -67,11 +70,11 @@ class Watch {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
-        result = 31 * result + (user != null ? user.hashCode() : 0)
+        result = 31 * result + (username != null ? username.hashCode() : 0)
         result = 31 * result + notifyMaxHoursBefore
         result = 31 * result + (schedule != null ? schedule.hashCode() : 0)
         result = 31 * result + (transports != null ? transports.hashCode() : 0)
-        result = 31 * result + (notifications != null ? notifications.hashCode() : 0)
+        result = 31 * result + (notifyBy != null ? notifyBy.hashCode() : 0)
         result = 31 * result + (created != null ? created.hashCode() : 0)
         return result
     }

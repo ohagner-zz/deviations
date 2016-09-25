@@ -1,6 +1,7 @@
 package com.ohagner.deviations.modules
 
 import com.gmongo.GMongo
+import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.google.inject.Singleton
 import com.mongodb.DB
@@ -12,21 +13,22 @@ import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.repository.WatchRepository
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
-import ratpack.guice.ConfigurableModule
 
 @Slf4j
-class MongoModule extends ConfigurableModule<MongoConfig> {
+class MongoModule extends AbstractModule {
 
+    MongoConfig mongoConfig
 
     @Override
     protected void configure() {
-
+        log.info "RUNNING CONFIGURE"
+        this.mongoConfig = MongoConfig.getInstance()
     }
 
     @Provides
     @CompileStatic
     @Singleton
-    UserRepository provideUserRepository(MongoConfig mongoConfig) {
+    UserRepository provideUserRepository() {
         try {
             DB db = connectToDatabase(mongoConfig)
             return new UserRepository(db.getCollection(mongoConfig.userCollectionName))
@@ -39,7 +41,7 @@ class MongoModule extends ConfigurableModule<MongoConfig> {
     @Provides
     @CompileStatic
     @Singleton
-    WatchRepository provideWatchRepository(MongoConfig mongoConfig) {
+    WatchRepository provideWatchRepository() {
         try {
             DB db = connectToDatabase(mongoConfig)
             return new WatchRepository(db.getCollection(mongoConfig.watchCollectionName))

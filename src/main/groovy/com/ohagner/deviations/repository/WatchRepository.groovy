@@ -33,6 +33,11 @@ final class WatchRepository {
         return watches
     }
 
+    List<Watch> retrieveNextToProcess(int max) {
+        DBCursor cursor = watches.find().sort(new BasicDBObject(lastUpdated: 1)).limit(max)
+        return cursor.iterator().collect { Watch.fromJson(JSON.serialize(it)) }
+    }
+
     Watch create(Watch watch) {
         DBObject mongoWatch = JSON.parse(watch.toJson())
         WriteResult result = watches.insert(mongoWatch)

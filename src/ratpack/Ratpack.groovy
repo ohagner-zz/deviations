@@ -1,13 +1,21 @@
+import com.ohagner.deviations.DeviationMatcher
+import com.ohagner.deviations.DeviationRepo
+import com.ohagner.deviations.HttpDeviationRepo
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.handler.UserHandler
 import com.ohagner.deviations.modules.JsonRenderingModule
 import com.ohagner.deviations.modules.MongoModule
+import com.ohagner.deviations.notifications.EmailNotifier
+import com.ohagner.deviations.notifications.LogNotifier
+import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.watch.WatchProcessor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import ratpack.exec.Blocking
 import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.registry.Registry
 import ratpack.server.BaseDir
@@ -125,6 +133,19 @@ ratpack {
                         }
                     }
                 }
+            }
+            path("check") { WatchRepository watchRepository, UserRepository userRepository ->
+                List<Watch> watches = watchRepository.retrieveAll()
+                DeviationRepo deviationRepo = new HttpDeviationRepo()
+                DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
+                WatchProcessor processor = WatchProcessor.builder()
+                    .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))
+                    .deviationMatcher(deviationMatcher)
+                    .watchesToProcess(watches).build()
+                log.info "Before blocking"
+                Blocking.exec { processor.process() }
+                log.info "After blocking"
+                render json(["message": "Checking user"])
             }
             path("authenticate") {
                 render json(["message": "Authenticating user"])

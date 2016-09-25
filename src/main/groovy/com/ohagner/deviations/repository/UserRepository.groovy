@@ -10,7 +10,7 @@ import com.ohagner.deviations.domain.User
 import groovy.util.logging.Slf4j
 
 @Slf4j
-final class UserRepository {
+class UserRepository {
 
     DBCollection users
 

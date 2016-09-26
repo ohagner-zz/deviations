@@ -3,8 +3,8 @@ package com.ohagner.deviations.scheduler
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.ohagner.deviations.DeviationMatcher
-import com.ohagner.deviations.DeviationRepo
-import com.ohagner.deviations.HttpDeviationRepo
+import com.ohagner.deviations.repository.DeviationRepository
+import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.modules.MongoModule
 import com.ohagner.deviations.notifications.EmailNotifier
@@ -43,11 +43,12 @@ public class WatchProcessingJob implements Job {
         Injector injector = Guice.createInjector(new MongoModule())
         WatchRepository watchRepository = injector.getInstance(WatchRepository)
         UserRepository userRepository = injector.getInstance(UserRepository)
-        DeviationRepo deviationRepo = new HttpDeviationRepo()
+        DeviationRepository deviationRepo = new HttpDeviationRepository()
         List<Watch> watches = watchRepository.retrieveAll()
         DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
         WatchProcessor processor = WatchProcessor.builder()
                 .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))
+                .(watchRepository)
                 .deviationMatcher(deviationMatcher)
                 .watchesToProcess(watches).build()
         log.info "LoggingJob executing!"

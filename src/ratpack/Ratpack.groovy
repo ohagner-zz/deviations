@@ -1,6 +1,7 @@
 import com.ohagner.deviations.DeviationMatcher
-import com.ohagner.deviations.DeviationRepo
-import com.ohagner.deviations.HttpDeviationRepo
+import com.ohagner.deviations.modules.TrafikLabModule
+import com.ohagner.deviations.repository.DeviationRepository
+import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
@@ -37,6 +38,7 @@ ratpack {
 
     bindings {
         module MongoModule
+        module TrafikLabModule
         module MarkupTemplateModule
         module JsonRenderingModule
     }
@@ -136,7 +138,7 @@ ratpack {
             }
             path("check") { WatchRepository watchRepository, UserRepository userRepository ->
                 List<Watch> watches = watchRepository.retrieveAll()
-                DeviationRepo deviationRepo = new HttpDeviationRepo()
+                DeviationRepository deviationRepo = new HttpDeviationRepository()
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
                 WatchProcessor processor = WatchProcessor.builder()
                     .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))

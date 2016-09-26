@@ -1,5 +1,6 @@
 package com.ohagner.deviations
 
+import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.TransportMode
 import spock.lang.Specification
 

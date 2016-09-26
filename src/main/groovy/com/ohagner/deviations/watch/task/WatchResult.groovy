@@ -1,4 +1,4 @@
-package com.ohagner.deviations.task
+package com.ohagner.deviations.watch.task
 
 import java.time.Duration
 

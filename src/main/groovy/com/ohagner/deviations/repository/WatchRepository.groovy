@@ -5,6 +5,9 @@ import com.mongodb.util.JSON
 import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
 
+import java.time.LocalDateTime
+import java.time.ZoneId
+
 @Slf4j
 final class WatchRepository {
 
@@ -42,19 +45,30 @@ final class WatchRepository {
     }
 
     List<Watch> retrieveNextToProcess(int max) {
-        DBCursor cursor = watches.find().sort(new BasicDBObject(lastUpdated: 1)).limit(max)
+        DBCursor cursor = watches.find().sort(new BasicDBObject(lastProcessed: 1)).limit(max)
         return cursor.iterator().collect { Watch.fromJson(JSON.serialize(it)) }
     }
 
     Watch create(Watch watch) {
         long generatedId = counter.getAndIncrement()
         watch.id = generatedId
+        watch.created = LocalDateTime.now(ZoneId.of("Europe/Paris"))
         DBObject mongoWatch = JSON.parse(watch.toJson())
         WriteResult result = watches.insert(mongoWatch)
         if (result.getN() == 1) {
             log.info "Successfully created watch"
         }
         return findByUsernameAndName(watch.username, watch.name)
+    }
+
+    Watch update(Watch watch) {
+        watch.lastUpdated = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+        DBObject mongoWatch = JSON.parse(watch.toJson())
+        WriteResult result = watches.update(new BasicDBObject(id:watch.id), mongoWatch)
+        if (result.getN() == 1) {
+            log.info "Successfully updated watch"
+        }
+        return findById(watch.id)
     }
 
     void delete(String username, String watchName) {

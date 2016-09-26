@@ -1,29 +1,26 @@
-package com.ohagner.deviations
+package com.ohagner.deviations.repository
 
+import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.TransportMode
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 import wslite.rest.ContentType
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 
 @Slf4j
-class HttpDeviationRepo implements DeviationRepo {
-    public static final String URL = "http://localhost:4549/api2/deviations.json"
+class HttpDeviationRepository implements DeviationRepository {
+//    public static final String URL = "http://localhost:4549/api2/deviations.json"
 
 //    public static final String URL = "http://api.sl.se/api2/deviations.json"
-    public static final String API_KEY = "0e21305879774373b47a8fd8262792aa"
+//    public static final String API_KEY = "0e21305879774373b47a8fd8262792aa"
 
     RESTClient trafikLabClient
+    String apiKey
 
-    public HttpDeviationRepo(RESTClient trafikLabClient) {
+    public HttpDeviationRepository(RESTClient trafikLabClient, String apikey) {
         this.trafikLabClient = trafikLabClient
-        deviationList = []
-    }
-
-    public HttpDeviationRepo() {
-        trafikLabClient = new RESTClient(URL)
+        this.apiKey = apiKey
         deviationList = []
     }
 
@@ -34,10 +31,10 @@ class HttpDeviationRepo implements DeviationRepo {
         log.info "Updating deviations"
 
         try {
-            //Sätt fromdate till 24h bakåt to-date 24h framåt
-            def response = trafikLabClient.get(query: [key: API_KEY, transportMode: "TRAIN"], accept: ContentType.JSON)
-            log.debug "Received ${response.json}"
             deviationList.clear()
+
+            def response = trafikLabClient.get(query: [key: apiKey, transportMode: TransportMode.TRAIN.toString()], accept: ContentType.JSON)
+            log.debug "Received ${response.json}"
 
             def jsonDeviations = response.json
             jsonDeviations.ResponseData.each {
@@ -60,12 +57,12 @@ class HttpDeviationRepo implements DeviationRepo {
         return retrieveAll().findAll { filter(it) }
     }
 
-    def parseJson(String json) {
-        new JsonSlurper().parseText(json)
-    }
-
-    def parseJson(Object json) {
-        new JsonSlurper().parse(json)
-    }
+//    def parseJson(String json) {
+//        new JsonSlurper().parseText(json)
+//    }
+//
+//    def parseJson(Object json) {
+//        new JsonSlurper().parse(json)
+//    }
 
 }

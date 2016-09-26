@@ -7,10 +7,9 @@ import com.ohagner.deviations.repository.UserRepository
 
 class NotificationService {
 
-
-
     List<Notifier> notifiers
     UserRepository userRepository
+
     //TODO: Some sort of injection of all notifiers
     NotificationService(List<Notifier> notifiers, UserRepository userRepository) {
         this.notifiers = notifiers

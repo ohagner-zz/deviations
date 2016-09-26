@@ -1,9 +1,9 @@
 package com.ohagner.deviations
 
+import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.Transport
 import com.ohagner.deviations.domain.TransportMode
 import com.ohagner.deviations.domain.Watch
-import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -28,6 +28,17 @@ class DeviationMatcherSpec extends Specification {
         then:
             assertThat(matching.size(), is(2))
             assertThat(matching.collect { it.header}, hasItems("First", "Second"))
+    }
+
+    def "match TRAIN transports for line 1 with id 1 already processed"() {
+        given:
+            Watch watch = new Watch(transports: [new Transport(transportMode: TransportMode.TRAIN, line: "1")])
+            watch.processedDeviationIds.add("1")
+        when:
+            Set<Deviation> matching = matcher.findMatching(watch)
+        then:
+        assertThat(matching.size(), is(1))
+        assertThat(matching.collect { it.header}, hasItems("Second"))
     }
 
     def "match BUS transport for line 3"() {
@@ -77,9 +88,9 @@ class DeviationMatcherSpec extends Specification {
     static List<Deviation> createDeviationList() {
         LocalDateTime now = LocalDateTime.now()
         List<Deviation> deviations = []
-        deviations << new Deviation(lineNumbers: ["1", "2", "3"], transportMode: TransportMode.TRAIN, header: "First", from: now.minusHours(10), to: now.plusHours(1), created: now)
-        deviations << new Deviation(lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second", from: now.minusHours(1), to: now.plusHours(1), created: now)
-        deviations << new Deviation(lineNumbers: ["3"], transportMode: TransportMode.BUS, header: "Third", from: now.minusHours(1), to: now.plusHours(1), created: now)
+        deviations << new Deviation(id: "1", lineNumbers: ["1", "2", "3"], transportMode: TransportMode.TRAIN, header: "First", from: now.minusHours(10), to: now.plusHours(1), created: now)
+        deviations << new Deviation(id: "2", lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second", from: now.minusHours(1), to: now.plusHours(1), created: now)
+        deviations << new Deviation(id: "3", lineNumbers: ["3"], transportMode: TransportMode.BUS, header: "Third", from: now.minusHours(1), to: now.plusHours(1), created: now)
         return deviations
     }
 

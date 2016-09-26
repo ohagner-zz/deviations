@@ -22,7 +22,6 @@ class MongoModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        log.info "RUNNING CONFIGURE"
         this.mongoConfig = MongoConfig.getInstance()
     }
 

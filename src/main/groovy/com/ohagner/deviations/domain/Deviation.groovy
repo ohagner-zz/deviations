@@ -1,7 +1,6 @@
-package com.ohagner.deviations
+package com.ohagner.deviations.domain
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.ohagner.deviations.domain.TransportMode
 import com.ohagner.deviations.parser.LineNumberParser
 import groovy.json.JsonSlurper
 import groovy.transform.builder.Builder

@@ -1,5 +1,6 @@
 package com.ohagner.deviations
 
+import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.Transport
 import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
@@ -15,11 +16,6 @@ class DeviationMatcher {
     final Map<Transport, List<Deviation>> transportDeviationMap
 
     public DeviationMatcher(List<Deviation> deviationList) {
-        /*
-            Filter list on:
-            1. Om duration > 24h
-
-         */
         log.info "Initializing DeviationMatcher with ${deviationList?.size()} deviations"
         transportDeviationMap = new HashMap<>()
         deviationList.findAll { Deviation deviation ->
@@ -41,7 +37,7 @@ class DeviationMatcher {
             matchingDeviations.addAll(transportDeviationMap.get(it, []))
         }
         log.info "Matching watch: ${watch.name}. Found ${matchingDeviations.size()} match(es)."
-        return matchingDeviations
+        return matchingDeviations.findAll { watch.processedDeviationIds.contains(it.id) == false }
     }
 
 

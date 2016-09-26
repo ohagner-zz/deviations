@@ -1,5 +1,6 @@
 package com.ohagner.deviations
 
+import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.Transport
 import com.ohagner.deviations.domain.TransportMode
 import com.ohagner.deviations.domain.User
@@ -9,7 +10,7 @@ import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.notifications.LogNotifier
 import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.task.WatchExecutionStatus
+import com.ohagner.deviations.watch.task.WatchExecutionStatus
 import com.ohagner.deviations.watch.WatchProcessor
 import spock.lang.Specification
 

@@ -41,3 +41,7 @@ gradle-app.setting
 
 # "temporary" build files
 /target
+
+# Mac OS files
+.DS_Store
+*.pid

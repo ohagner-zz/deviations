@@ -30,12 +30,6 @@ class WatchProcessor {
     NotificationService notificationService
     List<Watch> watchesToProcess
 
-//    WatchProcessor(DeviationMatcher deviationMatcher, List<Watch> watchesToProcess, NotificationService notificationService) {
-//        this.deviationMatcher = deviationMatcher
-//        this.watchesToProcess = watchesToProcess
-//        this.notificationService = notificationService
-//    }
-
     Map<WatchExecutionStatus, List<WatchResult>> process() {
 
         List<Future<WatchResult>> watchExecutionResults = submitForProcessing(watchesToProcess)

@@ -4,18 +4,31 @@ import com.ohagner.deviations.domain.Transport
 import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
 
+import java.time.Duration
+import java.time.LocalDateTime
+
 @Slf4j
 class DeviationMatcher {
     //Make immutable?
+    public static final int MAX_DEVIATION_DURATION_HOURS = 12
+    public static final int MAX_DEVIATION_CREATED_HOURS_AGO = 12
     final Map<Transport, List<Deviation>> transportDeviationMap
 
     public DeviationMatcher(List<Deviation> deviationList) {
+        /*
+            Filter list on:
+            1. Om duration > 24h
+
+         */
         log.info "Initializing DeviationMatcher with ${deviationList?.size()} deviations"
         transportDeviationMap = new HashMap<>()
-        deviationList.each { deviation ->
+        deviationList.findAll { Deviation deviation ->
+            deviation.getDuration().toHours() < MAX_DEVIATION_DURATION_HOURS && Duration.between(LocalDateTime.now(), deviation.created).toHours() < MAX_DEVIATION_CREATED_HOURS_AGO
+        }
+        .each { deviation ->
             deviation.lineNumbers.each { lineNumber ->
-                log.info "Adding linenumber $lineNumber"
                 def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)
+                log.debug "Adding deviation to matcher with linenumber $lineNumber"
                 transportDeviationMap.get(transport, []).add(deviation)
             }
         }
@@ -30,5 +43,6 @@ class DeviationMatcher {
         log.info "Matching watch: ${watch.name}. Found ${matchingDeviations.size()} match(es)."
         return matchingDeviations
     }
+
 
 }

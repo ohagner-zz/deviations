@@ -1,7 +1,11 @@
 package com.ohagner.deviations.domain
 
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.EvictingQueue
 import com.ohagner.deviations.config.DateConstants
 import com.ohagner.deviations.domain.notifications.NotificationType
 import com.ohagner.deviations.domain.schedule.Schedule
@@ -20,6 +24,8 @@ class Watch {
         mapper.findAndRegisterModules()
     }
 
+    long id
+
     String name
 
     String username
@@ -31,6 +37,11 @@ class Watch {
     List<Transport> transports
 
     List<NotificationType> notifyBy
+
+    EvictingQueue<String> processedDeviationIds = EvictingQueue.create(20)
+
+    @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
+    LocalDateTime lastNotified
 
     @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime created
@@ -56,6 +67,7 @@ class Watch {
         if (getClass() != o.class) return false
 
         Watch watch = (Watch) o
+        if (id != watch.id) return false
         if (notifyMaxHoursBefore != watch.notifyMaxHoursBefore) return false
         if (created != watch.created) return false
         if (name != watch.name) return false
@@ -70,6 +82,7 @@ class Watch {
     int hashCode() {
         int result
         result = (name != null ? name.hashCode() : 0)
+        result = 31 * result + (id != null ? id.hashCode() : 0)
         result = 31 * result + (username != null ? username.hashCode() : 0)
         result = 31 * result + notifyMaxHoursBefore
         result = 31 * result + (schedule != null ? schedule.hashCode() : 0)

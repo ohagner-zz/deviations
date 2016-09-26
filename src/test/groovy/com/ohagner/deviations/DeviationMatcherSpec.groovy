@@ -3,7 +3,10 @@ package com.ohagner.deviations
 import com.ohagner.deviations.domain.Transport
 import com.ohagner.deviations.domain.TransportMode
 import com.ohagner.deviations.domain.Watch
+import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import spock.lang.Specification
+
+import java.time.LocalDateTime
 
 import static org.hamcrest.CoreMatchers.hasItems
 import static org.hamcrest.CoreMatchers.is
@@ -43,15 +46,46 @@ class DeviationMatcherSpec extends Specification {
         when:
             def matching = matcher.findMatching(watch)
         then:
+            assertThat(matcher.transportDeviationMap.size(), is(5))
             assertThat(matching.size(), is(0))
     }
 
+    def "filter out deviation with long duration"() {
+        given:
+            Deviation longDuration = Deviation.builder()
+                    .from(LocalDateTime.now().minusHours(13))
+                    .to(LocalDateTime.now().plusHours(1))
+                    .created(LocalDateTime.now())
+                    .build()
+            DeviationMatcher deviationMatcher = new DeviationMatcher([longDuration])
+        expect:
+            assertThat(deviationMatcher.transportDeviationMap.size(), is(0))
+    }
+
+    def "filter out deviations created more than 12 hours ago"() {
+        given:
+            Deviation olderThan12Hours = Deviation.builder()
+                    .from(LocalDateTime.now().minusHours(1))
+                    .to(LocalDateTime.now().plusHours(1))
+                    .created(LocalDateTime.now().minusHours(11))
+                    .build()
+            DeviationMatcher deviationMatcher = new DeviationMatcher([olderThan12Hours])
+        expect:
+            assertThat(deviationMatcher.transportDeviationMap.size(), is(0))
+    }
+
     static List<Deviation> createDeviationList() {
-        List<Deviation> devList = []
-        devList << [lineNumbers: ["1", "2", "3"], transportMode: TransportMode.TRAIN, header: "First"]
-        devList << [lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second"]
-        devList << [lineNumbers: ["3"], transportMode: TransportMode.BUS, header: "Third"]
-        return devList
+        LocalDateTime now = LocalDateTime.now()
+        List<Deviation> deviations = []
+        deviations << new Deviation(lineNumbers: ["1", "2", "3"], transportMode: TransportMode.TRAIN, header: "First", from: now.minusHours(10), to: now.plusHours(1), created: now)
+        deviations << new Deviation(lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second", from: now.minusHours(1), to: now.plusHours(1), created: now)
+        deviations << new Deviation(lineNumbers: ["3"], transportMode: TransportMode.BUS, header: "Third", from: now.minusHours(1), to: now.plusHours(1), created: now)
+        return deviations
+    }
+
+    static Deviation createValidDeviation() {
+        LocalDateTime now = LocalDateTime.now()
+        return new Deviation(lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second", from: now, to: now, created: now)
     }
 
 }

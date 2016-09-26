@@ -13,6 +13,7 @@ class MongoConfig {
     String databaseName
     String userCollectionName
     String watchCollectionName
+    String counterCollectionName
 
     public static final String HOST = "MONGO_HOST"
     public static final String PORT = "MONGO_PORT"
@@ -23,6 +24,7 @@ class MongoConfig {
     public static final String DATABASE_NAME = "MONGO_DATABASE_NAME"
     public static final String USER_COLLECTION_NAME = "MONGO_USER_COLLECTION_NAME"
     public static final String WATCH_COLLECTION_NAME = "MONGO_WATCH_COLLECTION_NAME"
+    public static final String COUNTER_COLLECTION_NAME = "MONGO_COUNTER_COLLECTION_NAME"
 
     static MongoConfig getInstance() {
         MongoConfig instance = new MongoConfig()
@@ -34,6 +36,7 @@ class MongoConfig {
             databaseName = envOrProperty(DATABASE_NAME)
             userCollectionName = envOrProperty(USER_COLLECTION_NAME)
             watchCollectionName = envOrProperty(WATCH_COLLECTION_NAME)
+            counterCollectionName = envOrProperty(COUNTER_COLLECTION_NAME)
         }
         log.info instance.toString()
         return instance
@@ -50,6 +53,7 @@ class MongoConfig {
                 ", databaseName='" + databaseName + '\'' +
                 ", userCollectionName='" + userCollectionName + '\'' +
                 ", watchCollectionName='" + watchCollectionName + '\'' +
+                ", counterCollectionName='" + counterCollectionName + '\'' +
                 '}';
     }
 }

@@ -9,6 +9,7 @@ import com.mongodb.MongoClient
 import com.mongodb.MongoCredential
 import com.mongodb.ServerAddress
 import com.ohagner.deviations.config.MongoConfig
+import com.ohagner.deviations.repository.IncrementalCounter
 import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.repository.WatchRepository
 import groovy.transform.CompileStatic
@@ -44,7 +45,8 @@ class MongoModule extends AbstractModule {
     WatchRepository provideWatchRepository() {
         try {
             DB db = connectToDatabase(mongoConfig)
-            return new WatchRepository(db.getCollection(mongoConfig.watchCollectionName))
+            IncrementalCounter counter = IncrementalCounter.createCounter(db.getCollection(mongoConfig.counterCollectionName), mongoConfig.watchCollectionName)
+            return new WatchRepository(db.getCollection(mongoConfig.watchCollectionName), counter)
         } catch (Exception e) {
             log.error("Failed to create DB connection", e)
             throw e
@@ -58,4 +60,5 @@ class MongoModule extends AbstractModule {
         MongoClient mongoClient = new MongoClient(serverAddress, [credential])
         return new GMongo(mongoClient).getDB(mongoConfig.databaseName)
     }
+
 }

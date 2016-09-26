@@ -15,15 +15,14 @@ class UserRepository {
     DBCollection users
 
     UserRepository(DBCollection collection) {
+        this.users = collection
         log.info "UserRepository initialized"
-        users = collection
     }
 
     User findByUsername(String username) {
         log.debug "Retrieving data for user $username"
         DBObject userObject = users.findOne(new BasicDBObject(username: username))
         return User.fromJson(JSON.serialize(userObject))
-
     }
 
     List<User> retrieveAll() {

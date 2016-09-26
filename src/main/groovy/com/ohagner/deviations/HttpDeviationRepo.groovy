@@ -34,6 +34,7 @@ class HttpDeviationRepo implements DeviationRepo {
         log.info "Updating deviations"
 
         try {
+            //Sätt fromdate till 24h bakåt to-date 24h framåt
             def response = trafikLabClient.get(query: [key: API_KEY, transportMode: "TRAIN"], accept: ContentType.JSON)
             log.debug "Received ${response.json}"
             deviationList.clear()

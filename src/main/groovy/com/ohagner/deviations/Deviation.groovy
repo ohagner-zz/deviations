@@ -6,6 +6,7 @@ import com.ohagner.deviations.parser.LineNumberParser
 import groovy.json.JsonSlurper
 import groovy.transform.builder.Builder
 
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -13,6 +14,8 @@ import java.time.format.DateTimeFormatter
 class Deviation {
 
     private static final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules()
+
+    String id
 
     String header
     String details
@@ -28,6 +31,7 @@ class Deviation {
         def json = new JsonSlurper().parseText(jsonString)
 
         Deviation instance = new Deviation(transportMode: transportMode)
+        instance.id = json.DevCaseGid
         instance.header = json.Header
         instance.details = json.Details
         instance.lineNumbers = new LineNumberParser().extractLineNumbers(json.ScopeElements)
@@ -43,6 +47,9 @@ class Deviation {
         return mapper.writeValueAsString(this)
     }
 
+    Duration getDuration() {
+        return Duration.between(from, to)
+    }
 
     boolean equals(o) {
         if (this.is(o)) return true
@@ -54,6 +61,7 @@ class Deviation {
         if (details != deviation.details) return false
         if (from != deviation.from) return false
         if (header != deviation.header) return false
+        if (id != deviation.id) return false
         if (lineNumbers != deviation.lineNumbers) return false
         if (to != deviation.to) return false
         if (transportMode != deviation.transportMode) return false
@@ -64,17 +72,17 @@ class Deviation {
 
     int hashCode() {
         int result
-        result = header.hashCode()
-        result = 31 * result + details.hashCode()
-        result = 31 * result + lineNumbers.hashCode()
-        result = 31 * result + transportMode.hashCode()
-        result = 31 * result + from.hashCode()
-        result = 31 * result + to.hashCode()
-        result = 31 * result + created.hashCode()
-        result = 31 * result + updated.hashCode()
+        result = (id != null ? id.hashCode() : 0)
+        result = 31 * result + (header != null ? header.hashCode() : 0)
+        result = 31 * result + (details != null ? details.hashCode() : 0)
+        result = 31 * result + (lineNumbers != null ? lineNumbers.hashCode() : 0)
+        result = 31 * result + (transportMode != null ? transportMode.hashCode() : 0)
+        result = 31 * result + (from != null ? from.hashCode() : 0)
+        result = 31 * result + (to != null ? to.hashCode() : 0)
+        result = 31 * result + (created != null ? created.hashCode() : 0)
+        result = 31 * result + (updated != null ? updated.hashCode() : 0)
         return result
     }
-
 
     @Override
     public String toString() {

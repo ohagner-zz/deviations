@@ -9,10 +9,18 @@ import groovy.util.logging.Slf4j
 final class WatchRepository {
 
     DBCollection watches
+    IncrementalCounter counter
 
-    WatchRepository(DBCollection collection) {
+    WatchRepository(DBCollection collection, IncrementalCounter counter) {
+        this.counter = counter
+        this.watches = collection
         log.info "WatchRepository initialized"
-        watches = collection
+    }
+
+    Watch findById(long id) {
+        log.debug "Retrieving watch for user id $id"
+        DBObject watchObject = watches.findOne(new BasicDBObject(id:id))
+        return Watch.fromJson(JSON.serialize(watchObject))
     }
 
     List<Watch> findByUsername(String username) {
@@ -39,6 +47,8 @@ final class WatchRepository {
     }
 
     Watch create(Watch watch) {
+        long generatedId = counter.getAndIncrement()
+        watch.id = generatedId
         DBObject mongoWatch = JSON.parse(watch.toJson())
         WriteResult result = watches.insert(mongoWatch)
         if (result.getN() == 1) {

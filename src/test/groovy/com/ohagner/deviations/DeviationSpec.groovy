@@ -29,6 +29,7 @@ class DeviationSpec extends Specification {
     def "parse json to deviation"() {
         given:
             Deviation expected = Deviation.builder()
+                .id("9076001009188221")
                 .transportMode(TransportMode.TRAIN)
                 .header("Inställd delsträcka mot Nynäshamn")
                 .details("Tåg från Bålsta kl  14:53 mot Nynäshamn är inställd mellan Kallhäll och Jakobsberg pga vagnfel. Inställd Kallhäll kl  15:08.")

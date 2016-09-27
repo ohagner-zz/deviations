@@ -20,6 +20,56 @@
                 "path": "deviations.json",
                 "method": "GET"
             }
+        }, {
+            "contains": {
+                "path": "TRAIN"
+            }
+        }]
+    }, {
+        "responses": [{
+            "is": {
+                "statusCode": 200,
+                "headers": {
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                "body": "<%- stringify(filename, 'busDeviationsResponse.ejs') %>"
+            },
+            "_behaviors": {
+                "decorate": "function (request, response) { var now = new Date().toISOString().substring(0, 10); response.body = response.body.replace(/{TODAY}/g, now);}"
+            }
+        }],
+        "predicates": [{
+            "contains": {
+                "path": "deviations.json",
+                "method": "GET"
+            }
+        }, {
+            "contains": {
+                "path": "BUS"
+            }
+        }]
+    }, {
+        "responses": [{
+            "is": {
+                "statusCode": 200,
+                "headers": {
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                "body": "<%- stringify(filename, 'subwayDeviationsResponse.ejs') %>"
+            },
+            "_behaviors": {
+                "decorate": "function (request, response) { var now = new Date().toISOString().substring(0, 10); response.body = response.body.replace(/{TODAY}/g, now);}"
+            }
+        }],
+        "predicates": [{
+            "contains": {
+                "path": "deviations.json",
+                "method": "GET"
+            }
+        }, {
+            "contains": {
+                "path": "SUBWAY"
+            }
         }]
     }]
 }

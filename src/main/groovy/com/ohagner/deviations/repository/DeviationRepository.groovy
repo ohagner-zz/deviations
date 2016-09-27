@@ -6,6 +6,4 @@ interface DeviationRepository {
 
     List<Deviation> retrieveAll()
 
-    List<Deviation> getFiltered(Closure filter)
-
 }

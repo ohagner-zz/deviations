@@ -10,10 +10,6 @@ import wslite.rest.RESTClientException
 
 @Slf4j
 class HttpDeviationRepository implements DeviationRepository {
-//    public static final String URL = "http://localhost:4549/api2/deviations.json"
-
-//    public static final String URL = "http://api.sl.se/api2/deviations.json"
-//    public static final String API_KEY = "0e21305879774373b47a8fd8262792aa"
 
     RESTClient trafikLabClient
     String apiKey
@@ -21,48 +17,40 @@ class HttpDeviationRepository implements DeviationRepository {
     public HttpDeviationRepository(RESTClient trafikLabClient, String apikey) {
         this.trafikLabClient = trafikLabClient
         this.apiKey = apiKey
-        deviationList = []
     }
 
-    private List<Deviation> deviationList
 
     List<Deviation> retrieveAll() {
 
         log.info "Updating deviations"
-
+        List<Deviation> deviationList
         try {
-            deviationList.clear()
 
             def response = trafikLabClient.get(query: [key: apiKey, transportMode: TransportMode.TRAIN.toString()], accept: ContentType.JSON)
             log.debug "Received ${response.json}"
 
-            def jsonDeviations = response.json
-            jsonDeviations.ResponseData.each {
-                deviationList.add(Deviation.fromJson(JsonOutput.toJson(it), TransportMode.TRAIN,))
-            }
+            deviationList.addAll(retrieveDeviationsForTransport(TransportMode.TRAIN))
+            deviationList.addAll(retrieveDeviationsForTransport(TransportMode.BUS))
+            deviationList.addAll(retrieveDeviationsForTransport(TransportMode.SUBWAY))
 
-            log.info "Current deviations:"
-            deviationList.each {
-                log.info "Lines: ${it.lineNumbers}, Header: ${it.header}"
-            }
-        } catch(RESTClientException exception) {
-            log.error("Failed to retrieve deviations")
+            log.debug "Retrieved ${deviationList.size()} deviations"
+        } catch (RESTClientException exception) {
+            log.error("Failed to retrieve deviations", exception)
             deviationList = []
+            //TODO: Send some sort of notification
         }
 
         return deviationList.asImmutable()
     }
 
-    List<Deviation> getFiltered(Closure filter) {
-        return retrieveAll().findAll { filter(it) }
+    private List<Deviation> retrieveDeviationsForTransport(TransportMode transportMode) {
+        def response = trafikLabClient.get(query: [key: apiKey, transportMode: TransportMode.TRAIN.toString()], accept: ContentType.JSON)
+        log.debug "Received ${response.json}"
+
+        def jsonDeviations = response.json
+        return jsonDeviations.ResponseData.collect {
+            Deviation.fromJson(JsonOutput.toJson(it), TransportMode.TRAIN)
+        }
     }
-
-//    def parseJson(String json) {
-//        new JsonSlurper().parseText(json)
-//    }
-//
-//    def parseJson(Object json) {
-//        new JsonSlurper().parse(json)
-//    }
-
 }
+

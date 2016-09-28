@@ -24,7 +24,7 @@ class Watch {
         mapper.findAndRegisterModules()
     }
 
-    long id
+    Long id
 
     String name
 
@@ -38,7 +38,8 @@ class Watch {
 
     List<NotificationType> notifyBy
 
-    EvictingQueue<String> processedDeviationIds = EvictingQueue.create(20)
+    Queue<String> processedDeviationIds = new LinkedList<String>()
+
 
     @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime lastNotified
@@ -55,6 +56,13 @@ class Watch {
 
     String toJson() {
         return mapper.writeValueAsString(this)
+    }
+
+    void addDeviationId(String deviationId) {
+        processedDeviationIds.add(deviationId)
+        while(processedDeviationIds.size() > 20) {
+            processedDeviationIds.remove()
+        }
     }
 
     @JsonIgnore

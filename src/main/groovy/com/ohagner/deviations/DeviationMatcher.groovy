@@ -7,27 +7,37 @@ import groovy.util.logging.Slf4j
 
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Slf4j
 class DeviationMatcher {
     //Make immutable?
     public static final int MAX_DEVIATION_DURATION_HOURS = 12
-    public static final int MAX_DEVIATION_CREATED_HOURS_AGO = 12
+    public static final int MAX_DEVIATION_CREATED_HOURS_AGO = 24
     final Map<Transport, List<Deviation>> transportDeviationMap
 
+    static Closure maxDurationPredicate = {
+        Deviation deviation -> deviation.getDuration().toHours() < MAX_DEVIATION_DURATION_HOURS
+    }
+    static Closure stillActualPredicate = { Deviation deviation ->
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+        deviation.to.isAfter(now)
+    }
     public DeviationMatcher(List<Deviation> deviationList) {
+
         log.info "Initializing DeviationMatcher with ${deviationList?.size()} deviations"
         transportDeviationMap = new HashMap<>()
-        deviationList.findAll { Deviation deviation ->
-            deviation.getDuration().toHours() < MAX_DEVIATION_DURATION_HOURS && Duration.between(LocalDateTime.now(), deviation.created).toHours() < MAX_DEVIATION_CREATED_HOURS_AGO
-        }
-        .each { deviation ->
-            deviation.lineNumbers.each { lineNumber ->
-                def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)
-                log.debug "Adding deviation to matcher with linenumber $lineNumber"
-                transportDeviationMap.get(transport, []).add(deviation)
+
+        deviationList
+            .findAll { maxDurationPredicate(it) }
+            .findAll { stillActualPredicate(it) }
+            .each { deviation ->
+                deviation.lineNumbers.each { lineNumber ->
+                    def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)
+                    log.debug "Adding deviation to matcher with linenumber $lineNumber"
+                    transportDeviationMap.get(transport, []).add(deviation)
+                }
             }
-        }
         transportDeviationMap.each { key, value -> log.info "Adding transport/deviation key: ${key.toString()}, value: $value"}
     }
 

@@ -42,7 +42,7 @@ class WatchTask implements Callable<WatchResult> {
                     notificationService.processNotifications(watch, matchingDeviations)
                     result.status = WatchExecutionStatus.NOTIFIED
                     watch.lastNotified = LocalDateTime.now(ZoneId.of("Europe/Paris"))
-                    watch.processedDeviationIds.addAll(matchingDeviations.collect { it.id })
+                    matchingDeviations.each { watch.addDeviationId(it.id)}
                     watchRepository.update(watch)
                 } else {
                     result.status = WatchExecutionStatus.NO_MATCH
@@ -52,7 +52,7 @@ class WatchTask implements Callable<WatchResult> {
                 result.status = WatchExecutionStatus.NOT_TIME_TO_CHECK
             }
         } catch(Exception e) {
-            log.error("Task execution failed", e)
+            log.error("Task execution failed for watch ${watch.id}", e)
             result.status = WatchExecutionStatus.FAILED
             result.addMessage(e.getMessage())
         }

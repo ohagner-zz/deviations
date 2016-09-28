@@ -19,10 +19,14 @@ class UserRepository {
         log.info "UserRepository initialized"
     }
 
-    User findByUsername(String username) {
-        log.debug "Retrieving data for user $username"
+    Optional<User> findByUsername(String username) {
+        log.info "Retrieving data for user $username"
         DBObject userObject = users.findOne(new BasicDBObject(username: username))
-        return User.fromJson(JSON.serialize(userObject))
+        if (userObject) {
+            return Optional.of(User.fromJson(JSON.serialize(userObject)))
+        } else {
+            Optional.empty()
+        }
     }
 
     List<User> retrieveAll() {
@@ -46,7 +50,7 @@ class UserRepository {
 
     User update(String username, User update) {
         DBObject mongoUpdate = JSON.parse(update.toJson())
-        DBObject updatedUser = users.findAndModify(new BasicDBObject(username:username), mongoUpdate)
+        DBObject updatedUser = users.findAndModify(new BasicDBObject(username: username), mongoUpdate)
         return User.fromJson(JSON.serialize(updatedUser))
     }
 

@@ -10,6 +10,7 @@ import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.notifications.LogNotifier
 import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.repository.WatchRepository
 import com.ohagner.deviations.watch.task.WatchExecutionStatus
 import com.ohagner.deviations.watch.WatchProcessor
 import spock.lang.Specification
@@ -17,27 +18,36 @@ import spock.lang.Specification
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 
 /**
  * Test job for matching watches against current deviations
  */
 class WatchProcessorSpec extends Specification {
 
-
-
     void 'should match deviations'() {
         given:
             UserRepository userRepo = new UserRepository(null) {
                 @Override
-                User findByUsername(String username) {
-                    return new User(username: "user", emailAddress: "emailAddress")
+                Optional<User> findByUsername(String username) {
+                    return Optional.of(new User(username: "user", emailAddress: "emailAddress"))
+                }
+            }
+            WatchRepository watchRepo = new WatchRepository(null, null) {
+                @Override
+                List<Watch> retrieveNextToProcess(int max){
+                    return createWatches()
+                }
+                @Override
+                Watch update(Watch watch) {
+                    return null
                 }
             }
             NotificationService notificationService = new NotificationService([new LogNotifier()], userRepo)
             WatchProcessor watchProcessor = WatchProcessor.builder()
                 .notificationService(notificationService)
                 .deviationMatcher(new DeviationMatcher(createDeviationList()))
-                .watchesToProcess(createWatches()).build()
+                .watchRepository(watchRepo).build()
         when:
             def resultMap = watchProcessor.process()
         then:
@@ -45,15 +55,16 @@ class WatchProcessorSpec extends Specification {
     }
 
     List<Deviation> createDeviationList() {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
         def deviation = new Deviation()
         deviation.header = "header"
         deviation.lineNumbers = ["35", "36"]
         deviation.transportMode = TransportMode.BUS
         deviation.details = "details"
-        deviation.from = LocalDateTime.now()
-        deviation.to = LocalDateTime.now()
-        deviation.created = LocalDateTime.now()
-        deviation.updated = LocalDateTime.now()
+        deviation.from = now
+        deviation.to = now.plusHours(1)
+        deviation.created = now
+        deviation.updated = now
         return [deviation]
     }
 

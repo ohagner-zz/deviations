@@ -13,7 +13,7 @@ class TrafikLabConfig {
     public static final String DEVIATIONS_PATH = "TRAFIKLAB_DEVIATIONS_PATH"
     public static final String API_KEY = "TRAFIKLAB_API_KEY"
 
-    static MongoConfig getInstance() {
+    static TrafikLabConfig getInstance() {
         TrafikLabConfig instance = new TrafikLabConfig()
         instance.with {
             baseUrl = envOrProperty(BASE_URL)

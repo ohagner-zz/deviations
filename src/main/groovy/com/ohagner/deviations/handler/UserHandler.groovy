@@ -1,7 +1,9 @@
 package com.ohagner.deviations.handler
 
 import com.ohagner.deviations.domain.User
+import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.repository.WatchRepository
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyContext
 import ratpack.groovy.handling.GroovyHandler
@@ -19,9 +21,13 @@ class UserHandler extends GroovyHandler {
                 Optional<User> user = context.maybeGet(User)
                 delete {
                     UserRepository userRepository = context.get(UserRepository)
+                    WatchRepository watchRepository = context.get(WatchRepository)
                     if (user.isPresent()) {
                         log.info "Deleting user"
-                        userRepository.delete(user.get())
+                        User userToDelete = user.get()
+                        List<Watch> watches = watchRepository.findByUsername()
+                        watches.each { Watch watch -> watchRepository.delete(userToDelete.username, watch.name) }
+                        userRepository.delete(userToDelete)
                         render json(user.get())
                     } else {
                         log.info "NOT FOUND"

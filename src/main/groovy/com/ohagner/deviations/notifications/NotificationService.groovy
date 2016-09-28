@@ -4,6 +4,7 @@ import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.domain.notifications.NotificationType
 import com.ohagner.deviations.repository.UserRepository
+import groovy.transform.CompileStatic
 
 class NotificationService {
 
@@ -17,9 +18,9 @@ class NotificationService {
     }
 
     def processNotifications(Watch watch, def deviations) {
-        notifiers.each { notifier ->
-            if(notifier.isApplicable(watch.notifyBy?: [])) {
-                User user = userRepository.findByUsername(watch.username)
+        notifiers.each { Notifier notifier ->
+            if(notifier.isApplicable(watch.notifyBy ?: [])) {
+                User user = userRepository.findByUsername(watch.username).orElseThrow({new Exception("User doesn't exist")})
                 notifier.notify(user, deviations)
             }
         }

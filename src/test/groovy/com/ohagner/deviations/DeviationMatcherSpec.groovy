@@ -7,6 +7,7 @@ import com.ohagner.deviations.domain.Watch
 import spock.lang.Specification
 
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 import static org.hamcrest.CoreMatchers.hasItems
 import static org.hamcrest.CoreMatchers.is
@@ -75,14 +76,23 @@ class DeviationMatcherSpec extends Specification {
 
     def "filter out deviations created more than 12 hours ago"() {
         given:
-            Deviation olderThan12Hours = Deviation.builder()
-                    .from(LocalDateTime.now().minusHours(1))
-                    .to(LocalDateTime.now().plusHours(1))
-                    .created(LocalDateTime.now().minusHours(11))
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+            Deviation tooLongDuration = Deviation.builder()
+                    .from(now.minusHours(DeviationMatcher.MAX_DEVIATION_DURATION_HOURS))
+                    .to(now.plusHours(1))
                     .build()
-            DeviationMatcher deviationMatcher = new DeviationMatcher([olderThan12Hours])
         expect:
-            assertThat(deviationMatcher.transportDeviationMap.size(), is(0))
+            assertThat([tooLongDuration].findAll { DeviationMatcher.maxDurationPredicate(it) }.size(), is(0))
+    }
+
+    def "filter out deviations from the past"() {
+        given:
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+            Deviation oldDeviation = Deviation.builder()
+                .to(now.minusHours(1))
+                .build()
+        expect:
+            assertThat([oldDeviation].findAll { DeviationMatcher.stillActualPredicate(it) }.size(), is(0))
     }
 
     static List<Deviation> createDeviationList() {

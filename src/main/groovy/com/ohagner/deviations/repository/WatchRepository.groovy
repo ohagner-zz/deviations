@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Slf4j
-final class WatchRepository {
+class WatchRepository {
 
     DBCollection watches
     IncrementalCounter counter
@@ -20,22 +20,21 @@ final class WatchRepository {
         log.info "WatchRepository initialized"
     }
 
-    Watch findById(long id) {
-        log.debug "Retrieving watch for user id $id"
-        DBObject watchObject = watches.findOne(new BasicDBObject(id:id))
-        return Watch.fromJson(JSON.serialize(watchObject))
+    Optional<Watch> findById(long id) {
+        log.debug "Retrieving watch with id $id"
+        optionalFrom watches.findOne(new BasicDBObject(id:id))
     }
 
     List<Watch> findByUsername(String username) {
-        log.debug "Retrieving watches for user $username"
+        log.info "Retrieving watches for user $username"
         DBCursor cursor = watches.find(new BasicDBObject(username: username))
         List<Watch> watches = cursor.iterator().collect { Watch.fromJson(JSON.serialize(it)) }
         return watches
     }
 
-    Watch findByUsernameAndName(String username, String watchName) {
-        DBObject watchObject = watches.findOne(new BasicDBObject(name:watchName, username:username))
-        return Watch.fromJson(JSON.serialize(watchObject))
+    Optional<Watch> findByUsernameAndId(String username, long id) {
+        log.info "Looking for watch for user $username with id $id"
+        optionalFrom watches.findOne(new BasicDBObject(username:username, id:id))
     }
 
     List<Watch> retrieveAll() {
@@ -57,8 +56,8 @@ final class WatchRepository {
         WriteResult result = watches.insert(mongoWatch)
         if (result.getN() == 1) {
             log.info "Successfully created watch"
-        }
-        return findByUsernameAndName(watch.username, watch.name)
+        }//TODO: Throw some kind of exception otherwise
+        return findByUsernameAndId(watch.username, watch.id).get()
     }
 
     Watch update(Watch watch) {
@@ -68,15 +67,24 @@ final class WatchRepository {
         if (result.getN() == 1) {
             log.info "Successfully updated watch"
         }
-        return findById(watch.id)
+        return findById(watch.id).get()
     }
 
-    void delete(String username, String watchName) {
-        watches.remove(new BasicDBObject(name:watchName, username:username))
+    Optional<Watch> delete(String username, long id) {
+        log.info "Deleting watch for user $username with id $id"
+        optionalFrom watches.findAndRemove(new BasicDBObject(id:id as long, username:username))
     }
 
-    boolean exists(String username, String watchName) {
-        return watches.count(new BasicDBObject(name:watchName, username:username)) > 0
+    boolean exists(String username, long id) {
+        return watches.count(new BasicDBObject(id:id, username:username)) > 0
+    }
+
+    private Optional<Watch> optionalFrom(DBObject dbObject) {
+        if(dbObject) {
+            return Optional.of(Watch.fromJson(JSON.serialize(dbObject)))
+        } else {
+            return Optional.empty()
+        }
     }
 
 }

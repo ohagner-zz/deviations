@@ -3,6 +3,8 @@ package com.ohagner.deviations.scheduler
 import com.google.inject.Guice
 import com.google.inject.Injector
 import com.ohagner.deviations.DeviationMatcher
+import com.ohagner.deviations.modules.TrafikLabModule
+import com.ohagner.deviations.repository.CachedDeviationRepository
 import com.ohagner.deviations.repository.DeviationRepository
 import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.domain.Watch
@@ -13,6 +15,7 @@ import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.repository.WatchRepository
 import com.ohagner.deviations.watch.WatchProcessor
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import org.quartz.*
 import org.quartz.impl.StdSchedulerFactory
@@ -36,21 +39,24 @@ class JobScheduler {
 }
 
 @Slf4j
+@CompileStatic
 public class WatchProcessingJob implements Job {
 
     @Override
     void execute(JobExecutionContext context) throws JobExecutionException {
-        Injector injector = Guice.createInjector(new MongoModule())
-        WatchRepository watchRepository = injector.getInstance(WatchRepository)
-        UserRepository userRepository = injector.getInstance(UserRepository)
-        DeviationRepository deviationRepo = new HttpDeviationRepository()
-        List<Watch> watches = watchRepository.retrieveAll()
+        Injector mongoInjector = Guice.createInjector(new MongoModule())
+        Injector trafikLabInjector = Guice.createInjector(new TrafikLabModule())
+
+        WatchRepository watchRepository = mongoInjector.getInstance(WatchRepository)
+        UserRepository userRepository = mongoInjector.getInstance(UserRepository)
+
+        DeviationRepository deviationRepo = trafikLabInjector.getInstance(DeviationRepository)
         DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
+
         WatchProcessor processor = WatchProcessor.builder()
                 .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))
-                .(watchRepository)
-                .deviationMatcher(deviationMatcher)
-                .watchesToProcess(watches).build()
+                .watchRepository(watchRepository)
+                .deviationMatcher(deviationMatcher).build()
         log.info "LoggingJob executing!"
         processor.process()
     }

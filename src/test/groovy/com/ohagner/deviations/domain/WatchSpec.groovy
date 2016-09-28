@@ -53,6 +53,7 @@ class WatchSpec extends Specification {
             assertEquals(watch, expected)
     }
 
+
     private Watch createWeeklyScheduleWatch() {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
@@ -63,8 +64,9 @@ class WatchSpec extends Specification {
     private Watch createSingleOccurrenceWatch() {
         Schedule schedule = new SingleOccurrence(dateOfEvent: LocalDate.of(2016,10,10), timeOfEvent: LocalTime.of(10,10))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
+        Queue<String> processedDeviationIds = new LinkedList(["1", "2"])
         List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
-        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastUpdated: date, transports: transports)
+        return new Watch(id:99,name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastUpdated: date, transports: transports, processedDeviationIds: processedDeviationIds )
     }
 
 }

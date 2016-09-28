@@ -1,16 +1,16 @@
 import com.ohagner.deviations.DeviationMatcher
-import com.ohagner.deviations.modules.TrafikLabModule
-import com.ohagner.deviations.repository.DeviationRepository
-import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.handler.UserHandler
 import com.ohagner.deviations.modules.JsonRenderingModule
 import com.ohagner.deviations.modules.MongoModule
+import com.ohagner.deviations.modules.TrafikLabModule
 import com.ohagner.deviations.notifications.EmailNotifier
 import com.ohagner.deviations.notifications.LogNotifier
 import com.ohagner.deviations.notifications.NotificationService
+import com.ohagner.deviations.repository.DeviationRepository
+import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.repository.WatchRepository
 import com.ohagner.deviations.watch.WatchProcessor
@@ -86,21 +86,24 @@ ratpack {
         prefix("users/:username") {
             all { UserRepository userRepository ->
                 String username = pathTokens.username
-                User callingUser = userRepository.findByUsername(username)
-                callingUser ? next(Registry.single(User, callingUser)) : next()
+                log.info "Trying to retrieve user $username"
+                Optional<User> callingUser = userRepository.findByUsername(username)
+                callingUser.isPresent() ? next(Registry.single(User, callingUser.get())) : next()
             }
             path("") {
                 insert(new UserHandler())
             }
             //Everything below to be moved to WatchHandler of some sort
             all {
+                log.info "Looking in context for user"
                 Optional<User> user = context.maybeGet(User)
                 if (!user.isPresent()) {
-                    log.info "Not found"
+                    log.info "User not found"
                     response.status(404)
                     render json(["message": "Not found"])
+                } else {
+                    next()
                 }
-                next()
             }
             prefix("watches") {
                 path("") { WatchRepository watchRepository, User user ->
@@ -109,14 +112,8 @@ ratpack {
                             request.body.then { body ->
                                 log.info "Creating watch for user ${user.username}"
                                 Watch watch = Watch.fromJson(body.text)
-                                if(watchRepository.exists(user.username, watch.name)) {
-                                    response.status(400)
-                                    String message = "Unable to create watch ${watch.name}, it already exists"
-                                    render json(["message": message])
-                                } else {
-                                    watch.username = user.username
-                                    render json(watchRepository.create(watch))
-                                }
+                                watch.username = user.username
+                                render json(watchRepository.create(watch))
                             }
                         }
                         get {
@@ -124,26 +121,42 @@ ratpack {
                         }
                     }
                 }
-                path(":name") { WatchRepository watchRepository, User user ->
+                path(":id") { WatchRepository watchRepository, User user ->
+                    if(!pathTokens.id.isNumber()) {
+                        response.status(400)
+                        render json(["message": new String("Watch id ${pathTokens.id} is not numeric")])
+                    }
+                    long watchId = pathTokens.id as long
                     context.byMethod {
                         delete {
-                            watchRepository.delete(user.username, pathTokens.name)
-                            render json(["message": "Deleted watch: " + pathTokens.name])
+                            Optional<Watch> deletedWatch = watchRepository.delete(user.username, watchId)
+                            if(deletedWatch.isPresent()) {
+                                render json(deletedWatch.get())
+                            } else {
+                                response.status(500)
+                                render json(["message": new String("Watch with id $watchId could not be deleted")])
+                            }
                         }
                         get {
-                            render json(watchRepository.findByUsernameAndName(user.username, pathTokens.name))
+                            Optional<Watch> watch = watchRepository.findByUsernameAndId(user.username, watchId)
+                            if(watch.isPresent()) {
+                                render json(watch.get())
+                            } else {
+                                log.info "Watch not found"
+                                response.status(404)
+                                render json(["message": "Watch with id $watchId does not exist"])
+                            }
                         }
                     }
                 }
             }
             path("check") { WatchRepository watchRepository, UserRepository userRepository ->
-                List<Watch> watches = watchRepository.retrieveAll()
                 DeviationRepository deviationRepo = new HttpDeviationRepository()
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
                 WatchProcessor processor = WatchProcessor.builder()
-                    .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))
-                    .deviationMatcher(deviationMatcher)
-                    .watchesToProcess(watches).build()
+                        .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))
+                        .deviationMatcher(deviationMatcher)
+                        .watchRepository(watchRepository).build()
                 log.info "Before blocking"
                 Blocking.exec { processor.process() }
                 log.info "After blocking"

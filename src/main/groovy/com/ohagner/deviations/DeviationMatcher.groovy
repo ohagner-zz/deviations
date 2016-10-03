@@ -25,7 +25,7 @@ class DeviationMatcher {
     }
     public DeviationMatcher(List<Deviation> deviationList) {
 
-        log.info "Initializing DeviationMatcher with ${deviationList?.size()} deviations"
+        log.debug "Initializing DeviationMatcher with ${deviationList?.size()} deviations"
         transportDeviationMap = new HashMap<>()
 
         deviationList

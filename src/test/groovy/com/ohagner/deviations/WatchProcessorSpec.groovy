@@ -57,6 +57,7 @@ class WatchProcessorSpec extends Specification {
     List<Deviation> createDeviationList() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
         def deviation = new Deviation()
+        deviation.id = 1
         deviation.header = "header"
         deviation.lineNumbers = ["35", "36"]
         deviation.transportMode = TransportMode.BUS

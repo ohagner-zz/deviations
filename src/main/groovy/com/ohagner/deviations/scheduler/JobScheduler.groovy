@@ -23,14 +23,22 @@ import org.quartz.impl.StdSchedulerFactory
 @Slf4j
 class JobScheduler {
 
+    static Injector mongoInjector
+    static Injector trafikLabInjector
+
     def static main(def args) {
+
+        mongoInjector = Guice.createInjector(new MongoModule())
+        trafikLabInjector = Guice.createInjector(new TrafikLabModule())
 
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler()
         scheduler.start()
-        JobDetail jobDetail = JobBuilder.newJob(WatchProcessingJob).build()
+        JobDetail jobDetail = JobBuilder
+                .newJob(WatchProcessingJob)
+                .build()
         Trigger trigger = TriggerBuilder.newTrigger()
             .startNow()
-            .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(10))
+            .withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(30))
             .build()
         scheduler.scheduleJob(jobDetail, trigger)
     }
@@ -44,13 +52,13 @@ public class WatchProcessingJob implements Job {
 
     @Override
     void execute(JobExecutionContext context) throws JobExecutionException {
-        Injector mongoInjector = Guice.createInjector(new MongoModule())
-        Injector trafikLabInjector = Guice.createInjector(new TrafikLabModule())
+//        Injector mongoInjector = Guice.createInjector(new MongoModule())
+//        Injector trafikLabInjector = Guice.createInjector(new TrafikLabModule())
 
-        WatchRepository watchRepository = mongoInjector.getInstance(WatchRepository)
-        UserRepository userRepository = mongoInjector.getInstance(UserRepository)
+        WatchRepository watchRepository = JobScheduler.mongoInjector.getInstance(WatchRepository)
+        UserRepository userRepository = JobScheduler.mongoInjector.getInstance(UserRepository)
 
-        DeviationRepository deviationRepo = trafikLabInjector.getInstance(DeviationRepository)
+        DeviationRepository deviationRepo = JobScheduler.trafikLabInjector.getInstance(DeviationRepository)
         DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
 
         WatchProcessor processor = WatchProcessor.builder()

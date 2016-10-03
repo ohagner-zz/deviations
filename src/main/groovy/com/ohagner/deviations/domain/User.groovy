@@ -10,6 +10,7 @@ class User {
     private final static ObjectMapper mapper = new ObjectMapper()
 
     String username
+
     String firstName
     String lastName
     String emailAddress
@@ -21,4 +22,5 @@ class User {
     String toJson() {
         return mapper.writeValueAsString(this)
     }
+
 }

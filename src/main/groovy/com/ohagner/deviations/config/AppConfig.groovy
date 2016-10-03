@@ -4,7 +4,7 @@ class AppConfig {
 
     static ConfigObject config = readProperties()
 
-    static Map env = System.getenv().getProperties()
+    static Map env = System.getenv()
 
     static envOrProperty(String key) {
         return env."$key" ?: config."$key"

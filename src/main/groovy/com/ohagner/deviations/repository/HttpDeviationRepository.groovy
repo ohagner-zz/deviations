@@ -16,7 +16,7 @@ class HttpDeviationRepository implements DeviationRepository {
 
     public HttpDeviationRepository(RESTClient trafikLabClient, String apikey) {
         this.trafikLabClient = trafikLabClient
-        this.apiKey = apiKey
+        this.apiKey = apikey
     }
 
 
@@ -45,11 +45,10 @@ class HttpDeviationRepository implements DeviationRepository {
 
     private List<Deviation> retrieveDeviationsForTransport(TransportMode transportMode) {
         def response = trafikLabClient.get(query: [key: apiKey, transportMode: transportMode.toString()], accept: ContentType.JSON)
-        log.info "Received ${response.json}"
+        log.debug "Received ${response.json}"
 
         def jsonDeviations = response.json
         return jsonDeviations.ResponseData.collect {
-            log.info "Doing stuff"
             Deviation.fromJson(JsonOutput.toJson(it), TransportMode.TRAIN)
         }
     }

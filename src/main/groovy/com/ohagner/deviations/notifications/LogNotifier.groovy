@@ -19,7 +19,7 @@ class LogNotifier implements Notifier {
         logMessage += "User ${user.username} has ${deviations.size()} notification${deviations.size() > 1 ? 's' : ''}\n"
         logMessage += "LineNumbers".padRight(20) + "DeviationId".padRight(20)+ "Details\n"
         deviations.each {
-            logMessage += it.lineNumbers.join(",").padRight(20) + it.id.padRight(20) + it.details + "\n"
+            logMessage += it?.lineNumbers.join(",").padRight(20) + it?.id.padRight(20) + it?.details + "\n"
         }
         log.info(logMessage)
     }

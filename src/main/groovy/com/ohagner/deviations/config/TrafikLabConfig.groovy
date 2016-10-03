@@ -1,8 +1,10 @@
 package com.ohagner.deviations.config
 
+import groovy.util.logging.Slf4j
+
 import static com.ohagner.deviations.config.AppConfig.envOrProperty
 
-
+@Slf4j
 class TrafikLabConfig {
 
     String baseUrl
@@ -20,7 +22,17 @@ class TrafikLabConfig {
             deviationsResourcePath = envOrProperty(DEVIATIONS_PATH)
             apiKey = envOrProperty(API_KEY)
         }
+        log.info "Initializing trafiklab client with config $instance"
         return instance
     }
 
+
+    @Override
+    public String toString() {
+        return "TrafikLabConfig{" +
+                "baseUrl='" + baseUrl + '\'' +
+                ", deviationsResourcePath='" + deviationsResourcePath + '\'' +
+                ", apiKey='" + apiKey + '\'' +
+                '}';
+    }
 }

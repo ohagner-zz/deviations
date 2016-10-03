@@ -1,8 +1,8 @@
 import com.ohagner.deviations.DeviationMatcher
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.handler.UserHandler
+import com.ohagner.deviations.handler.WatchChain
 import com.ohagner.deviations.modules.JsonRenderingModule
 import com.ohagner.deviations.modules.MongoModule
 import com.ohagner.deviations.modules.TrafikLabModule
@@ -33,7 +33,6 @@ ratpack {
         props("config/app.properties")
         env()
         require("/mongo", MongoConfig)
-
     }
 
     bindings {
@@ -93,62 +92,9 @@ ratpack {
             path("") {
                 insert(new UserHandler())
             }
-            //Everything below to be moved to WatchHandler of some sort
-            all {
-                log.info "Looking in context for user"
-                Optional<User> user = context.maybeGet(User)
-                if (!user.isPresent()) {
-                    log.info "User not found"
-                    response.status(404)
-                    render json(["message": "Not found"])
-                } else {
-                    next()
-                }
-            }
+            //Everything below to be moved to WatchChain of some sort
             prefix("watches") {
-                path("") { WatchRepository watchRepository, User user ->
-                    context.byMethod {
-                        post {
-                            request.body.then { body ->
-                                log.info "Creating watch for user ${user.username}"
-                                Watch watch = Watch.fromJson(body.text)
-                                watch.username = user.username
-                                render json(watchRepository.create(watch))
-                            }
-                        }
-                        get {
-                            render json(watchRepository.findByUsername(user.username))
-                        }
-                    }
-                }
-                path(":id") { WatchRepository watchRepository, User user ->
-                    if(!pathTokens.id.isNumber()) {
-                        response.status(400)
-                        render json(["message": new String("Watch id ${pathTokens.id} is not numeric")])
-                    }
-                    long watchId = pathTokens.id as long
-                    context.byMethod {
-                        delete {
-                            Optional<Watch> deletedWatch = watchRepository.delete(user.username, watchId)
-                            if(deletedWatch.isPresent()) {
-                                render json(deletedWatch.get())
-                            } else {
-                                response.status(500)
-                                render json(["message": new String("Watch with id $watchId could not be deleted")])
-                            }
-                        }
-                        get {
-                            Optional<Watch> watch = watchRepository.findByUsernameAndId(user.username, watchId)
-                            if(watch.isPresent()) {
-                                render json(watch.get())
-                            } else {
-                                log.info "Watch not found"
-                                response.status(404)
-                                render json(["message": "Watch with id $watchId does not exist"])
-                            }
-                        }
-                    }
-                }
+                insert(new WatchChain())
             }
             path("check") { WatchRepository watchRepository, UserRepository userRepository ->
                 DeviationRepository deviationRepo = new HttpDeviationRepository()
@@ -161,12 +107,6 @@ ratpack {
                 Blocking.exec { processor.process() }
                 log.info "After blocking"
                 render json(["message": "Checking user"])
-            }
-            path("authenticate") {
-                render json(["message": "Authenticating user"])
-            }
-            path("check") {
-                render json(["message": "Perform check"])
             }
         }
 

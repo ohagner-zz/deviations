@@ -38,7 +38,7 @@ class DeviationMatcher {
                     transportDeviationMap.get(transport, []).add(deviation)
                 }
             }
-        transportDeviationMap.each { key, value -> log.info "Adding transport/deviation key: ${key.toString()}, value: $value"}
+        transportDeviationMap.each { key, value -> log.debug "Adding transport/deviation key: ${key.toString()}, value: $value"}
     }
 
     Set<Deviation> findMatching(Watch watch) {
@@ -46,7 +46,7 @@ class DeviationMatcher {
         watch.transports.each {
             matchingDeviations.addAll(transportDeviationMap.get(it, []))
         }
-        log.info "Matching watch: ${watch.name}. Found ${matchingDeviations.size()} match(es)."
+        log.debug "Matching watch: ${watch.name}. Found ${matchingDeviations.size()} match(es)."
         return matchingDeviations.findAll { watch.processedDeviationIds.contains(it.id) == false }
     }
 

@@ -2,6 +2,7 @@ package com.ohagner.deviations.modules
 
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
+import com.google.inject.Singleton
 import com.ohagner.deviations.repository.CachedDeviationRepository
 import com.ohagner.deviations.repository.DeviationRepository
 import com.ohagner.deviations.repository.HttpDeviationRepository
@@ -22,6 +23,7 @@ class TrafikLabModule extends AbstractModule {
 
     @Provides
     @CompileStatic
+    @Singleton
     DeviationRepository createDeviationRepo() {
         RESTClient client = new RESTClient(config.baseUrl+config.deviationsResourcePath)
         return new CachedDeviationRepository(new HttpDeviationRepository(client, config.apiKey), Duration.ofMinutes(30))

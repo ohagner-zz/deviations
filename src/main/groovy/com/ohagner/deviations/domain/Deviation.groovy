@@ -1,6 +1,10 @@
 package com.ohagner.deviations.domain
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.ohagner.deviations.config.DateConstants
 import com.ohagner.deviations.parser.LineNumberParser
 import groovy.json.JsonSlurper
 import groovy.transform.builder.Builder
@@ -9,7 +13,11 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
+
 @Builder
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Deviation {
 
     private static final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules()
@@ -17,13 +25,23 @@ class Deviation {
     String id
 
     String header
+
     String details
 
     List<String> lineNumbers
+
     TransportMode transportMode
+
+    @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime from
+
+    @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime to
+
+    @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime created
+
+    @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
     LocalDateTime updated
 
     static Deviation fromJson(String jsonString, TransportMode transportMode) {

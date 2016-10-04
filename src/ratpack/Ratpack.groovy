@@ -49,7 +49,8 @@ ratpack {
         }
         prefix("deviations") {
             get("") {
-                render json(["message": "Get all deviations"])
+                DeviationRepository deviationRepo = context.get(DeviationRepository)
+                render json(deviationRepo.retrieveAll())
             }
             get(":transportType") {
                 render json(["message": "Get all deviations for transport"])

@@ -10,6 +10,7 @@ class MongoConfig {
     int port
     String username
     String password
+    String userDatabaseName
     String databaseName
     String userCollectionName
     String watchCollectionName
@@ -21,6 +22,7 @@ class MongoConfig {
     public static final String USERNAME = "MONGO_USERNAME"
     public static final String PASSWORD = "MONGO_PASSWORD"
 
+    public static final String USER_DATABASE_NAME = "MONGO_USER_DATABASE_NAME"
     public static final String DATABASE_NAME = "MONGO_DATABASE_NAME"
     public static final String USER_COLLECTION_NAME = "MONGO_USER_COLLECTION_NAME"
     public static final String WATCH_COLLECTION_NAME = "MONGO_WATCH_COLLECTION_NAME"
@@ -31,6 +33,7 @@ class MongoConfig {
         instance.with {
             host = envOrProperty(HOST)
             port = envOrProperty(PORT) as int
+            userDatabaseName = envOrProperty(USER_DATABASE_NAME)
             username = envOrProperty(USERNAME)
             password = envOrProperty(PASSWORD)
             databaseName = envOrProperty(DATABASE_NAME)

@@ -54,7 +54,7 @@ class MongoModule extends AbstractModule {
 
     private DB connectToDatabase(MongoConfig mongoConfig) {
         log.info "Initializing DB with connection to host: ${mongoConfig.host}"
-        MongoCredential credential = MongoCredential.createCredential(mongoConfig.username, 'admin', mongoConfig.password as char[])
+        MongoCredential credential = MongoCredential.createCredential(mongoConfig.username, mongoConfig.userDatabaseName, mongoConfig.password as char[])
         ServerAddress serverAddress = new ServerAddress(mongoConfig.host, mongoConfig.port)
         MongoClient mongoClient = new MongoClient(serverAddress, [credential])
         return new GMongo(mongoClient).getDB(mongoConfig.databaseName)

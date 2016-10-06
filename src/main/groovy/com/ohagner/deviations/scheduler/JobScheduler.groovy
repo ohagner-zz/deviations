@@ -38,11 +38,10 @@ class JobScheduler {
                 .build()
         Trigger trigger = TriggerBuilder.newTrigger()
             .startNow()
-            .withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(30))
+            .withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(5))
             .build()
         scheduler.scheduleJob(jobDetail, trigger)
     }
-
 
 }
 
@@ -52,8 +51,6 @@ public class WatchProcessingJob implements Job {
 
     @Override
     void execute(JobExecutionContext context) throws JobExecutionException {
-//        Injector mongoInjector = Guice.createInjector(new MongoModule())
-//        Injector trafikLabInjector = Guice.createInjector(new TrafikLabModule())
 
         WatchRepository watchRepository = JobScheduler.mongoInjector.getInstance(WatchRepository)
         UserRepository userRepository = JobScheduler.mongoInjector.getInstance(UserRepository)

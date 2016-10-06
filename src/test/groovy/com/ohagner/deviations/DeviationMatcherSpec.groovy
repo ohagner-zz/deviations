@@ -12,6 +12,7 @@ import java.time.ZoneId
 import static org.hamcrest.CoreMatchers.hasItems
 import static org.hamcrest.CoreMatchers.is
 import static org.junit.Assert.assertThat
+import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 class DeviationMatcherSpec extends Specification {
 
@@ -65,9 +66,9 @@ class DeviationMatcherSpec extends Specification {
     def "filter out deviation with long duration"() {
         given:
             Deviation longDuration = Deviation.builder()
-                    .from(LocalDateTime.now().minusHours(13))
-                    .to(LocalDateTime.now().plusHours(1))
-                    .created(LocalDateTime.now())
+                    .from(LocalDateTime.now(ZONE_ID).minusHours(13))
+                    .to(LocalDateTime.now(ZONE_ID).plusHours(1))
+                    .created(LocalDateTime.now(ZONE_ID))
                     .build()
             DeviationMatcher deviationMatcher = new DeviationMatcher([longDuration])
         expect:
@@ -76,7 +77,7 @@ class DeviationMatcherSpec extends Specification {
 
     def "filter out deviations created more than 12 hours ago"() {
         given:
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+            LocalDateTime now = LocalDateTime.now(ZONE_ID)
             Deviation tooLongDuration = Deviation.builder()
                     .from(now.minusHours(DeviationMatcher.MAX_DEVIATION_DURATION_HOURS))
                     .to(now.plusHours(1))
@@ -87,7 +88,7 @@ class DeviationMatcherSpec extends Specification {
 
     def "filter out deviations from the past"() {
         given:
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+            LocalDateTime now = LocalDateTime.now(ZONE_ID)
             Deviation oldDeviation = Deviation.builder()
                 .to(now.minusHours(1))
                 .build()
@@ -96,7 +97,7 @@ class DeviationMatcherSpec extends Specification {
     }
 
     static List<Deviation> createDeviationList() {
-        LocalDateTime now = LocalDateTime.now()
+        LocalDateTime now = LocalDateTime.now(ZONE_ID)
         List<Deviation> deviations = []
         deviations << new Deviation(id: "1", lineNumbers: ["1", "2", "3"], transportMode: TransportMode.TRAIN, header: "First", from: now.minusHours(10), to: now.plusHours(1), created: now)
         deviations << new Deviation(id: "2", lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second", from: now.minusHours(1), to: now.plusHours(1), created: now)
@@ -105,7 +106,7 @@ class DeviationMatcherSpec extends Specification {
     }
 
     static Deviation createValidDeviation() {
-        LocalDateTime now = LocalDateTime.now()
+        LocalDateTime now = LocalDateTime.now(ZONE_ID)
         return new Deviation(lineNumbers: ["1"], transportMode: TransportMode.TRAIN, header: "Second", from: now, to: now, created: now)
     }
 

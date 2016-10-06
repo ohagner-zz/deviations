@@ -8,6 +8,8 @@ import groovy.util.logging.Slf4j
 import java.time.LocalDateTime
 import java.time.ZoneId
 
+import static com.ohagner.deviations.config.Constants.ZONE_ID
+
 @Slf4j
 class WatchRepository {
 
@@ -51,7 +53,7 @@ class WatchRepository {
     Watch create(Watch watch) {
         long generatedId = counter.getAndIncrement()
         watch.id = generatedId
-        watch.created = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+        watch.created = LocalDateTime.now(ZONE_ID)
         DBObject mongoWatch = JSON.parse(watch.toJson())
         WriteResult result = watches.insert(mongoWatch)
         if (result.getN() == 1) {
@@ -61,7 +63,7 @@ class WatchRepository {
     }
 
     Watch update(Watch watch) {
-        watch.lastUpdated = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+        watch.lastUpdated = LocalDateTime.now(ZONE_ID)
         DBObject mongoWatch = JSON.parse(watch.toJson())
         WriteResult result = watches.update(new BasicDBObject(id:watch.id), mongoWatch)
         if (result.getN() == 1) {

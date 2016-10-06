@@ -5,22 +5,21 @@ import com.ohagner.deviations.domain.Transport
 import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
 
-import java.time.Duration
 import java.time.LocalDateTime
-import java.time.ZoneId
+
+import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 @Slf4j
 class DeviationMatcher {
     //Make immutable?
     public static final int MAX_DEVIATION_DURATION_HOURS = 12
-    public static final int MAX_DEVIATION_CREATED_HOURS_AGO = 24
     final Map<Transport, List<Deviation>> transportDeviationMap
 
     static Closure maxDurationPredicate = {
         Deviation deviation -> deviation.getDuration().toHours() < MAX_DEVIATION_DURATION_HOURS
     }
     static Closure stillActualPredicate = { Deviation deviation ->
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+        LocalDateTime now = LocalDateTime.now(ZONE_ID)
         deviation.to.isAfter(now)
     }
     public DeviationMatcher(List<Deviation> deviationList) {

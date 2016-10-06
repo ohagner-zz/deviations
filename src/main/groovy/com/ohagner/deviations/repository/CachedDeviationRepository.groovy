@@ -1,5 +1,6 @@
 package com.ohagner.deviations.repository
 
+import static com.ohagner.deviations.config.Constants.ZONE_ID
 import com.ohagner.deviations.domain.Deviation
 import groovy.util.logging.Slf4j
 
@@ -26,16 +27,17 @@ class CachedDeviationRepository implements DeviationRepository {
     List<Deviation> retrieveAll() {
         if(cachedResponse == null) {
             cachedResponse = source.retrieveAll()
-            lastUpdated = LocalDateTime.now()
+            lastUpdated = LocalDateTime.now(ZONE_ID)
         }
 
-        Duration timeSinceUpdate = Duration.between(lastUpdated, LocalDateTime.now())
+        Duration timeSinceUpdate = Duration.between(lastUpdated, LocalDateTime.now(ZONE_ID))
         if (timeSinceUpdate.compareTo(timeToCache) > 0) {
             log.info "Updating cached deviations"
             cachedResponse = source.retrieveAll()
-            lastUpdated = LocalDateTime.now()
+            lastUpdated = LocalDateTime.now(ZONE_ID)
         }
         return cachedResponse
     }
+
 
 }

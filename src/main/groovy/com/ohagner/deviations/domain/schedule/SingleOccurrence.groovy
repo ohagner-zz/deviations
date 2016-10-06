@@ -15,6 +15,8 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*
+import static com.ohagner.deviations.config.Constants.ZONE_ID
+
 
 @Slf4j
 @TupleConstructor(force = true)
@@ -43,7 +45,7 @@ class SingleOccurrence extends Schedule {
 
     @Override
     boolean isTimeToArchive() {
-        return LocalDateTime.now().isAfter(LocalDateTime.of(dateOfEvent, timeOfEvent))
+        return LocalDateTime.now(ZONE_ID).isAfter(LocalDateTime.of(dateOfEvent, timeOfEvent))
     }
 
     String toJson() {

@@ -14,8 +14,7 @@ import static groovy.util.GroovyTestCase.assertEquals
 import static java.time.DayOfWeek.FRIDAY
 import static java.time.DayOfWeek.MONDAY
 import static org.hamcrest.MatcherAssert.assertThat
-import static net.javacrumbs.jsonunit.JsonAssert.*
-import static net.javacrumbs.jsonunit.JsonMatchers.*;
+import static net.javacrumbs.jsonunit.JsonMatchers.*
 
 
 class WatchSpec extends Specification {

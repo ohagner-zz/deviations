@@ -19,6 +19,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 /**
  * Test job for matching watches against current deviations
@@ -55,7 +56,7 @@ class WatchProcessorSpec extends Specification {
     }
 
     List<Deviation> createDeviationList() {
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+        LocalDateTime now = LocalDateTime.now(ZONE_ID)
         def deviation = new Deviation()
         deviation.id = 1
         deviation.header = "header"
@@ -71,9 +72,9 @@ class WatchProcessorSpec extends Specification {
 
     List<Watch> createWatches() {
         def matching = new Watch(name: "matching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "35", transportMode: TransportMode.BUS)])
-        matching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now().plusMinutes(5), dateOfEvent: LocalDate.now())
+        matching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5), dateOfEvent: LocalDate.now(ZONE_ID))
         def nonMatching = new Watch(name: "nonMatching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "99", transportMode: TransportMode.TRAIN)])
-        nonMatching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now().plusMinutes(5l), dateOfEvent: LocalDate.now())
+        nonMatching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5l), dateOfEvent: LocalDate.now(ZONE_ID))
         return [matching, nonMatching]
     }
 }

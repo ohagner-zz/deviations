@@ -14,6 +14,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
+import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 @Slf4j
 @Builder
@@ -32,7 +33,7 @@ class WatchTask implements Callable<WatchResult> {
         WatchResult result = new WatchResult(status: WatchExecutionStatus.STARTED)
         Stopwatch timer = Stopwatch.createStarted()
         try {
-            if (watch.isTimeToCheck(LocalDateTime.now())) {
+            if (watch.isTimeToCheck(LocalDateTime.now(ZONE_ID))) {
                 def matchingDeviations = deviationMatcher.findMatching(watch)
                 result.status = WatchExecutionStatus.TIME_CHECKED
 
@@ -41,7 +42,7 @@ class WatchTask implements Callable<WatchResult> {
                     result.status = WatchExecutionStatus.MATCHED
                     notificationService.processNotifications(watch, matchingDeviations)
                     result.status = WatchExecutionStatus.NOTIFIED
-                    watch.lastNotified = LocalDateTime.now(ZoneId.of("Europe/Paris"))
+                    watch.lastNotified = LocalDateTime.now(ZONE_ID)
                     matchingDeviations.each { watch.addDeviationId(it.id)}
                     watchRepository.update(watch)
                 } else {

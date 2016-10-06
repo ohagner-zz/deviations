@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.EvictingQueue
 import com.ohagner.deviations.config.DateConstants
 import com.ohagner.deviations.domain.notifications.NotificationType
 import com.ohagner.deviations.domain.schedule.Schedule

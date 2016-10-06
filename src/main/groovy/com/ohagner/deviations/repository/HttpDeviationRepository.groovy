@@ -22,7 +22,7 @@ class HttpDeviationRepository implements DeviationRepository {
 
     List<Deviation> retrieveAll() {
 
-        log.info "Updating deviations"
+        log.info "Updating deviations through http call"
         List<Deviation> deviationList = []
         try {
 
@@ -49,7 +49,7 @@ class HttpDeviationRepository implements DeviationRepository {
 
         def jsonDeviations = response.json
         return jsonDeviations.ResponseData.collect {
-            Deviation.fromJson(JsonOutput.toJson(it), TransportMode.TRAIN)
+            Deviation.fromJson(JsonOutput.toJson(it), transportMode)
         }
     }
 }

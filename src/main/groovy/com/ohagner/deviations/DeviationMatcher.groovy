@@ -33,7 +33,7 @@ class DeviationMatcher {
             .each { deviation ->
                 deviation.lineNumbers.each { lineNumber ->
                     def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)
-                    log.debug "Adding deviation to matcher with linenumber $lineNumber"
+                    log.debug "Adding deviation to matcher with linenumber $lineNumber and transportMode ${deviation.transportMode}"
                     transportDeviationMap.get(transport, []).add(deviation)
                 }
             }

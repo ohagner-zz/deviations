@@ -19,6 +19,15 @@ class LineNumberParserSpec extends Specification {
             assertThat(result, is(["35", "36", "37"]))
     }
 
+    def 'parse single line numbers'() {
+        given:
+        def input = "Buss 745"
+        when:
+        def result = parser.extractLineNumbers(input)
+        then:
+        assertThat(result, is(["745"]))
+    }
+
 
     def 'parse multiple line numbers and transportTypes'() {
         given:

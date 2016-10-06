@@ -5,8 +5,14 @@ class LineNumberParser {
     final static String PATTERN = /[\w\s]*\s((?:\d*[\,\s]?)+)/
 
     List<String> extractLineNumbers(String scopeElements) {
-        def matcher=(scopeElements =~ PATTERN)
-        def lineNumbers = matcher[0][1]
-        return lineNumbers.split(',').collect { it.trim() }
+        def parts = scopeElements.split(";")
+        def lineNumbers = []
+        parts.each { part ->
+            def matcher=(part =~ PATTERN)
+            def foundNumbers = matcher[0][1]
+            lineNumbers.addAll(foundNumbers.split(",").collect { it.trim() })
+        }
+
+        return lineNumbers
     }
 }

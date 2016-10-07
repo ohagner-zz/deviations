@@ -47,7 +47,7 @@ class Watch {
     LocalDateTime created
 
     @JsonFormat(pattern=DateConstants.LONG_DATE_FORMAT, shape=STRING)
-    LocalDateTime lastUpdated
+    LocalDateTime lastProcessed
 
     static Watch fromJson(String json) {
         return mapper.readValue(json, Watch)

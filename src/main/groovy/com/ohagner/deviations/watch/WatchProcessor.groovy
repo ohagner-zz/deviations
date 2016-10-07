@@ -40,7 +40,11 @@ class WatchProcessor {
         def watchTasks = watches.collect { watch -> new WatchTask(watch: watch, watchRepository: watchRepository, deviationMatcher: deviationMatcher, notificationService: notificationService) }
         log.info "Submitting ${watchTasks.size()} tasks to executor"
         ExecutorService executorService = Executors.newFixedThreadPool(2)
-        return executorService.invokeAll(watchTasks, 5, TimeUnit.MINUTES)
+        try {
+            return executorService.invokeAll(watchTasks, 5, TimeUnit.MINUTES)
+        } finally {
+            executorService.shutdown()
+        }
     }
 
     private Map<WatchExecutionStatus, List<WatchResult>> handleResults(List<Future<WatchResult>> watchExecutionResults) {

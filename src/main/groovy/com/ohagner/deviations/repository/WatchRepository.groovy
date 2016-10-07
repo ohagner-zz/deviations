@@ -6,7 +6,6 @@ import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
 
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 import static com.ohagner.deviations.config.Constants.ZONE_ID
 
@@ -63,7 +62,7 @@ class WatchRepository {
     }
 
     Watch update(Watch watch) {
-        watch.lastUpdated = LocalDateTime.now(ZONE_ID)
+        watch.lastProcessed = LocalDateTime.now(ZONE_ID)
         DBObject mongoWatch = JSON.parse(watch.toJson())
         WriteResult result = watches.update(new BasicDBObject(id:watch.id), mongoWatch)
         if (result.getN() == 1) {

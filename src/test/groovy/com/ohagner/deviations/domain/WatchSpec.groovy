@@ -57,7 +57,7 @@ class WatchSpec extends Specification {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
-        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastUpdated: date, transports: transports)
+        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports)
     }
 
     private Watch createSingleOccurrenceWatch() {
@@ -65,7 +65,7 @@ class WatchSpec extends Specification {
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         Queue<String> processedDeviationIds = new LinkedList(["1", "2"])
         List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
-        return new Watch(id:99,name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastUpdated: date, transports: transports, processedDeviationIds: processedDeviationIds )
+        return new Watch(id:99,name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports, processedDeviationIds: processedDeviationIds )
     }
 
 }

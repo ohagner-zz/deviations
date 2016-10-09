@@ -1,5 +1,6 @@
 package com.ohagner.deviations.domain.schedule
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,7 +20,7 @@ import java.time.LocalDateTime
 @Slf4j
 class Schedule {
 
-    String type
+//    String type
 
     boolean isEventWithinPeriod(LocalDateTime now, long hoursBefore) { return false }
 

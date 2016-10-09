@@ -12,24 +12,15 @@ import static com.ohagner.deviations.config.Constants.ZONE_ID
 @Slf4j
 class DeviationMatcher {
     //Make immutable?
-    public static final int MAX_DEVIATION_DURATION_HOURS = 12
     final Map<Transport, List<Deviation>> transportDeviationMap
 
-    static Closure maxDurationPredicate = {
-        Deviation deviation -> deviation.getDuration().toHours() < MAX_DEVIATION_DURATION_HOURS
-    }
-    static Closure stillActualPredicate = { Deviation deviation ->
-        LocalDateTime now = LocalDateTime.now(ZONE_ID)
-        deviation.to.isAfter(now)
-    }
+
     public DeviationMatcher(List<Deviation> deviationList) {
 
         log.debug "Initializing DeviationMatcher with ${deviationList?.size()} deviations"
         transportDeviationMap = new HashMap<>()
 
         deviationList
-            .findAll { maxDurationPredicate(it) }
-            .findAll { stillActualPredicate(it) }
             .each { deviation ->
                 deviation.lineNumbers.each { lineNumber ->
                     def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)

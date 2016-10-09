@@ -4,14 +4,12 @@ import com.google.common.base.Stopwatch
 import com.ohagner.deviations.DeviationMatcher
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.notifications.NotificationService
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import groovy.transform.builder.Builder
 import groovy.util.logging.Slf4j
 
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
 import static com.ohagner.deviations.config.Constants.ZONE_ID
@@ -26,7 +24,7 @@ class WatchTask implements Callable<WatchResult> {
 
     NotificationService notificationService
 
-    WatchRepository watchRepository
+    MongoWatchRepository watchRepository
 
     @Override
     WatchResult call() throws Exception {

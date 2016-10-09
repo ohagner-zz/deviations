@@ -10,7 +10,7 @@ import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.notifications.LogNotifier
 import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import com.ohagner.deviations.watch.task.WatchExecutionStatus
 import com.ohagner.deviations.watch.WatchProcessor
 import spock.lang.Specification
@@ -18,7 +18,7 @@ import spock.lang.Specification
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
+
 import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 /**
@@ -34,9 +34,9 @@ class WatchProcessorSpec extends Specification {
                     return Optional.of(new User(username: "user", emailAddress: "emailAddress"))
                 }
             }
-            WatchRepository watchRepo = new WatchRepository(null, null) {
+            MongoWatchRepository watchRepo = new MongoWatchRepository(null, null) {
                 @Override
-                List<Watch> retrieveNextToProcess(int max){
+                List<Watch> retrieveRange(int pageNumber, int maxNumPerPage){
                     return createWatches()
                 }
                 @Override

@@ -3,8 +3,7 @@ package com.ohagner.deviations.watch
 import com.ohagner.deviations.DeviationMatcher
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.notifications.NotificationService
-import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import com.ohagner.deviations.watch.task.WatchExecutionStatus
 import com.ohagner.deviations.watch.task.WatchResult
 import com.ohagner.deviations.watch.task.WatchTask
@@ -27,11 +26,11 @@ class WatchProcessor {
 
     DeviationMatcher deviationMatcher
     NotificationService notificationService
-    WatchRepository watchRepository
+    MongoWatchRepository watchRepository
 
     Map<WatchExecutionStatus, List<WatchResult>> process() {
 
-        List<Future<WatchResult>> watchExecutionResults = submitForProcessing(watchRepository.retrieveNextToProcess(50))
+        List<Future<WatchResult>> watchExecutionResults = submitForProcessing(watchRepository.retrieveRange(1, 50))
 
         return handleResults(watchExecutionResults)
     }

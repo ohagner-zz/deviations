@@ -56,7 +56,7 @@ class SingleOccurrence extends Schedule {
     void setTimeToArchive(String timeToArchive) {}
 
 
-    @JsonProperty("type")
+    @JsonProperty
     String getType() {
         return "SINGLE"
     }

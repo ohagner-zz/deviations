@@ -1,9 +1,9 @@
-package com.ohagner.deviations.handler
+package com.ohagner.deviations.handlers
 
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyContext
 import ratpack.groovy.handling.GroovyHandler
@@ -21,7 +21,7 @@ class UserHandler extends GroovyHandler {
                 Optional<User> user = context.maybeGet(User)
                 delete {
                     UserRepository userRepository = context.get(UserRepository)
-                    WatchRepository watchRepository = context.get(WatchRepository)
+                    MongoWatchRepository watchRepository = context.get(MongoWatchRepository)
                     if (user.isPresent()) {
                         log.info "Deleting user"
                         User userToDelete = user.get()

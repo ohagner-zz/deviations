@@ -3,6 +3,7 @@ package com.ohagner.deviations.domain
 import com.ohagner.deviations.domain.schedule.Schedule
 import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.domain.schedule.WeeklySchedule
+import groovy.json.JsonOutput
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -22,10 +23,11 @@ class WatchSpec extends Specification {
     def 'transform watch with weekly schedule to json'() {
         given:
             Watch watch = createWeeklyScheduleWatch()
-        expect:
-        String expected = new File("src/test/resources/watches/weeklyScheduleWatch.json").text
-        println expected
-        assertThat(watch.toJson(), jsonEquals(expected))
+        when:
+            String expected = new File("src/test/resources/watches/weeklyScheduleWatch.json").text
+        then:
+            println JsonOutput.prettyPrint(watch.toJson())
+            assertThat(watch.toJson(), jsonEquals(expected))
     }
 
     def 'transform weekly schedule watch json to object'() {

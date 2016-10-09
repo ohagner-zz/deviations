@@ -12,7 +12,7 @@ import wslite.rest.RESTClient
 
 import java.time.Duration
 
-class TrafikLabModule extends AbstractModule {
+class DeviationsModule extends AbstractModule {
 
     TrafikLabConfig config
 

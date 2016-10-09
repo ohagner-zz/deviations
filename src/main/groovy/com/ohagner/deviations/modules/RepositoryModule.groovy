@@ -11,12 +11,12 @@ import com.mongodb.ServerAddress
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.repository.IncrementalCounter
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 @Slf4j
-class MongoModule extends AbstractModule {
+class RepositoryModule extends AbstractModule {
 
     MongoConfig mongoConfig
 
@@ -41,11 +41,12 @@ class MongoModule extends AbstractModule {
     @Provides
     @CompileStatic
     @Singleton
-    WatchRepository provideWatchRepository() {
+    MongoWatchRepository provideWatchRepository() {
         try {
             DB db = connectToDatabase(mongoConfig)
             IncrementalCounter counter = IncrementalCounter.createCounter(db.getCollection(mongoConfig.counterCollectionName), mongoConfig.watchCollectionName)
-            return new WatchRepository(db.getCollection(mongoConfig.watchCollectionName), counter)
+
+            return new MongoWatchRepository(db.getCollection(mongoConfig.watchCollectionName), counter)
         } catch (Exception e) {
             log.error("Failed to create DB connection", e)
             throw e
@@ -57,7 +58,7 @@ class MongoModule extends AbstractModule {
         MongoCredential credential = MongoCredential.createCredential(mongoConfig.username, mongoConfig.userDatabaseName, mongoConfig.password as char[])
         ServerAddress serverAddress = new ServerAddress(mongoConfig.host, mongoConfig.port)
         MongoClient mongoClient = new MongoClient(serverAddress, [credential])
-        return new GMongo(mongoClient).getDB(mongoConfig.databaseName)
+        return new GMongo(mongoClient)..getDB(mongoConfig.databaseName)
     }
 
 }

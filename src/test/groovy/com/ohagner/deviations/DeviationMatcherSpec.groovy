@@ -63,38 +63,7 @@ class DeviationMatcherSpec extends Specification {
             assertThat(matching.size(), is(0))
     }
 
-    def "filter out deviation with long duration"() {
-        given:
-            Deviation longDuration = Deviation.builder()
-                    .from(LocalDateTime.now(ZONE_ID).minusHours(13))
-                    .to(LocalDateTime.now(ZONE_ID).plusHours(1))
-                    .created(LocalDateTime.now(ZONE_ID))
-                    .build()
-            DeviationMatcher deviationMatcher = new DeviationMatcher([longDuration])
-        expect:
-            assertThat(deviationMatcher.transportDeviationMap.size(), is(0))
-    }
 
-    def "filter out deviations created more than 12 hours ago"() {
-        given:
-            LocalDateTime now = LocalDateTime.now(ZONE_ID)
-            Deviation tooLongDuration = Deviation.builder()
-                    .from(now.minusHours(DeviationMatcher.MAX_DEVIATION_DURATION_HOURS))
-                    .to(now.plusHours(1))
-                    .build()
-        expect:
-            assertThat([tooLongDuration].findAll { DeviationMatcher.maxDurationPredicate(it) }.size(), is(0))
-    }
-
-    def "filter out deviations from the past"() {
-        given:
-            LocalDateTime now = LocalDateTime.now(ZONE_ID)
-            Deviation oldDeviation = Deviation.builder()
-                .to(now.minusHours(1))
-                .build()
-        expect:
-            assertThat([oldDeviation].findAll { DeviationMatcher.stillActualPredicate(it) }.size(), is(0))
-    }
 
     static List<Deviation> createDeviationList() {
         LocalDateTime now = LocalDateTime.now(ZONE_ID)

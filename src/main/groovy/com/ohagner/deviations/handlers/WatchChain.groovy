@@ -1,8 +1,8 @@
-package com.ohagner.deviations.handler
+package com.ohagner.deviations.handlers
 
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyChainAction
 
@@ -24,7 +24,7 @@ class WatchChain extends GroovyChainAction {
                 next()
             }
         }
-        path("") { WatchRepository watchRepository, User user ->
+        path("") { MongoWatchRepository watchRepository, User user ->
             context.byMethod {
                 post {
                     request.body.then { body ->
@@ -39,7 +39,7 @@ class WatchChain extends GroovyChainAction {
                 }
             }
         }
-        path(":id") { WatchRepository watchRepository, User user ->
+        path(":id") { MongoWatchRepository watchRepository, User user ->
             if (!pathTokens.id.isNumber()) {
                 response.status(400)
                 render json(["message": new String("Watch id ${pathTokens.id} is not numeric")])

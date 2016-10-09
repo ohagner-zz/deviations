@@ -43,10 +43,10 @@ class WeeklySchedule extends Schedule {
     @JsonProperty("timeToArchive")
     void setTimeToArchive(String timeToArchive) {}
 
-    @JsonProperty("type")
-    String getType() {
-        return "WEEKLY"
-    }
+//    @JsonProperty
+//    String getType() {
+//        return "WEEKLYHEJ"
+//    }
 
     boolean equals(o) {
         if (this.is(o)) return true

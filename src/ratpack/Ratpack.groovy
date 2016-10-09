@@ -1,18 +1,20 @@
+import com.ohagner.deviations.DeviationFilter
 import com.ohagner.deviations.DeviationMatcher
+import com.ohagner.deviations.chains.AdminChain
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.handler.UserHandler
-import com.ohagner.deviations.handler.WatchChain
+import com.ohagner.deviations.handlers.UserHandler
+import com.ohagner.deviations.handlers.WatchChain
 import com.ohagner.deviations.modules.JsonRenderingModule
-import com.ohagner.deviations.modules.MongoModule
-import com.ohagner.deviations.modules.TrafikLabModule
+import com.ohagner.deviations.modules.RepositoryModule
+import com.ohagner.deviations.modules.DeviationsModule
 import com.ohagner.deviations.notifications.EmailNotifier
 import com.ohagner.deviations.notifications.LogNotifier
 import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.DeviationRepository
 import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.repository.MongoWatchRepository
 import com.ohagner.deviations.watch.WatchProcessor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -36,10 +38,11 @@ ratpack {
     }
 
     bindings {
-        module MongoModule
-        module TrafikLabModule
+        module RepositoryModule
+        module DeviationsModule
         module MarkupTemplateModule
         module JsonRenderingModule
+        add(new AdminChain())
     }
 
     handlers {
@@ -47,10 +50,13 @@ ratpack {
             context.response.contentType("application/json")
             next()
         }
+        prefix("admin") {
+            insert(AdminChain)
+        }
         prefix("deviations") {
             get("") {
                 DeviationRepository deviationRepo = context.get(DeviationRepository)
-                render json(deviationRepo.retrieveAll())
+                render json(DeviationFilter.apply(deviationRepo.retrieveAll()))
             }
             get(":transportType") {
                 render json(["message": "Get all deviations for transport"])
@@ -97,7 +103,7 @@ ratpack {
             prefix("watches") {
                 insert(new WatchChain())
             }
-            path("check") { WatchRepository watchRepository, UserRepository userRepository ->
+            path("check") { MongoWatchRepository watchRepository, UserRepository userRepository ->
                 DeviationRepository deviationRepo = new HttpDeviationRepository()
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
                 WatchProcessor processor = WatchProcessor.builder()

@@ -7,7 +7,7 @@
     "dateOfEvent": "2016-10-10",
     "timeOfEvent": "10:10",
     "type": "SINGLE",
-    "timeToArchive": false
+    "timeToArchive": true
   },
   "transports": [
     {

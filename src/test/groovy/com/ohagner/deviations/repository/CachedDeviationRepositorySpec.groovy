@@ -18,7 +18,7 @@ class CachedDeviationRepositorySpec extends Specification {
         given:
             DeviationRepository source = Mock()
             source.retrieveAll() >> [one] >> [two]
-            CachedDeviationRepository cachedRepo = new CachedDeviationRepository(source, Duration.ofMillis(0))
+            CachedDeviationRepository cachedRepo = new CachedDeviationRepository(source, Duration.ofMillis(1))
         when:
             Deviation firstResponse = cachedRepo.retrieveAll().first()
             Thread.sleep(1000)

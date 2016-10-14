@@ -49,5 +49,15 @@ class SingleOccurrenceSpec extends Specification {
             singleOccurrence.isEventWithinPeriod(timeToCheck, 1) == false
     }
 
+    def 'just after midnight'() {
+        given:
+            LocalTime timeOfEvent = LocalTime.of(1,0)
+            LocalDate dateOfEvent = LocalDate.of(2016,10,10)
+            SingleOccurrence singleOccurrence = new SingleOccurrence(dateOfEvent: dateOfEvent, timeOfEvent: timeOfEvent)
+            LocalDateTime timeToCheck = LocalDateTime.of(dateOfEvent, LocalTime.of(0,15))
+        expect:
+            singleOccurrence.isEventWithinPeriod(timeToCheck, 2) == true
+    }
+
 
 }

@@ -1,52 +1,79 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.domain.Watch
-import com.ohagner.deviations.repository.WatchRepository
-import ratpack.http.client.ReceivedResponse
-import ratpack.jackson.JsonRender
-import ratpack.test.embed.EmbeddedApp
+import com.ohagner.deviations.domain.User
+import com.ohagner.deviations.domain.notifications.Notification
+import com.ohagner.deviations.notifications.NotificationService
+import com.ohagner.deviations.repository.UserRepository
 import ratpack.test.handling.RequestFixture
 import spock.lang.Specification
-
+import wslite.rest.RESTClientException
 
 class AdminChainSpec extends Specification {
 
-    def watchRepo = Mock(WatchRepository)
+    private static final String USERNAME = "theUsername"
 
-    def requestFixture = RequestFixture.requestFixture()
-        .registry { registry ->
-            registry.add(WatchRepository, watchRepo)
-    }
+    NotificationService notificationsService
+    UserRepository userRepository
+
+    def requestFixture
 
     def setup() {
-
+        notificationsService = Mock(NotificationService)
+        userRepository = Mock(UserRepository)
+        requestFixture = RequestFixture.requestFixture()
+                .registry { registry ->
+            registry.add(NotificationService, notificationsService)
+            registry.add(UserRepository, userRepository)
+        }
     }
 
-    def 'should return list of watches'() {
+    def 'should notify when user exists'() {
         given:
-            Watch watch = Watch.fromJson(new File("src/test/resources/watches/weeklyScheduleWatch.json").text)
+            Notification notification = new Notification(header: "Header", message: "Message")
+            User user = new User(username: USERNAME)
         when:
-            def result = requestFixture.uri("watchesToProcess").handleChain(new AdminChain())
+            def result = requestFixture
+                    .uri("users/$USERNAME/notification")
+                    .method("POST")
+                    .body(notification.toJson(), "application/json")
+                    .handleChain(new AdminChain())
         then:
-            1 * watchRepo.retrieveRange(_,_) >> [watch]
-            assert result.rendered(JsonRender).object == [watch]
+            1 * userRepository.findByUsername(USERNAME) >> Optional.of(user)
+            1 * notificationsService.sendNotification(user, _)
+            assert result.status.code == 204
+            assert result.bodyText == ""
     }
 
-    def 'should return response'() {
+    def 'should respond with 404 when user is missing'() {
         given:
-            Watch watch = Watch.fromJson(new File("src/test/resources/watches/weeklyScheduleWatch.json").text)
-
-        def app = EmbeddedApp.of{ s ->
-
-                s.registryOf { r ->
-                    r.add(WatchRepository, watchRepo)
-                }
-                s.handlers(new AdminChain())
-            }
+            Notification notification = new Notification(header: "Header", message: "Message")
         when:
-            ReceivedResponse response = app.httpClient.get("watchesToProcess")
+            def result = requestFixture
+                    .uri("users/$USERNAME/notification")
+                    .method("POST")
+                    .body(notification.toJson(), "application/json")
+                    .handleChain(new AdminChain())
         then:
-            1 * watchRepo.retrieveRange(_,_) >> [watch]
-            assert response.statusCode == 200
+            1 * userRepository.findByUsername(USERNAME) >> Optional.empty()
+            0 * notificationsService.sendNotification(_, _)
+            assert result.status.code == 404
     }
+
+    def 'should respond with 500 when notification fails'() {
+        given:
+            Notification notification = new Notification(header: "Header", message: "Message")
+            User user = new User(username: USERNAME)
+        when:
+            def result = requestFixture
+                    .uri("users/$USERNAME/notification")
+                    .method("POST")
+                    .body(notification.toJson(), "application/json")
+                    .handleChain(new AdminChain())
+        then:
+            1 * userRepository.findByUsername(USERNAME) >> Optional.of(user)
+            notificationsService.sendNotification(user,_) >> { throw new RESTClientException("Connection reset") }
+            assert result.status.code == 500
+    }
+
+
 }

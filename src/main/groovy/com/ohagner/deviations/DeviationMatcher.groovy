@@ -24,7 +24,7 @@ class DeviationMatcher {
             .each { deviation ->
                 deviation.lineNumbers.each { lineNumber ->
                     def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)
-                    log.debug "Adding deviation to matcher with linenumber $lineNumber and transportMode ${deviation.transportMode}"
+                    log.info "Adding deviation to matcher with linenumber $lineNumber and transportMode ${deviation.transportMode}"
                     transportDeviationMap.get(transport, []).add(deviation)
                 }
             }
@@ -32,6 +32,7 @@ class DeviationMatcher {
     }
 
     Set<Deviation> findMatching(Watch watch) {
+        log.info "Matching watch: $watch"
         Set<Deviation> matchingDeviations = []
         watch.transports.each {
             matchingDeviations.addAll(transportDeviationMap.get(it, []))

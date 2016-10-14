@@ -1,20 +1,24 @@
 package com.ohagner.deviations.watch
 
+import com.google.common.base.Stopwatch
 import com.ohagner.deviations.DeviationMatcher
+import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.Watch
-import com.ohagner.deviations.notifications.NotificationService
-import com.ohagner.deviations.repository.MongoWatchRepository
-import com.ohagner.deviations.watch.task.WatchExecutionStatus
-import com.ohagner.deviations.watch.task.WatchResult
-import com.ohagner.deviations.watch.task.WatchTask
+import com.ohagner.deviations.domain.notifications.Notification
+import com.ohagner.deviations.watch.task.WatchProcessingStatus
+import com.ohagner.deviations.watch.task.WatchProcessingResult
 import groovy.transform.TupleConstructor
 import groovy.transform.builder.Builder
 import groovy.util.logging.Slf4j
+import wslite.rest.ContentType
+import wslite.rest.RESTClient
+import wslite.rest.Response
 
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
+import java.time.Duration
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
+
+import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 /**
  * Process watches and notify if one or more deviations are found
@@ -25,41 +29,78 @@ import java.util.concurrent.TimeUnit
 class WatchProcessor {
 
     DeviationMatcher deviationMatcher
-    NotificationService notificationService
-    MongoWatchRepository watchRepository
+    RESTClient deviationsApiClient
 
-    Map<WatchExecutionStatus, List<WatchResult>> process() {
 
-        List<Future<WatchResult>> watchExecutionResults = submitForProcessing(watchRepository.retrieveRange(1, 50))
-
-        return handleResults(watchExecutionResults)
-    }
-
-    private List<Future<WatchResult>> submitForProcessing(List<Watch> watches) {
-        def watchTasks = watches.collect { watch -> new WatchTask(watch: watch, watchRepository: watchRepository, deviationMatcher: deviationMatcher, notificationService: notificationService) }
-        log.info "Submitting ${watchTasks.size()} tasks to executor"
-        ExecutorService executorService = Executors.newFixedThreadPool(2)
+    WatchProcessingResult process(Watch watch) {
+        WatchProcessingResult result = new WatchProcessingResult(status: WatchProcessingStatus.STARTED)
+        Stopwatch timer = Stopwatch.createStarted()
         try {
-            return executorService.invokeAll(watchTasks, 5, TimeUnit.MINUTES)
-        } finally {
-            executorService.shutdown()
+            if (watch.isTimeToCheck(LocalDateTime.now(ZONE_ID))) {
+                result.matchingDeviations = deviationMatcher.findMatching(watch)
+
+                if(result.matchingDeviations) {
+                    result.addMessage("Matching deviations: ${result.matchingDeviations.collect { it.id}.join(",") }")
+                    result.status = WatchProcessingStatus.MATCHED
+                    if(!sendNotifications(watch, result.matchingDeviations)) {
+                        result.status = WatchProcessingStatus.NOTIFICATION_FAILED
+                        result.executionTime = Duration.ofMillis(timer.elapsed(TimeUnit.MILLISECONDS))
+                        return result
+                    }
+                    result.status = WatchProcessingStatus.NOTIFIED
+                    watch.lastNotified = LocalDateTime.now(ZONE_ID)
+                    result.matchingDeviations.each { watch.addDeviationId(it.id)}
+
+                    if(!update(watch)) {
+                        result.status = WatchProcessingStatus.WATCH_UPDATE_FAILED
+                    }
+                } else {
+                    result.status = WatchProcessingStatus.NO_MATCH
+                    result.addMessage("No matching deviations found")
+                }
+            } else {
+                result.status = WatchProcessingStatus.NOT_TIME_TO_CHECK
+            }
+        } catch(Exception e) {
+            log.error("Watch processing failed for watch ${watch.id}", e)
+            result.status = WatchProcessingStatus.FAILED
+            result.addMessage(e.getMessage())
         }
+        result.executionTime = Duration.ofMillis(timer.elapsed(TimeUnit.MILLISECONDS))
+        return result
     }
 
-    private Map<WatchExecutionStatus, List<WatchResult>> handleResults(List<Future<WatchResult>> watchExecutionResults) {
-        Map<WatchExecutionStatus, List<WatchResult>> resultsByStatus = [:]
-        watchExecutionResults.each { future ->
-            //Probably a try-catch somewhere around here
-            WatchResult result = future.get(5, TimeUnit.SECONDS)
-            resultsByStatus.get(result.status, []) << result
+    private boolean sendNotifications(Watch watch, Set<Deviation> matchingDeviations) {
+        try {
+            Notification notification = Notification.fromDeviations(matchingDeviations, watch.notifyBy)
+            log.info "Sending notification ${notification.toString()}"
+            Response notificationResponse = deviationsApiClient.post(path: "/admin/users/${watch.username}/notification") {
+                type ContentType.JSON
+                text notification.toJson()
+            }
+            log.info "Notification response status ${notificationResponse.statusCode}"
+            return notificationResponse.statusCode ==~  /2\d\d/
+        } catch(Exception e) {
+            log.error("Failed to send notification", e)
+            return false
         }
 
-        List executionSummary = []
-        WatchExecutionStatus.values().each {
-            executionSummary.add("Status $it: with " + resultsByStatus.get(it, []).size() + " watches")
-        }
-        log.info executionSummary.join("\n")
-        return resultsByStatus
     }
+
+    private boolean update(Watch watch) {
+        try {
+            Response updateResponse = deviationsApiClient.put(path: "/users/${watch.username}/watches/${watch.id}") {
+                type ContentType.JSON
+                text watch.toJson()
+            }
+            log.debug "Update response status ${updateResponse.statusCode}"
+            return updateResponse.statusCode ==~  /2\d\d/
+        } catch(Exception e) {
+            log.error("Failed to send notification", e)
+            return false
+        }
+
+    }
+
 
 }

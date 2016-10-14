@@ -51,6 +51,7 @@ class Deviation {
         instance.id = json.DevCaseGid
         instance.header = json.Header
         instance.details = json.Details
+        instance.details = instance.details.replaceAll(/(\n)+\s?/, "\n")
         instance.lineNumbers = new LineNumberParser().extractLineNumbers(json.ScopeElements)
         instance.from = LocalDateTime.parse(json.FromDateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
         instance.to = LocalDateTime.parse(json.UpToDateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME)

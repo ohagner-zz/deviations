@@ -1,7 +1,7 @@
 package com.ohagner.deviations.notifications
 
-import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.User
+import com.ohagner.deviations.domain.notifications.Notification
 import com.ohagner.deviations.domain.notifications.NotificationType
 import groovy.util.logging.Slf4j
 
@@ -9,18 +9,15 @@ import groovy.util.logging.Slf4j
 class LogNotifier implements Notifier {
 
 
-    boolean isApplicable(List<NotificationType> notificationTypes) {
+    boolean isApplicable(Collection<NotificationType> notificationTypes) {
         return notificationTypes.contains(NotificationType.LOG)
     }
 
     @Override
-    def notify(User user, Set<Deviation> deviations) {
+    void notify(User user, Notification notification) {
         def logMessage = ""
-        logMessage += "User ${user.username} has ${deviations.size()} notification${deviations.size() > 1 ? 's' : ''}\n"
-        logMessage += "LineNumbers".padRight(20) + "DeviationId".padRight(20)+ "Details\n"
-        deviations.each {
-            logMessage += it?.lineNumbers.join(",").padRight(20) + it?.id.padRight(20) + it?.details + "\n"
-        }
+        logMessage += "User ${user.username} was notified that: ${notification.header}\n"
+        logMessage += notification.message
         log.info(logMessage)
     }
 }

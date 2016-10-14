@@ -1,53 +1,60 @@
 package com.ohagner.deviations.scheduler
 
+import com.google.inject.Inject
+import com.ohagner.deviations.config.AppConfig
+import com.ohagner.deviations.config.Constants
 import com.ohagner.deviations.domain.Watch
+import com.ohagner.deviations.modules.MessagingModule
+import com.ohagner.deviations.repository.WatchRepository
+import com.rabbitmq.client.Channel
 import groovy.util.logging.Slf4j
-import org.quartz.Job
-import org.quartz.JobExecutionContext
-import org.quartz.JobExecutionException
-import wslite.rest.ContentType
-import wslite.rest.RESTClient
-import wslite.rest.RESTClientException
-import wslite.rest.Response
+import ratpack.exec.ExecController
+import ratpack.exec.Execution
+import ratpack.service.Service
+import ratpack.service.StartEvent
+
+import java.util.concurrent.TimeUnit
 
 @Slf4j
-class JobScheduler {
+class JobScheduler implements Service, Runnable {
 
+    private static final int MAX_NUM_OF_WATCHES = 50
 
-    def static main(def args) {
-        def response2 = "http://localhost:5000/admin/watchesToProcess".toURL().getText("UTF-8")
-        log.info "Response $response2"
-        RESTClient restClient = new RESTClient("http://localhost:5000")
-        try {
-            def response = restClient.get(path: "admin/watchesToProcess", accept: ContentType.JSON)
-            println response.contentAsString
-            List<Watch> watches = response.json.collect { Watch.fromJson(it) }
-        } catch(RESTClientException rce) {
-            println "Hej hej " + rce.message
-            rce.printStackTrace()
-        }
-//        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler()
-//        scheduler.start()
-//        JobDetail jobDetail = JobBuilder
-//                .newJob(WatchProcessingJob)
-//                .build()
-//        Trigger trigger = TriggerBuilder.newTrigger()
-//            .startNow()
-//            .withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(5))
-//            .build()
-//        scheduler.scheduleJob(jobDetail, trigger)
+    WatchRepository watchRepository
+    Channel channel
+
+    @Inject
+    JobScheduler(WatchRepository watchRepository, Channel channel) {
+        this.watchRepository = watchRepository
+        this.channel = channel
     }
-
-}
-
-@Slf4j
-public class WatchProcessingJob implements Job {
 
     @Override
-    void execute(JobExecutionContext context) throws JobExecutionException {
-
-        RESTClient restClient = new RESTClient("http://localhost:5050")
-        Response response = restClient.get(path: "/admin/watchesToProcess", contentType: ContentType.JSON)
-        List<Watch> watches = response.json.collect { Watch.fromJson(it)}
+    public void onStart(StartEvent startEvent) {
+        ExecController execController = startEvent.getRegistry().get(ExecController.class);
+        execController.getExecutor()
+                .scheduleAtFixedRate(this, 0, AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 30), TimeUnit.MINUTES)
     }
+
+    @Override
+    void run() {
+        log.info "Watch process queueing started"
+        Execution.fork()
+                .onError { t -> log.error("Failed to submit watches for processing", t) }
+                .start {
+            List<Watch> watchesToProcess
+            int pageNumber = 1
+            while (watchesToProcess = watchRepository.retrieveRange(pageNumber, MAX_NUM_OF_WATCHES)) {
+                log.info "Retrieving range with pageNumber $pageNumber, got ${watchesToProcess.size()} watches"
+                watchesToProcess.each {
+                    channel.basicPublish("", Constants.WATCHES_TO_PROCESS_QUEUE_NAME, null, it.toJson().bytes)
+                }
+                pageNumber++
+                log.info "Submitted ${watchesToProcess.size()} watches to watch processing queue"
+            }
+        }
+
+    }
+
 }
+

@@ -22,12 +22,12 @@ class WeeklyScheduleSpec extends Specification {
             monToFriScheduleAt1045.isEventWithinPeriod(timeToCheck, 2)
     }
 
-    def "correct weekday, time just before"() {
+    def "should be time to check when event is just after midnight"() {
         given:
-            def monToFriScheduleAt1045 = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(8,45))
-            def timeToCheck = LocalDateTime.of(THURSDAY_DATE, LocalTime.of(10,15))
+            def monToFriScheduleAt1045 = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(0,45))
+            def timeToCheck = LocalDateTime.of(THURSDAY_DATE, LocalTime.of(23,59))
         expect:
-            monToFriScheduleAt1045.isEventWithinPeriod(timeToCheck, 2) == false
+            monToFriScheduleAt1045.isEventWithinPeriod(timeToCheck, 1)
     }
 
     def "correct weekday, time just after event"() {
@@ -40,11 +40,13 @@ class WeeklyScheduleSpec extends Specification {
 
     def "correct weekday, time just before event"() {
         given:
-        def monToFriScheduleAt1045 = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(8,45))
-        def timeToCheck = LocalDateTime.of(THURSDAY_DATE, LocalTime.of(8,44))
+            def monToFriScheduleAt1045 = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(8,45))
+            def timeToCheck = LocalDateTime.of(THURSDAY_DATE, LocalTime.of(8,44))
         expect:
-        monToFriScheduleAt1045.isEventWithinPeriod(timeToCheck, 2)
+            monToFriScheduleAt1045.isEventWithinPeriod(timeToCheck, 2)
     }
+
+
 
 }
 

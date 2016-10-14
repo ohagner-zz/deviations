@@ -10,8 +10,10 @@ import com.mongodb.MongoCredential
 import com.mongodb.ServerAddress
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.repository.IncrementalCounter
+import com.ohagner.deviations.repository.MongoUserRepository
 import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.repository.MongoWatchRepository
+import com.ohagner.deviations.repository.WatchRepository
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
@@ -31,7 +33,7 @@ class RepositoryModule extends AbstractModule {
     UserRepository provideUserRepository() {
         try {
             DB db = connectToDatabase(mongoConfig)
-            return new UserRepository(db.getCollection(mongoConfig.userCollectionName))
+            return new MongoUserRepository(db.getCollection(mongoConfig.userCollectionName))
         } catch (Exception e) {
             log.error("Failed to create DB connection", e)
             throw e
@@ -41,7 +43,7 @@ class RepositoryModule extends AbstractModule {
     @Provides
     @CompileStatic
     @Singleton
-    MongoWatchRepository provideWatchRepository() {
+    WatchRepository provideWatchRepository() {
         try {
             DB db = connectToDatabase(mongoConfig)
             IncrementalCounter counter = IncrementalCounter.createCounter(db.getCollection(mongoConfig.counterCollectionName), mongoConfig.watchCollectionName)
@@ -53,12 +55,13 @@ class RepositoryModule extends AbstractModule {
         }
     }
 
+    @CompileStatic
     private DB connectToDatabase(MongoConfig mongoConfig) {
         log.info "Initializing DB with connection to host: ${mongoConfig.host}"
         MongoCredential credential = MongoCredential.createCredential(mongoConfig.username, mongoConfig.userDatabaseName, mongoConfig.password as char[])
         ServerAddress serverAddress = new ServerAddress(mongoConfig.host, mongoConfig.port)
         MongoClient mongoClient = new MongoClient(serverAddress, [credential])
-        return new GMongo(mongoClient)..getDB(mongoConfig.databaseName)
+        return new GMongo(mongoClient).getDB(mongoConfig.databaseName) //.getDB(mongoConfig.databaseName)
     }
 
 }

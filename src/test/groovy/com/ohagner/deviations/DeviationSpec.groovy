@@ -16,7 +16,7 @@ class DeviationSpec extends Specification {
       "MainNews": false,
       "SortOrder": 1,
       "Header": "Inställd delsträcka mot Nynäshamn",
-      "Details": "Tåg från Bålsta kl  14:53 mot Nynäshamn är inställd mellan Kallhäll och Jakobsberg pga vagnfel. Inställd Kallhäll kl  15:08.",
+      "Details": "Tåg från Bålsta kl  14:53 mot Nynäshamn är inställd mellan Kallhäll och Jakobsberg pga vagnfel.\n\n Inställd Kallhäll kl  15:08.",
       "Scope": "Pendeltåg Nynäshamn-Bålsta-linje 35",
       "DevCaseGid": 9076001009188221,
       "DevMessageVersionNumber": 1,
@@ -33,7 +33,7 @@ class DeviationSpec extends Specification {
                 .id("9076001009188221")
                 .transportMode(TransportMode.TRAIN)
                 .header("Inställd delsträcka mot Nynäshamn")
-                .details("Tåg från Bålsta kl  14:53 mot Nynäshamn är inställd mellan Kallhäll och Jakobsberg pga vagnfel. Inställd Kallhäll kl  15:08.")
+                .details("Tåg från Bålsta kl  14:53 mot Nynäshamn är inställd mellan Kallhäll och Jakobsberg pga vagnfel.\nInställd Kallhäll kl  15:08.")
                 .lineNumbers(["35", "36"])
                 .created(LocalDateTime.of(2016, 5, 3, 15, 14, 22, 720_000_000))
                 .from(LocalDateTime.of(2016, 5, 3, 14, 48, 0))

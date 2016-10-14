@@ -43,6 +43,7 @@ class WatchSpec extends Specification {
             Watch watch = createSingleOccurrenceWatch()
         expect:
             String expected = new File("src/test/resources/watches/singleOccurrenceWatch.json").text
+            println watch.toJson()
             assertThat(watch.toJson(), jsonEquals(expected))
     }
 

@@ -22,7 +22,7 @@ dependencies {
     // See here for a non blocking appender http://logging.apache.org/log4j/2.x/manual/async.html
     runtime 'org.slf4j:slf4j-simple:1.7.21'
 
-    compile 'com.rabbitmq:amqp-client:2.8.2'
+    compile 'com.rabbitmq:amqp-client:3.6.2'
     compile('com.gmongo:gmongo:1.5') {
         exclude group: 'org.mongodb', module: 'mongo-java-driver'
     }

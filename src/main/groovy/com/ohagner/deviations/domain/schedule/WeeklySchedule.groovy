@@ -2,7 +2,6 @@ package com.ohagner.deviations.domain.schedule
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import groovy.transform.TupleConstructor
 
@@ -10,7 +9,7 @@ import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
 
 @TupleConstructor(force = true)
 class WeeklySchedule extends Schedule {
@@ -29,9 +28,15 @@ class WeeklySchedule extends Schedule {
 
     @Override
     boolean isEventWithinPeriod(LocalDateTime now, long hoursBefore) {
-        boolean scheduleHasWeekday = weekDays.contains(now.dayOfWeek)
-        LocalTime timeNow = now.toLocalTime()
-        boolean isWithinTime = timeOfEvent.minusHours(hoursBefore).isBefore(timeNow) && timeOfEvent.isAfter(timeNow)
+        DayOfWeek weekdayToConsider = now.dayOfWeek
+        LocalDateTime eventDateTime = LocalDateTime.of(now.toLocalDate(), timeOfEvent)
+        if(timeOfEvent.isBefore(now.toLocalTime())) {
+            weekdayToConsider = weekdayToConsider.plus(1)
+            eventDateTime = eventDateTime.plusDays(1)
+        }
+        boolean scheduleHasWeekday = weekDays.contains(weekdayToConsider)
+
+        boolean isWithinTime = eventDateTime.minusHours(hoursBefore).isBefore(now) && eventDateTime.isAfter(now)
         return scheduleHasWeekday && isWithinTime
     }
 
@@ -41,12 +46,7 @@ class WeeklySchedule extends Schedule {
     }
 
     @JsonProperty("timeToArchive")
-    void setTimeToArchive(String timeToArchive) {}
-
-//    @JsonProperty
-//    String getType() {
-//        return "WEEKLYHEJ"
-//    }
+    void setTimeToArchive(boolean timeToArchive) {}
 
     boolean equals(o) {
         if (this.is(o)) return true

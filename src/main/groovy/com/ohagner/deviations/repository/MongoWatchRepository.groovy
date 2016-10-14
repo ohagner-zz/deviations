@@ -3,6 +3,7 @@ package com.ohagner.deviations.repository
 import com.mongodb.*
 import com.mongodb.util.JSON
 import com.ohagner.deviations.domain.Watch
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import java.time.LocalDateTime
@@ -10,6 +11,7 @@ import java.time.LocalDateTime
 import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 @Slf4j
+@CompileStatic
 class MongoWatchRepository implements WatchRepository {
 
     DBCollection watches
@@ -23,7 +25,6 @@ class MongoWatchRepository implements WatchRepository {
 
     Optional<Watch> findById(long id) {
         log.debug "Retrieving watch with id $id"
-        watches.insertO
         optionalFrom watches.findOne(new BasicDBObject(id:id))
     }
 
@@ -47,6 +48,7 @@ class MongoWatchRepository implements WatchRepository {
 
     List<Watch> retrieveRange(int pageNumber, int maxNumPerPage) {
         int toSkip = pageNumber > 0 ? ((pageNumber-1) * maxNumPerPage) : 0
+        log.debug "Retrieving ranged with $pageNumber"
         DBCursor cursor = watches.find().skip(toSkip).limit(maxNumPerPage)
         return cursor.iterator()
                 .collect { Watch.fromJson(JSON.serialize(it)) }
@@ -56,7 +58,8 @@ class MongoWatchRepository implements WatchRepository {
         long generatedId = counter.getAndIncrement()
         watch.id = generatedId
         watch.created = LocalDateTime.now(ZONE_ID)
-        DBObject mongoWatch = JSON.parse(watch.toJson())
+        DBObject mongoWatch = JSON.parse(watch.toJson()) as DBObject
+
         WriteResult result = watches.insert(mongoWatch)
         if (result.getN() == 1) {
             log.info "Successfully created watch"
@@ -66,7 +69,7 @@ class MongoWatchRepository implements WatchRepository {
 
     Watch update(Watch watch) {
         watch.lastProcessed = LocalDateTime.now(ZONE_ID)
-        DBObject mongoWatch = JSON.parse(watch.toJson())
+        DBObject mongoWatch = JSON.parse(watch.toJson()) as DBObject
         WriteResult result = watches.update(new BasicDBObject(id:watch.id), mongoWatch)
         if (result.getN() == 1) {
             log.info "Successfully updated watch"

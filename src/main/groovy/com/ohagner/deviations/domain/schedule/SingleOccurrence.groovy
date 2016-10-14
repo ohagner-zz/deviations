@@ -2,7 +2,6 @@ package com.ohagner.deviations.domain.schedule
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.config.DateConstants
@@ -14,9 +13,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
 import static com.ohagner.deviations.config.Constants.ZONE_ID
-
 
 @Slf4j
 @TupleConstructor(force = true)
@@ -37,10 +35,11 @@ class SingleOccurrence extends Schedule {
 
     @Override
     boolean isEventWithinPeriod(LocalDateTime now, long hoursBefore) {
-        boolean isCorrectDay = dateOfEvent.isEqual(now.toLocalDate())
-        boolean isWithinTime = timeOfEvent.minusHours(hoursBefore).isBefore(now.toLocalTime()) && timeOfEvent.isAfter(now.toLocalTime())
-        log.info "IsEventWithinPeriod. Time: $now within $hoursBefore hours before $timeOfEvent on day $dateOfEvent"
-        return isCorrectDay && isWithinTime
+        LocalDateTime eventDateTime = LocalDateTime.of(dateOfEvent, timeOfEvent)
+        //boolean isCorrectDay = dateOfEvent.isEqual(now.toLocalDate())
+        boolean isWithinTime = eventDateTime.minusHours(hoursBefore).isBefore(now) && eventDateTime.isAfter(now)
+        log.info "IsEventWithinPeriod. Time: $now within $hoursBefore hours before $timeOfEvent on day $dateOfEvent = $isWithinTime"
+        return isWithinTime
     }
 
     @Override
@@ -53,13 +52,7 @@ class SingleOccurrence extends Schedule {
     }
 
     @JsonProperty("timeToArchive")
-    void setTimeToArchive(String timeToArchive) {}
-
-
-    @JsonProperty
-    String getType() {
-        return "SINGLE"
-    }
+    void setTimeToArchive(boolean timeToArchive) {}
 
     @Override
     public String toString() {

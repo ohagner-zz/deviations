@@ -1,24 +1,19 @@
 import com.ohagner.deviations.DeviationFilter
-import com.ohagner.deviations.DeviationMatcher
 import com.ohagner.deviations.chains.AdminChain
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.handlers.UserHandler
 import com.ohagner.deviations.handlers.WatchChain
-import com.ohagner.deviations.modules.JsonRenderingModule
-import com.ohagner.deviations.modules.RepositoryModule
 import com.ohagner.deviations.modules.DeviationsModule
-import com.ohagner.deviations.notifications.EmailNotifier
-import com.ohagner.deviations.notifications.LogNotifier
-import com.ohagner.deviations.notifications.NotificationService
+import com.ohagner.deviations.modules.JsonRenderingModule
+import com.ohagner.deviations.modules.MessagingModule
+import com.ohagner.deviations.modules.NotificationsModule
+import com.ohagner.deviations.modules.RepositoryModule
 import com.ohagner.deviations.repository.DeviationRepository
-import com.ohagner.deviations.repository.HttpDeviationRepository
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.MongoWatchRepository
-import com.ohagner.deviations.watch.WatchProcessor
+import com.ohagner.deviations.scheduler.JobScheduler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import ratpack.exec.Blocking
 import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.registry.Registry
 import ratpack.server.BaseDir
@@ -42,7 +37,10 @@ ratpack {
         module DeviationsModule
         module MarkupTemplateModule
         module JsonRenderingModule
-        add(new AdminChain())
+        module MessagingModule
+        module NotificationsModule
+        add new AdminChain()
+        bind JobScheduler
     }
 
     handlers {
@@ -103,18 +101,18 @@ ratpack {
             prefix("watches") {
                 insert(new WatchChain())
             }
-            path("check") { MongoWatchRepository watchRepository, UserRepository userRepository ->
+            //A user should be able to trigger a watch check
+            /*path("check") { WatchRepository watchRepository, UserRepository userRepository ->
                 DeviationRepository deviationRepo = new HttpDeviationRepository()
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
                 WatchProcessor processor = WatchProcessor.builder()
-                        .notificationService(new NotificationService([new LogNotifier(), new EmailNotifier()], userRepository))
                         .deviationMatcher(deviationMatcher)
-                        .watchRepository(watchRepository).build()
+                        .deviationsApiClient(watchRepository).build()
                 log.info "Before blocking"
                 Blocking.exec { processor.process() }
                 log.info "After blocking"
                 render json(["message": "Checking user"])
-            }
+            }*/
         }
 
         files { dir "public" }

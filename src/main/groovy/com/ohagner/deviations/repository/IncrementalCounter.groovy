@@ -27,7 +27,7 @@ final class IncrementalCounter {
         BasicDBObject increase = new BasicDBObject(SEQUENCE_PROPERTY, 1)
         BasicDBObject updateQuery = new BasicDBObject('$inc', increase)
         BasicDBObject result = countersCollection.findAndModify(searchQuery, updateQuery)
-        log.info "Incremented id, returning ${result.get(SEQUENCE_PROPERTY)}"
+        log.debug "Incremented id, returning ${result.get(SEQUENCE_PROPERTY)}"
         return result.get(SEQUENCE_PROPERTY) as long
     }
 

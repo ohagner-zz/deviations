@@ -15,6 +15,7 @@ import com.ohagner.deviations.scheduler.JobScheduler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.groovy.template.MarkupTemplateModule
+import ratpack.handling.RequestLogger
 import ratpack.registry.Registry
 import ratpack.server.BaseDir
 
@@ -48,13 +49,14 @@ ratpack {
             context.response.contentType("application/json")
             next()
         }
+        all RequestLogger.ncsa(log)
         prefix("admin") {
             insert(AdminChain)
         }
         prefix("deviations") {
             get("") {
                 DeviationRepository deviationRepo = context.get(DeviationRepository)
-                render json(DeviationFilter.apply(deviationRepo.retrieveAll()))
+                render json(deviationRepo.retrieveAll())
             }
             get(":transportType") {
                 render json(["message": "Get all deviations for transport"])
@@ -71,7 +73,6 @@ ratpack {
                 post {
                     request.getBody().then {
                         String request = it.text
-                        log.info "Request: $request"
                         User requestUser = User.fromJson(request)
 
                         if (userRepository.userExists(requestUser.username)) {
@@ -90,7 +91,6 @@ ratpack {
         prefix("users/:username") {
             all { UserRepository userRepository ->
                 String username = pathTokens.username
-                log.info "Trying to retrieve user $username"
                 Optional<User> callingUser = userRepository.findByUsername(username)
                 callingUser.isPresent() ? next(Registry.single(User, callingUser.get())) : next()
             }

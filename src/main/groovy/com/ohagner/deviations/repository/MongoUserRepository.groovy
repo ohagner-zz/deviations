@@ -20,7 +20,7 @@ class MongoUserRepository implements UserRepository {
     }
 
     Optional<User> findByUsername(String username) {
-        log.info "Retrieving data for user $username"
+        log.debug "Retrieving data for user $username"
         DBObject userObject = users.findOne(new BasicDBObject(username: username))
         if (userObject) {
             return Optional.of(User.fromJson(JSON.serialize(userObject)))
@@ -39,7 +39,7 @@ class MongoUserRepository implements UserRepository {
         DBObject mongoUser = JSON.parse(user.toJson())
         WriteResult result = users.insert(mongoUser)
         if (result.getN() == 1) {
-            log.info "Successfully created user"
+            log.debug "Successfully created user"
         }
         return findByUsername(user.username).get()
     }

@@ -29,14 +29,14 @@ class MongoWatchRepository implements WatchRepository {
     }
 
     List<Watch> findByUsername(String username) {
-        log.info "Retrieving watches for user $username"
+        log.debug "Retrieving watches for user $username"
         DBCursor cursor = watches.find(new BasicDBObject(username: username))
         List<Watch> watches = cursor.iterator().collect { Watch.fromJson(JSON.serialize(it)) }
         return watches
     }
 
     Optional<Watch> findByUsernameAndId(String username, long id) {
-        log.info "Looking for watch for user $username with id $id"
+        log.debug "Looking for watch for user $username with id $id"
         optionalFrom watches.findOne(new BasicDBObject(username:username, id:id))
     }
 
@@ -62,7 +62,7 @@ class MongoWatchRepository implements WatchRepository {
 
         WriteResult result = watches.insert(mongoWatch)
         if (result.getN() == 1) {
-            log.info "Successfully created watch"
+            log.debug "Successfully created watch"
         }//TODO: Throw some kind of exception otherwise
         return findByUsernameAndId(watch.username, watch.id).get()
     }
@@ -72,13 +72,13 @@ class MongoWatchRepository implements WatchRepository {
         DBObject mongoWatch = JSON.parse(watch.toJson()) as DBObject
         WriteResult result = watches.update(new BasicDBObject(id:watch.id), mongoWatch)
         if (result.getN() == 1) {
-            log.info "Successfully updated watch"
+            log.debug "Successfully updated watch"
         }
         return findById(watch.id).get()
     }
 
     Optional<Watch> delete(String username, long id) {
-        log.info "Deleting watch for user $username with id $id"
+        log.debug "Deleting watch for user $username with id $id"
         optionalFrom watches.findAndRemove(new BasicDBObject(id:id as long, username:username))
     }
 

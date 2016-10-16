@@ -18,51 +18,43 @@ class UserHandler extends GroovyHandler {
     void handle(GroovyContext ctx) throws Exception {
         ctx.with {
             byMethod {
-                Optional<User> user = context.maybeGet(User)
+                Optional<User> userOpt = context.maybeGet(User)
+                if (!userOpt.present) {
+                    log.debug "Failed to delete user, not found"
+                    response.status(404)
+                    render json(["message": "Not found"])
+                }
+                User existingUser = userOpt.get()
                 delete {
                     UserRepository userRepository = context.get(UserRepository)
                     WatchRepository watchRepository = context.get(WatchRepository)
-                    if (user.isPresent()) {
-                        log.info "Deleting user"
-                        User userToDelete = user.get()
-                        List<Watch> watches = watchRepository.findByUsername()
-                        watches.each { Watch watch -> watchRepository.delete(userToDelete.username, watch.name) }
-                        userRepository.delete(userToDelete)
-                        render json(user.get())
-                    } else {
-                        log.info "NOT FOUND"
-                        response.status(404)
-                        render json(["message": "Not found"])
-                    }
+                    log.debug "Deleting user"
+                    List<Watch> watches = watchRepository.findByUsername()
+                    watches.each { Watch watch -> watchRepository.delete(existingUser.username, watch.name) }
+                    userRepository.delete(existingUser)
+                    render json(existingUser)
+
                 }
                 get {
-                    if (user.isPresent()) {
-                        render json(user.get())
-                    } else {
-                        log.info "USER NOT FOUND"
-                        response.status(404)
-                        render json(["message": "Not found"])
-                    }
+                    render json(existingUser)
                 }
                 put {
                     UserRepository userRepository = context.get(UserRepository)
-                    if(user.isPresent()) {
-                        User current = user.get()
-                        request.getBody().then {
-                            String request = it.text
-                            log.info "Request: $request"
-                            User update = User.fromJson(request)
-
-                            User updatedUser = userRepository.update(current.getUsername(), update)
-                            render json(updatedUser)
-                        }
-                    } else {
-                        log.info "USER NOT FOUND"
-                        response.status(404)
-                        render json(["message": "Not found"])
+                    request.getBody().map {
+                        String request = it.text
+                        log.debug "User update request: $request"
+                        User update = User.fromJson(request)
+                        userRepository.update(existingUser.getUsername(), update)
+                    }.onError { throwable ->
+                        log.error("Failed to update user", throwable)
+                        response.status(500)
+                        render json([message: "Failed to update user"])
+                    }.then { updatedUser ->
+                        response.status(200)
+                        render json(updatedUser)
                     }
-                }
 
+                }
             }
         }
     }

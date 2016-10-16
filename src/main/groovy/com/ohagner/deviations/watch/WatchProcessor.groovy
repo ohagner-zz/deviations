@@ -73,12 +73,12 @@ class WatchProcessor {
     private boolean sendNotifications(Watch watch, Set<Deviation> matchingDeviations) {
         try {
             Notification notification = Notification.fromDeviations(matchingDeviations, watch.notifyBy)
-            log.info "Sending notification ${notification.toString()}"
+            log.debug "Sending notification ${notification.toString()}"
             Response notificationResponse = deviationsApiClient.post(path: "/admin/users/${watch.username}/notification") {
                 type ContentType.JSON
                 text notification.toJson()
             }
-            log.info "Notification response status ${notificationResponse.statusCode}"
+            log.debug "Notification response status ${notificationResponse.statusCode}"
             return notificationResponse.statusCode ==~  /2\d\d/
         } catch(Exception e) {
             log.error("Failed to send notification", e)

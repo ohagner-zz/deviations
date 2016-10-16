@@ -41,7 +41,7 @@ class MongoConfig {
             watchCollectionName = envOrProperty(WATCH_COLLECTION_NAME)
             counterCollectionName = envOrProperty(COUNTER_COLLECTION_NAME)
         }
-        log.info instance.toString()
+        log.debug "Initializing mongoDB with configuration:\n instance.toString()"
         return instance
     }
 

@@ -14,12 +14,11 @@ class WatchChain extends GroovyChainAction {
     @Override
     void execute() throws Exception {
         all {
-            log.info "Looking in context for user"
             Optional<User> user = context.maybeGet(User)
             if (!user.isPresent()) {
-                log.info "User not found"
+                log.debug "User not found"
                 response.status(404)
-                render json(["message": "Not found"])
+                render json(["message": "User not found"])
             } else {
                 next()
             }
@@ -28,7 +27,7 @@ class WatchChain extends GroovyChainAction {
             context.byMethod {
                 post {
                     request.body.then { body ->
-                        log.info "Creating watch for user ${user.username}"
+                        log.debug "Creating watch for user ${user.username}"
                         Watch watch = Watch.fromJson(body.text)
                         watch.username = user.username
                         response.status(201)
@@ -45,7 +44,7 @@ class WatchChain extends GroovyChainAction {
                 response.status(400)
                 render json(["message": new String("Watch id ${pathTokens.id} is not numeric")])
             }
-            long watchId = pathTokens.id as long
+            long watchId = pathTokens.asLong('id')
             context.byMethod {
                 delete {
                     Optional<Watch> deletedWatch = watchRepository.delete(user.username, watchId)
@@ -61,7 +60,7 @@ class WatchChain extends GroovyChainAction {
                     if (watch.isPresent()) {
                         render json(watch.get())
                     } else {
-                        log.info "Watch not found"
+                        log.debug "Watch not found"
                         response.status(404)
                         render json(["message": "Watch with id $watchId does not exist"])
                     }

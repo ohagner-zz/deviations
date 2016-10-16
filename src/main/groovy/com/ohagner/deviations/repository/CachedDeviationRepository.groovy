@@ -32,7 +32,7 @@ class CachedDeviationRepository implements DeviationRepository {
 
         Duration timeSinceUpdate = Duration.between(lastUpdated, LocalDateTime.now(ZONE_ID))
         if (timeSinceUpdate.compareTo(timeToCache) > 0) {
-            log.info "Updating cached deviations"
+            log.info "Updating cached deviations. Cache timeout is $timeToCache minutes"
             cachedResponse = source.retrieveAll()
             lastUpdated = LocalDateTime.now(ZONE_ID)
         }

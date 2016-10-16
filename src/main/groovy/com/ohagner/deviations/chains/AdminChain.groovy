@@ -14,18 +14,15 @@ class AdminChain extends GroovyChainAction {
     @Override
     void execute() throws Exception {
         post("users/:username/notification") { UserRepository userRepository,  NotificationService notificationService ->
-            log.info "Handling notification"
             String username = pathTokens.username
             Optional<User> userOptional = userRepository.findByUsername(username)
             if(userOptional.present) {
-                log.info "User is present, preparing to notify"
                 User user = userOptional.get()
                 request.body.map { body ->
-                    log.info "Request body = ${body.text}"
                     Notification notification = Notification.fromJson(body.text)
                     notificationService.sendNotification(user, notification)
                 }.onError { t ->
-                    log.error("Notification failed", t)
+                    log.error("Failure to send notifications", t)
                     response.status(500)
                     render json([message: "Notification failed"])
                 }.then {
@@ -34,7 +31,7 @@ class AdminChain extends GroovyChainAction {
                 }
             } else {
                 response.status(404)
-                render json([message:"User $username not found"])
+                render json([message:"Failed to send notifications. User $username could not be found"])
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.ohagner.deviations.repository
 
+import com.ohagner.deviations.DeviationFilter
 import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.TransportMode
 import groovy.json.JsonOutput
@@ -40,7 +41,7 @@ class HttpDeviationRepository implements DeviationRepository {
             //TODO: Send some sort of notification
         }
 
-        return deviationList.asImmutable()
+        return DeviationFilter.apply(deviationList).asImmutable()
     }
 
     private List<Deviation> retrieveDeviationsForTransport(TransportMode transportMode) {

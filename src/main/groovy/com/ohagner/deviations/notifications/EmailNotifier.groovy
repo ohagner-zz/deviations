@@ -24,12 +24,10 @@ class EmailNotifier implements Notifier {
 
     @Override
     void notify(User user, Notification notification) {
-        //RESTClient client = new RESTClient('https://api.mailgun.net/v3/sandbox8e1378b0675e4dfeaf914d9d6b710afa.mailgun.org/messages')
-        //client.authorization = new HTTPBasicAuthorization('api', 'key-221c9a9de2862b986a05a43ac92070cf')
 
         log.info "Sending email to ${user.emailAddress} about ${notification.header}"
 
-        log.info "Text: ${notification.message}"
+        log.debug "Email text: ${notification.message}"
         Response response = restClient.post() {
             multipart 'to', "${user.emailAddress}".bytes
             multipart 'from', 'Deviation <postmaster@sandbox8e1378b0675e4dfeaf914d9d6b710afa.mailgun.org>'.bytes
@@ -37,7 +35,7 @@ class EmailNotifier implements Notifier {
             multipart 'text', notification.message.bytes
         }
 
-        log.info response.toString()
+        log.debug "Send email response: ${response.toString()}"
     }
 
 

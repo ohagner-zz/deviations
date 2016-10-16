@@ -45,7 +45,7 @@ class JobScheduler implements Service, Runnable {
             List<Watch> watchesToProcess
             int pageNumber = 1
             while (watchesToProcess = watchRepository.retrieveRange(pageNumber, MAX_NUM_OF_WATCHES)) {
-                log.info "Retrieving range with pageNumber $pageNumber, got ${watchesToProcess.size()} watches"
+                log.debug "Retrieving range with pageNumber $pageNumber, got ${watchesToProcess.size()} watches"
                 watchesToProcess.each {
                     channel.basicPublish("", Constants.WATCHES_TO_PROCESS_QUEUE_NAME, null, it.toJson().bytes)
                 }

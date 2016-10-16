@@ -11,9 +11,7 @@ import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 @Slf4j
 class DeviationMatcher {
-    //Make immutable?
     final Map<Transport, List<Deviation>> transportDeviationMap
-
 
     public DeviationMatcher(List<Deviation> deviationList) {
 
@@ -24,7 +22,7 @@ class DeviationMatcher {
             .each { deviation ->
                 deviation.lineNumbers.each { lineNumber ->
                     def transport = new Transport(transportMode: deviation.transportMode, line: lineNumber)
-                    log.info "Adding deviation to matcher with linenumber $lineNumber and transportMode ${deviation.transportMode}"
+                    log.debug "Adding deviation to matcher with linenumber $lineNumber and transportMode ${deviation.transportMode}"
                     transportDeviationMap.get(transport, []).add(deviation)
                 }
             }
@@ -32,7 +30,7 @@ class DeviationMatcher {
     }
 
     Set<Deviation> findMatching(Watch watch) {
-        log.info "Matching watch: $watch"
+        log.debug "Matching watch: $watch"
         Set<Deviation> matchingDeviations = []
         watch.transports.each {
             matchingDeviations.addAll(transportDeviationMap.get(it, []))

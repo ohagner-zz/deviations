@@ -38,7 +38,7 @@ class SingleOccurrence extends Schedule {
         LocalDateTime eventDateTime = LocalDateTime.of(dateOfEvent, timeOfEvent)
         //boolean isCorrectDay = dateOfEvent.isEqual(now.toLocalDate())
         boolean isWithinTime = eventDateTime.minusHours(hoursBefore).isBefore(now) && eventDateTime.isAfter(now)
-        log.info "IsEventWithinPeriod. Time: $now within $hoursBefore hours before $timeOfEvent on day $dateOfEvent = $isWithinTime"
+        log.debug "IsEventWithinPeriod. Time: $now within $hoursBefore hours before $timeOfEvent on day $dateOfEvent = $isWithinTime"
         return isWithinTime
     }
 

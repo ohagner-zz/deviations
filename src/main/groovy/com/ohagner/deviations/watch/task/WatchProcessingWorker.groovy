@@ -59,18 +59,18 @@ class WatchProcessingWorker  {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
                 String message = new String(body, "UTF-8");
-                log.info "Matching deviation"
+                log.debug "Matching deviation"
                 Watch watch = Watch.fromJson(message)
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepository.retrieveAll())
                 WatchProcessor watchProcessor = WatchProcessor.builder().deviationsApiClient(apiClient).deviationMatcher(deviationMatcher).build()
                 WatchProcessingResult result = watchProcessor.process(watch)
-                log.info "Watchprocessor result:\n${result.toString()}"
+                log.info "Watchprocessor result for watch ${watch.id}:${watch.name}:\n${result.toString()}"
             }
 
 
         }
         channel.basicConsume(Constants.WATCHES_TO_PROCESS_QUEUE_NAME, true, consumer)
-        println "Started consumer"
+        log.info "Started watch processing queue consumer"
     }
 
 }

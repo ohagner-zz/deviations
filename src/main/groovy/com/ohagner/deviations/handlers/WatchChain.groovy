@@ -62,7 +62,7 @@ class WatchChain extends GroovyChainAction {
                     } else {
                         log.debug "Watch not found"
                         response.status(404)
-                        render json(["message": "Watch with id $watchId does not exist"])
+                        render json(["message": new String("Watch with id $watchId does not exist")])
                     }
                 }
                 put {

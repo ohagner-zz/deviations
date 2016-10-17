@@ -23,7 +23,7 @@ class WatchProcessingResult {
                 "status=" + status +
                 ", message=" + messages.join(". ") +
                 ", executionTime=" + executionTime.toMillis() + " ms" +
-                ", matchingDeviations=" + matchingDeviations.collect { it.id }.join(",") +
+                ", matchingDeviations=" + matchingDeviations ? matchingDeviations.collect { it.id }.join(",") : "[]" +
                 '}';
     }
 }

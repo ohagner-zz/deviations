@@ -4,6 +4,7 @@ import com.ohagner.deviations.domain.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.repository.WatchRepository
 import groovy.util.logging.Slf4j
+import ratpack.exec.Promise
 import ratpack.groovy.handling.GroovyChainAction
 
 import static ratpack.jackson.Jackson.json
@@ -26,12 +27,19 @@ class WatchChain extends GroovyChainAction {
         path("") { WatchRepository watchRepository, User user ->
             context.byMethod {
                 post {
-                    request.body.then { body ->
+                    request.body.map { body ->
                         log.debug "Creating watch for user ${user.username}"
                         Watch watch = Watch.fromJson(body.text)
                         watch.username = user.username
                         response.status(201)
-                        render json(watchRepository.create(watch))
+                        watchRepository.create(watch)
+                    }.onError { throwable ->
+                        log.error("Failed to create watch", throwable)
+                        response.status(500)
+                        render json(["message":"Failed to create watch"])
+                    }.then { Watch created ->
+                        response.status(201)
+                        render json(created)
                     }
                 }
                 get {

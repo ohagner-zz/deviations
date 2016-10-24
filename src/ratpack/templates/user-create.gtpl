@@ -1,5 +1,5 @@
 layout 'layout.gtpl',
-title: 'Deviation watcher',
+title: title,
 msg: msg,
 bodyContents: contents {
     if (username) {
@@ -9,7 +9,9 @@ bodyContents: contents {
         }
     }
 
-    h1('Start here')
-
-    p('This the starting point, high time to think of more to display here')
+    h1('Create User')
+    div(class: 'alert alert-info') {
+        p { strong('Username must be unique!') }
+    }
+    includeGroovy '_user_form.gtpl'
 }

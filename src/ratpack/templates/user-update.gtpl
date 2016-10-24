@@ -1,5 +1,5 @@
 layout 'layout.gtpl',
-title: 'Deviation watcher',
+title: title,
 msg: msg,
 bodyContents: contents {
     if (username) {
@@ -9,7 +9,7 @@ bodyContents: contents {
         }
     }
 
-    h1('Start here')
+    h1('Update User')
 
-    p('This the starting point, high time to think of more to display here')
+    includeGroovy '_user_form.gtpl'
 }

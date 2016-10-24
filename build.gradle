@@ -27,6 +27,8 @@ dependencies {
     runtime 'org.apache.logging.log4j:log4j-core:2.2'
     runtime 'com.lmax:disruptor:3.3.0'
 
+    compile ratpack.dependency('session')
+
     compile 'com.rabbitmq:amqp-client:3.6.2'
     compile('com.gmongo:gmongo:1.5') {
         exclude group: 'org.mongodb', module: 'mongo-java-driver'

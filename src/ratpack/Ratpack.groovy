@@ -1,17 +1,21 @@
 import com.ohagner.deviations.chains.AdminChain
 import com.ohagner.deviations.chains.WebChain
 import com.ohagner.deviations.config.MongoConfig
-import com.ohagner.deviations.handlers.ApiChain
+import com.ohagner.deviations.chains.ApiChain
+import com.ohagner.deviations.errorhandling.DefaultServerErrorHandler
+import com.ohagner.deviations.handlers.AdminAuthorizationHandler
+import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.modules.*
 import com.ohagner.deviations.scheduler.JobScheduler
+import com.ohagner.deviations.domain.renderer.UserRenderer
+import com.ohagner.deviations.security.AuthService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import ratpack.error.ServerErrorHandler
 import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.handling.RequestLogger
-import ratpack.server.BaseDir
 import ratpack.session.SessionModule
 
-import static ratpack.groovy.Groovy.groovyMarkupTemplate
 import static ratpack.groovy.Groovy.ratpack
 
 Logger log = LoggerFactory.getLogger("Deviations-Main")
@@ -39,7 +43,12 @@ ratpack {
         add new AdminChain()
         add new ApiChain()
         add new WebChain()
+        bind AuthService
+        bind UserRenderer
         bind JobScheduler
+        bind UserAuthorizationHandler
+        bind AdminAuthorizationHandler
+        bindInstance(ServerErrorHandler, new DefaultServerErrorHandler())
     }
 
     handlers {
@@ -48,8 +57,10 @@ ratpack {
         prefix("admin") {
             all() {
                 context.response.contentType("application/json")
+//                insert(AdminAuthorizationHandler)
                 next()
             }
+            all(AdminAuthorizationHandler)
             insert(AdminChain)
         }
         prefix("api") {

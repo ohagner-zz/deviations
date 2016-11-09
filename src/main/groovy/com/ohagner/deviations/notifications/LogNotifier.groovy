@@ -1,8 +1,8 @@
 package com.ohagner.deviations.notifications
 
-import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.domain.notifications.Notification
-import com.ohagner.deviations.domain.notifications.NotificationType
+import com.ohagner.deviations.domain.notification.Notification
+import com.ohagner.deviations.domain.notification.NotificationType
+import com.ohagner.deviations.domain.user.User
 import groovy.util.logging.Slf4j
 
 @Slf4j
@@ -16,7 +16,7 @@ class LogNotifier implements Notifier {
     @Override
     void notify(User user, Notification notification) {
         def logMessage = ""
-        logMessage += "User ${user.username} was notified that: ${notification.header}\n"
+        logMessage += "User ${user.credentials.username} was notified that: ${notification.header}\n"
         logMessage += notification.message
         log.info(logMessage)
     }

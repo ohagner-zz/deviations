@@ -2,7 +2,7 @@ package com.ohagner.deviations.repository
 
 import com.ohagner.deviations.DeviationFilter
 import com.ohagner.deviations.domain.Deviation
-import com.ohagner.deviations.domain.TransportMode
+
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import wslite.rest.ContentType
@@ -27,12 +27,12 @@ class HttpDeviationRepository implements DeviationRepository {
         List<Deviation> deviationList = []
         try {
 
-            def response = trafikLabClient.get(query: [key: apiKey, transportMode: TransportMode.TRAIN.toString()], accept: ContentType.JSON)
+            def response = trafikLabClient.get(query: [key: apiKey, transportMode: Deviation.TransportMode.TRAIN.toString()], accept: ContentType.JSON)
             log.debug "Received ${response.json}"
 
-            deviationList.addAll(retrieveDeviationsForTransport(TransportMode.TRAIN))
-            deviationList.addAll(retrieveDeviationsForTransport(TransportMode.BUS))
-            deviationList.addAll(retrieveDeviationsForTransport(TransportMode.SUBWAY))
+            deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.TRAIN))
+            deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.BUS))
+            deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.SUBWAY))
 
             log.debug "Retrieved ${deviationList.size()} deviations"
         } catch (RESTClientException exception) {
@@ -44,7 +44,7 @@ class HttpDeviationRepository implements DeviationRepository {
         return DeviationFilter.apply(deviationList).asImmutable()
     }
 
-    private List<Deviation> retrieveDeviationsForTransport(TransportMode transportMode) {
+    private List<Deviation> retrieveDeviationsForTransport(Deviation.TransportMode transportMode) {
         def response = trafikLabClient.get(query: [key: apiKey, transportMode: transportMode.toString()], accept: ContentType.JSON)
         log.debug "Received ${response.json}"
 

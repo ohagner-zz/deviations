@@ -114,4 +114,8 @@ class Deviation {
                 ", updated=" + updated +
                 '}';
     }
+
+    static enum TransportMode {
+        TRAIN, BUS, SUBWAY
+    }
 }

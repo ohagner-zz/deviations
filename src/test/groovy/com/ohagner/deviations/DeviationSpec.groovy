@@ -1,7 +1,7 @@
 package com.ohagner.deviations
 
 import com.ohagner.deviations.domain.Deviation
-import com.ohagner.deviations.domain.TransportMode
+
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -31,7 +31,7 @@ class DeviationSpec extends Specification {
         given:
             Deviation expected = Deviation.builder()
                 .id("9076001009188221")
-                .transportMode(TransportMode.TRAIN)
+                .transportMode(Deviation.TransportMode.TRAIN)
                 .header("Inställd delsträcka mot Nynäshamn")
                 .details("Tåg från Bålsta kl  14:53 mot Nynäshamn är inställd mellan Kallhäll och Jakobsberg pga vagnfel.\nInställd Kallhäll kl  15:08.")
                 .lineNumbers(["35", "36"])
@@ -41,7 +41,7 @@ class DeviationSpec extends Specification {
                 .updated(LocalDateTime.of(2016, 5, 3, 16, 40, 50, 320_000_000))
                 .build()
         when:
-            Deviation actual = Deviation.fromJson(json, TransportMode.TRAIN)
+            Deviation actual = Deviation.fromJson(json, Deviation.TransportMode.TRAIN)
         then:
             assertEquals(expected, actual)
     }

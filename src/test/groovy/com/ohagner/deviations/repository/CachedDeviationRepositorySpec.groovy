@@ -5,9 +5,8 @@ import spock.lang.Specification
 
 import java.time.Duration
 
-import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.CoreMatchers.is
-
+import static org.hamcrest.MatcherAssert.assertThat
 
 class CachedDeviationRepositorySpec extends Specification {
 
@@ -30,15 +29,15 @@ class CachedDeviationRepositorySpec extends Specification {
 
     def "should return same value for both calls"() {
         given:
-        DeviationRepository source = Mock()
-        source.retrieveAll() >> [one] >> [two]
-        CachedDeviationRepository cachedRepo = new CachedDeviationRepository(source, Duration.ofMinutes(30))
+            DeviationRepository source = Mock()
+            source.retrieveAll() >> [one] >> [two]
+            CachedDeviationRepository cachedRepo = new CachedDeviationRepository(source, Duration.ofMinutes(30))
         when:
-        Deviation firstResponse = cachedRepo.retrieveAll().first()
-        Deviation secondResponse = cachedRepo.retrieveAll().first()
+            Deviation firstResponse = cachedRepo.retrieveAll().first()
+            Deviation secondResponse = cachedRepo.retrieveAll().first()
         then:
-        assertThat(firstResponse.id, is(one.id))
-        assertThat(secondResponse.id, is(one.id))
+            assertThat(firstResponse.id, is(one.id))
+            assertThat(secondResponse.id, is(one.id))
     }
 
 

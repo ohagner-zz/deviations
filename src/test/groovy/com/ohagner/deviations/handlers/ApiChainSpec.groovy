@@ -1,19 +1,19 @@
 package com.ohagner.deviations.handlers
 
+import com.ohagner.deviations.chains.ApiChain
 import com.ohagner.deviations.domain.Deviation
-import com.ohagner.deviations.domain.TransportMode
+
 import com.ohagner.deviations.repository.DeviationRepository
-import groovy.json.JsonSlurper
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture
 import spock.lang.Specification
 
 class ApiChainSpec extends Specification {
 
-    private static final Deviation BUS_1 = new Deviation(transportMode: TransportMode.BUS, lineNumbers: ["800"])
-    private static final Deviation BUS_2 = new Deviation(transportMode: TransportMode.BUS, lineNumbers: ["801"])
-    private static final Deviation TRAIN = new Deviation(transportMode: TransportMode.TRAIN, lineNumbers: ["35", "36"])
-    private static final Deviation SUBWAY = new Deviation(transportMode: TransportMode.SUBWAY, lineNumbers: ["1"])
+    private static final Deviation BUS_1 = new Deviation(transportMode: Deviation.TransportMode.BUS, lineNumbers: ["800"])
+    private static final Deviation BUS_2 = new Deviation(transportMode: Deviation.TransportMode.BUS, lineNumbers: ["801"])
+    private static final Deviation TRAIN = new Deviation(transportMode: Deviation.TransportMode.TRAIN, lineNumbers: ["35", "36"])
+    private static final Deviation SUBWAY = new Deviation(transportMode: Deviation.TransportMode.SUBWAY, lineNumbers: ["1"])
 
     DeviationRepository deviationRepository
     RequestFixture requestFixture

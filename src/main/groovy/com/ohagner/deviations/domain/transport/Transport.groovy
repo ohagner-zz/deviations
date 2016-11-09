@@ -1,9 +1,11 @@
-package com.ohagner.deviations.domain
+package com.ohagner.deviations.domain.transport
+
+import com.ohagner.deviations.domain.Deviation
 
 class Transport {
 
     String line
-    TransportMode transportMode
+    Deviation.TransportMode transportMode
 
     boolean equals(o) {
         if (this.is(o)) return true

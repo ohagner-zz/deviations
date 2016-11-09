@@ -1,6 +1,7 @@
 package com.ohagner.deviations.watch.task
 
 import com.ohagner.deviations.domain.Deviation
+import groovy.json.JsonOutput
 
 import java.time.Duration
 
@@ -19,12 +20,18 @@ class WatchProcessingResult {
 
     @Override
     public String toString() {
-        return "WatchProcessingResult{" +
-                "status=" + status +
-                ", message=" + messages.join(". ") +
-                ", executionTime=" + executionTime.toMillis() + " ms" +
-                ", matchingDeviations=" + matchingDeviations ? matchingDeviations.collect { it.id }.join(",") : "[]" +
-                '}';
+        return JsonOutput.toJson {
+            status(status)
+            message(messages.join(". "))
+            executionTime(executionTime.toMillis() + " ms")
+            matchingDeviations(matchingDeviations ? matchingDeviations.collect { it.id }.join(",") : "[]")
+        }
+//        return "WatchProcessingResult{" +
+//                "status=" + status +
+//                ", message=" + messages.join(". ") +
+//                ", executionTime=" + executionTime.toMillis() + " ms" +
+//                ", matchingDeviations=" + matchingDeviations ? matchingDeviations.collect { it.id }.join(",") : "[]" +
+//                '}'
     }
 }
 

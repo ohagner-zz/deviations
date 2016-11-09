@@ -57,14 +57,27 @@ class WebChain extends GroovyChainAction {
                         log.info "Saving user"
                         parse(Form).then { form ->
                             log.info "Form as json ${toJson(form)}"
-                            httpClient.post(publicAddress.get("api/users")) { request ->
-                                request.body.text(toJson(form))
+                            def createUserRequest = JsonOutput.toJson {
+                                firstName form.firstName
+                                lastName form.lastName
+                                emailAddress form.emailAddress
+                                credentials {
+                                    username form.username
+                                    password form.password
+                                }
                             }
+                            httpClient.post(publicAddress.get("api/users")) { request ->
+                                request.body.text(createUserRequest)
+                            }
+                            //Hantera felaktiga
                             .map { response ->
-                                log.info(response.getBody().getText(Charsets.UTF_8))
-                            }.mapError { t ->
+                                log.info("POST /api/users ${response.statusCode}")
+                                if(!(200..299).contains(response.statusCode)){
+                                    throw new Exception("Failed to create user")
+                                }
+                            }.onError { t ->
                                 log.error("Something went wrong", t)
-                                redirect "user/create?msg=Failed+to+save+user"
+                                redirect "/?msg=Failed+to+save+user"
                             }.then {
                                 redirect "/?msg=User+created"
                             }
@@ -89,8 +102,14 @@ class WebChain extends GroovyChainAction {
                         log.info "Updating user"
                         parse(Form).then { form ->
                             log.info "Form as json ${toJson(form)}"
+                            def updateUserRequest = JsonOutput.toJson {
+                                firstName form.firstName
+                                lastName form.lastName
+                                emailAddress form.emailAddress
+                            }
+                            //This should be PATCH
                             httpClient.post(publicAddress.get("api/users")) { request ->
-                                request.body.text(toJson(form))
+                                request.body.text(updateUserRequest)
                             }
                             .map { response ->
                                 log.info(response.getBody().getText(Charsets.UTF_8))

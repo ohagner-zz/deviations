@@ -1,0 +1,15 @@
+{
+  "firstName": "firstName",
+  "lastName": "lastName",
+  "emailAddress": "emailAddress",
+  "credentials": {
+    "username": "username",
+    "passwordHash": "passwordHash",
+    "passwordSalt": "passwordSalt",
+    "apiToken": {
+      "value": "value",
+      "expirationDate": "2016-10-10"
+    },
+    "role": "USER"
+  }
+}

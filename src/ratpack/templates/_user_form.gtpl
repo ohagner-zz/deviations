@@ -7,6 +7,7 @@ def inputText(id, value, opts=[:], disabledFields=[]) {
 
 form(class:"form-user", method:"POST", action:"/user/create") {
     input(inputText('username', username, [required:'',placeholder:'Username'], disabledFields))
+    input(id:'password', name:'password', class:'form-control', type:'password' ,placeholder:'Password')
     input(inputText('firstName', firstName, [placeholder:'First name'], disabledFields))
     input(inputText('lastName', lastName, [placeholder:'Last name'], disabledFields))
     input(id:'emailAddress', name:'emailAddress', class:'form-control', type:'email' ,placeholder:'Email address')

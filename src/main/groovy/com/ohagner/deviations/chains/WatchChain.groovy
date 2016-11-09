@@ -1,10 +1,9 @@
-package com.ohagner.deviations.handlers
+package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.domain.User
+import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.repository.WatchRepository
 import groovy.util.logging.Slf4j
-import ratpack.exec.Promise
 import ratpack.groovy.handling.GroovyChainAction
 
 import static ratpack.jackson.Jackson.json
@@ -14,23 +13,13 @@ class WatchChain extends GroovyChainAction {
 
     @Override
     void execute() throws Exception {
-        all {
-            Optional<User> user = context.maybeGet(User)
-            if (!user.isPresent()) {
-                log.debug "User not found"
-                response.status(404)
-                render json(["message": "User not found"])
-            } else {
-                next()
-            }
-        }
         path("") { WatchRepository watchRepository, User user ->
             context.byMethod {
                 post {
                     request.body.map { body ->
-                        log.debug "Creating watch for user ${user.username}"
+                        log.debug "Creating watch for user ${user.credentials.username}"
                         Watch watch = Watch.fromJson(body.text)
-                        watch.username = user.username
+                        watch.username = user.credentials.username
                         response.status(201)
                         watchRepository.create(watch)
                     }.onError { throwable ->
@@ -43,7 +32,7 @@ class WatchChain extends GroovyChainAction {
                     }
                 }
                 get {
-                    render json(watchRepository.findByUsername(user.username))
+                    render json(watchRepository.findByUsername(user.credentials.username))
                 }
             }
         }
@@ -55,7 +44,7 @@ class WatchChain extends GroovyChainAction {
             long watchId = pathTokens.asLong('id')
             context.byMethod {
                 delete {
-                    Optional<Watch> deletedWatch = watchRepository.delete(user.username, watchId)
+                    Optional<Watch> deletedWatch = watchRepository.delete(user.credentials.username, watchId)
                     if (deletedWatch.isPresent()) {
                         render json(deletedWatch.get())
                     } else {
@@ -64,7 +53,7 @@ class WatchChain extends GroovyChainAction {
                     }
                 }
                 get {
-                    Optional<Watch> watch = watchRepository.findByUsernameAndId(user.username, watchId)
+                    Optional<Watch> watch = watchRepository.findByUsernameAndId(user.credentials.username, watchId)
                     if (watch.isPresent()) {
                         render json(watch.get())
                     } else {

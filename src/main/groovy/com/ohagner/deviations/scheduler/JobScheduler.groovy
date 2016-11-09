@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.ohagner.deviations.config.AppConfig
 import com.ohagner.deviations.config.Constants
 import com.ohagner.deviations.domain.Watch
-import com.ohagner.deviations.modules.MessagingModule
 import com.ohagner.deviations.repository.WatchRepository
 import com.rabbitmq.client.Channel
 import groovy.util.logging.Slf4j
@@ -33,7 +32,7 @@ class JobScheduler implements Service, Runnable {
     public void onStart(StartEvent startEvent) {
         ExecController execController = startEvent.getRegistry().get(ExecController.class);
         execController.getExecutor()
-                .scheduleAtFixedRate(this, 0, AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 30), TimeUnit.MINUTES)
+                .scheduleAtFixedRate(this, 0, AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 2), TimeUnit.MINUTES)
     }
 
     @Override

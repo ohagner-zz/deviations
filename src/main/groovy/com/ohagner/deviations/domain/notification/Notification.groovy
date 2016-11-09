@@ -1,4 +1,4 @@
-package com.ohagner.deviations.domain.notifications
+package com.ohagner.deviations.domain.notification
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.domain.Deviation

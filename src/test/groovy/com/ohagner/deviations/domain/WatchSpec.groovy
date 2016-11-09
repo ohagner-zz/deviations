@@ -3,14 +3,14 @@ package com.ohagner.deviations.domain
 import com.ohagner.deviations.domain.schedule.Schedule
 import com.ohagner.deviations.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.domain.schedule.WeeklySchedule
-import groovy.json.JsonOutput
+import com.ohagner.deviations.domain.transport.Transport
 import spock.lang.Specification
 
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-import static com.ohagner.deviations.domain.notifications.NotificationType.*
+import static com.ohagner.deviations.domain.notification.NotificationType.*
 import static groovy.util.GroovyTestCase.assertEquals
 import static java.time.DayOfWeek.FRIDAY
 import static java.time.DayOfWeek.MONDAY
@@ -22,11 +22,9 @@ class WatchSpec extends Specification {
 
     def 'transform watch with weekly schedule to json'() {
         given:
-            Watch watch = createWeeklyScheduleWatch()
-        when:
             String expected = new File("src/test/resources/watches/weeklyScheduleWatch.json").text
-        then:
-            println JsonOutput.prettyPrint(watch.toJson())
+            Watch watch = createWeeklyScheduleWatch()
+        expect:
             assertThat(watch.toJson(), jsonEquals(expected))
     }
 
@@ -43,7 +41,6 @@ class WatchSpec extends Specification {
             Watch watch = createSingleOccurrenceWatch()
         expect:
             String expected = new File("src/test/resources/watches/singleOccurrenceWatch.json").text
-            println watch.toJson()
             assertThat(watch.toJson(), jsonEquals(expected))
     }
 
@@ -59,7 +56,7 @@ class WatchSpec extends Specification {
     private Watch createWeeklyScheduleWatch() {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
-        List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
+        List<Transport> transports = [new Transport(line:"35", transportMode: Deviation.TransportMode.TRAIN), new Transport(line:"807B", transportMode: Deviation.TransportMode.BUS)]
         return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports)
     }
 
@@ -67,7 +64,7 @@ class WatchSpec extends Specification {
         Schedule schedule = new SingleOccurrence(dateOfEvent: LocalDate.of(2016,10,10), timeOfEvent: LocalTime.of(10,10))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         Queue<String> processedDeviationIds = new LinkedList(["1", "2"])
-        List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
+        List<Transport> transports = [new Transport(line:"35", transportMode: Deviation.TransportMode.TRAIN), new Transport(line:"807B", transportMode: Deviation.TransportMode.BUS)]
         return new Watch(id:99,name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports, processedDeviationIds: processedDeviationIds )
     }
 

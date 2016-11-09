@@ -1,7 +1,8 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.domain.notifications.Notification
+import com.ohagner.deviations.domain.user.Credentials
+import com.ohagner.deviations.domain.user.User
+import com.ohagner.deviations.domain.notification.Notification
 import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
 import ratpack.test.handling.RequestFixture
@@ -30,7 +31,7 @@ class AdminChainSpec extends Specification {
     def 'should notify when user exists'() {
         given:
             Notification notification = new Notification(header: "Header", message: "Message")
-            User user = new User(username: USERNAME)
+            User user = new User(credentials:new Credentials(username: USERNAME))
         when:
             def result = requestFixture
                     .uri("users/$USERNAME/notification")
@@ -62,7 +63,7 @@ class AdminChainSpec extends Specification {
     def 'should respond with 500 when notification fails'() {
         given:
             Notification notification = new Notification(header: "Header", message: "Message")
-            User user = new User(username: USERNAME)
+            User user = new User(credentials: new Credentials(username: USERNAME))
         when:
             def result = requestFixture
                     .uri("users/$USERNAME/notification")
@@ -71,7 +72,7 @@ class AdminChainSpec extends Specification {
                     .handleChain(new AdminChain())
         then:
             1 * userRepository.findByUsername(USERNAME) >> Optional.of(user)
-            notificationsService.sendNotification(user,_) >> { throw new RESTClientException("Connection reset") }
+            notificationsService.sendNotification(user,_) >> { throw new RESTClientException("Connection reset", null, null) }
             assert result.status.code == 500
     }
 

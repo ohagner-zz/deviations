@@ -1,9 +1,13 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.domain.notifications.Notification
+import com.ohagner.deviations.domain.user.User
+import com.ohagner.deviations.domain.Watch
+import com.ohagner.deviations.domain.notification.Notification
+import com.ohagner.deviations.handlers.AdminAuthorizationHandler
+import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.notifications.NotificationService
 import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.repository.WatchRepository
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyChainAction
 
@@ -33,6 +37,22 @@ class AdminChain extends GroovyChainAction {
                 response.status(404)
                 render json([message:"Failed to send notifications. User $username could not be found"])
             }
+        }
+        delete("users/:username") { UserRepository userRepository, WatchRepository watchRepository ->
+            String username = pathTokens.username
+            log.debug "Deleting user"
+            Optional<User> optUser = userRepository.findByUsername(username)
+            if(optUser.isPresent()) {
+                User user = optUser.get()
+                List<Watch> watches = watchRepository.findByUsername(user.credentials.username)
+                watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.name) }
+                userRepository.delete(user)
+                render json(user)
+            } else {
+                response.status(404)
+                render json([message: "User could not be found"])
+            }
+
         }
     }
 }

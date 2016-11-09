@@ -28,6 +28,9 @@ dependencies {
     runtime 'com.lmax:disruptor:3.3.0'
 
     compile ratpack.dependency('session')
+//    compile ratpack.dependency('pac4j')
+//    compile "org.pac4j:pac4j-http:1.8.8"
+//    compile "commons-codec:commons-codec:1.10"
 
     compile 'com.rabbitmq:amqp-client:3.6.2'
     compile('com.gmongo:gmongo:1.5') {
@@ -45,6 +48,12 @@ dependencies {
     testCompile 'net.javacrumbs.json-unit:json-unit:1.15.0'
 }
 
+test {
+    testLogging {
+        // Make sure output from standard out or error is shown in Gradle output.
+        showStandardStreams = false
+    }
+}
 task stage {
     dependsOn shadowJar
 }

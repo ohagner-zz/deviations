@@ -1,7 +1,7 @@
 package com.ohagner.deviations.notifications
 
-import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.domain.notifications.Notification
+import com.ohagner.deviations.domain.user.User
+import com.ohagner.deviations.domain.notification.Notification
 
 class DefaultNotificationService implements NotificationService {
 

@@ -1,13 +1,9 @@
 package com.ohagner.deviations
 
 import com.ohagner.deviations.domain.Deviation
-import com.ohagner.deviations.domain.Transport
+import com.ohagner.deviations.domain.transport.Transport
 import com.ohagner.deviations.domain.Watch
 import groovy.util.logging.Slf4j
-
-import java.time.LocalDateTime
-
-import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 @Slf4j
 class DeviationMatcher {

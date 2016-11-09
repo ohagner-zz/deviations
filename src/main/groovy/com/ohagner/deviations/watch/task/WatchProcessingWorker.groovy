@@ -25,13 +25,13 @@ import wslite.rest.RESTClient
 @Builder
 class WatchProcessingWorker  {
 
-    RESTClient apiClient
+    DeviationsApiClient apiClient
     DeviationRepository deviationRepository
 
 
     def static main(args) {
-        String apiBaseUrl = AppConfig.envOrProperty("DEVIATIONS_API_URL")
-        if(!apiBaseUrl) {
+        String baseUrl = AppConfig.envOrProperty("DEVIATIONS_URL")
+        if(!baseUrl) {
             log.error "No url found for api. Exiting..."
             System.exit(-1)
         }
@@ -42,7 +42,7 @@ class WatchProcessingWorker  {
         Injector messagingInjector = Guice.createInjector(new MessagingModule())
         Channel channel = messagingInjector.getInstance(Channel)
 
-        WatchProcessingWorker worker = new WatchProcessingWorker(apiClient: new RESTClient(apiBaseUrl), deviationRepository: deviationRepository)
+        WatchProcessingWorker worker = new WatchProcessingWorker(apiClient: new DefaultDeviationsApiClient(client: new RESTClient(baseUrl)), deviationRepository: deviationRepository)
         try {
             worker.handleIncomingWork(channel)
         } catch(Exception e) {
@@ -58,15 +58,17 @@ class WatchProcessingWorker  {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
-                String message = new String(body, "UTF-8");
                 log.debug "Matching deviation"
+
+                String message = new String(body, "UTF-8");
                 Watch watch = Watch.fromJson(message)
+
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepository.retrieveAll())
                 WatchProcessor watchProcessor = WatchProcessor.builder().deviationsApiClient(apiClient).deviationMatcher(deviationMatcher).build()
                 WatchProcessingResult result = watchProcessor.process(watch)
-                log.info "Watchprocessor result for watch ${watch.id}:${watch.name}:\n${result.toString()}"
+                log.info "Watchprocessor result for watch ${watch.id}:${watch.name}:"
+                log.info(result.toString())
             }
-
 
         }
         channel.basicConsume(Constants.WATCHES_TO_PROCESS_QUEUE_NAME, true, consumer)

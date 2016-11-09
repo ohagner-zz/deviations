@@ -1,8 +1,8 @@
 package com.ohagner.deviations.notifications
 
-import com.ohagner.deviations.domain.User
-import com.ohagner.deviations.domain.notifications.Notification
-import com.ohagner.deviations.domain.notifications.NotificationType
+import com.ohagner.deviations.domain.user.User
+import com.ohagner.deviations.domain.notification.Notification
+import com.ohagner.deviations.domain.notification.NotificationType
 import groovy.util.logging.Slf4j
 import wslite.rest.RESTClient
 import wslite.rest.Response

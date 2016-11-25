@@ -1,6 +1,7 @@
 layout 'layout.gtpl',
         title: title,
         msg: msg,
+        user: user,
         bodyContents: contents {
             script(src: '/js/createWatch.js') {}
 
@@ -33,9 +34,9 @@ layout 'layout.gtpl',
                             option(value: "SUBWAY", 'Tunnelbana')
                         }
                     }
-                    label(for: "line", class: "control-label col-sm-1", 'Linjer')
+                    label(for: "line", class: "control-label col-sm-1", 'Linje')
                     div(class: "col-sm-2") {
-                        input(type: "text", class: "form-control", name: "transport[0].line", placeholder: "1, 2, 3...", pattern: "[a-öA-Ö0-9,\\s]*", required: '', autofocus: '')
+                        input(type: "text", class: "form-control", name: "transport[0].line", placeholder: "Linjenummer", pattern: "[a-öA-Ö0-9]*", required: '', autofocus: '')
                     }
                     div(class: "col-sm-offset-1 col-sm-2") {
                         button(class: "btn btn-success form-control addButton", type: "button", 'Lägg till rad')

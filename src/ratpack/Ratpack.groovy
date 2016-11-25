@@ -9,6 +9,8 @@ import com.ohagner.deviations.modules.*
 import com.ohagner.deviations.scheduler.JobScheduler
 import com.ohagner.deviations.domain.renderer.UserRenderer
 import com.ohagner.deviations.security.AuthService
+import com.ohagner.deviations.web.service.DefaultUserService
+import com.ohagner.deviations.web.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.error.ServerErrorHandler
@@ -40,6 +42,7 @@ ratpack {
         module JsonRenderingModule
         module MessagingModule
         module NotificationsModule
+        module ServiceModule
         add new AdminChain()
         add new ApiChain()
         add new WebChain()
@@ -57,7 +60,6 @@ ratpack {
         prefix("admin") {
             all() {
                 context.response.contentType("application/json")
-//                insert(AdminAuthorizationHandler)
                 next()
             }
             all(AdminAuthorizationHandler)

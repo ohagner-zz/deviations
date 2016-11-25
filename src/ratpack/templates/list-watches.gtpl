@@ -1,6 +1,7 @@
 layout 'layout.gtpl',
 title: title,
 msg: msg,
+user: user,
 weeklyWatches: weeklyWatches,
 singleOccurrenceWatches: singleOccurrenceWatches,
 bodyContents: contents {

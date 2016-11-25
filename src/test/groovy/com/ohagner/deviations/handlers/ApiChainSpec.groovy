@@ -4,6 +4,7 @@ import com.ohagner.deviations.chains.ApiChain
 import com.ohagner.deviations.domain.Deviation
 
 import com.ohagner.deviations.repository.DeviationRepository
+import com.ohagner.deviations.repository.UserRepository
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture
 import spock.lang.Specification
@@ -29,6 +30,7 @@ class ApiChainSpec extends Specification {
         requestFixture = RequestFixture.requestFixture()
                 .registry { registry ->
             registry.add(DeviationRepository, deviationRepository)
+            registry.add(UserAuthorizationHandler, new UserAuthorizationHandler())
         }
     }
 

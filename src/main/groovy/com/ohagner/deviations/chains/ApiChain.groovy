@@ -87,7 +87,6 @@ class ApiChain extends GroovyChainAction {
                             render json(["message": "User already exists"])
                         } else {
                             //validate user
-                            //Hash password
                             requestUser.credentials.apiToken = null
                             requestUser.credentials.role = Role.USER
                             User createdUser = userRepository.create(requestUser, password)

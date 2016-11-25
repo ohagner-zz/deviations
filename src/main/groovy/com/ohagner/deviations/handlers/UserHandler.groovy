@@ -47,7 +47,6 @@ class UserHandler extends GroovyHandler {
                         response.status(500)
                         render json([message: "Failed to update user"])
                     }.then { updatedUser ->
-                        log.info "Here or what?"
                         response.status(200)
                         render updatedUser
                     }

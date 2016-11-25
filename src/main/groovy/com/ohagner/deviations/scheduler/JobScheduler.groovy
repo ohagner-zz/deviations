@@ -32,7 +32,7 @@ class JobScheduler implements Service, Runnable {
     public void onStart(StartEvent startEvent) {
         ExecController execController = startEvent.getRegistry().get(ExecController.class);
         execController.getExecutor()
-                .scheduleAtFixedRate(this, 0, AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 2), TimeUnit.MINUTES)
+                .scheduleAtFixedRate(this, 0, AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 30), TimeUnit.MINUTES)
     }
 
     @Override

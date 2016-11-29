@@ -92,7 +92,7 @@ class UserAuthorizationHandlerSpec extends Specification {
 
     void 'should fail when no user is found'() {
         when:
-            def result = requestFixture.pathBinding(["username": USERNAME])handle(handler)
+            def result = requestFixture.pathBinding(["username": USERNAME]).handle(handler)
         then:
             1 * userRepository.findByApiToken(_) >> Promise.value(null)
             result.status.code == 401

@@ -5,6 +5,7 @@ import com.ohagner.deviations.chains.ApiChain
 import com.ohagner.deviations.errorhandling.DefaultServerErrorHandler
 import com.ohagner.deviations.handlers.AdminAuthorizationHandler
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
+import com.ohagner.deviations.handlers.notification.SendNotificationHandler
 import com.ohagner.deviations.modules.*
 import com.ohagner.deviations.scheduler.JobScheduler
 import com.ohagner.deviations.domain.renderer.UserRenderer
@@ -51,6 +52,7 @@ ratpack {
         bind JobScheduler
         bind UserAuthorizationHandler
         bind AdminAuthorizationHandler
+        bind SendNotificationHandler
         bindInstance(ServerErrorHandler, new DefaultServerErrorHandler())
     }
 

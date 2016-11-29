@@ -33,8 +33,8 @@ class AdminAuthorizationHandler extends GroovyHandler {
     protected void handle(GroovyContext context) {
 
         context.with {
-            log.info "In authorization code"
             String suppliedApiToken = request.headers.get(Headers.USER_TOKEN)
+            log.info "Supplied token: $suppliedApiToken"
             userRepository.findByApiToken(suppliedApiToken).onNull {
                 log.debug "No user found for token ${suppliedApiToken}"
                 response.status(401)

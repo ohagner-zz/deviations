@@ -4,7 +4,6 @@ import com.google.inject.Inject
 import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.repository.UserRepository
 import groovy.util.logging.Slf4j
-import ratpack.exec.Blocking
 import ratpack.groovy.handling.GroovyContext
 import ratpack.groovy.handling.GroovyHandler
 import ratpack.registry.Registry
@@ -21,6 +20,9 @@ import static ratpack.jackson.Jackson.json
 @Slf4j
 class UserAuthorizationHandler extends GroovyHandler {
 
+    public static final String ERROR_MSG_USERNAME_MISMATCH = "Attempt to access other users data"
+    public static final String ERROR_MSG_API_TOKEN_EXPIRED = "API token has expired"
+    public static final String ERROR_MSG_INVALID_API_TOKEN = "Invalid api token"
     UserRepository userRepository
 
     @Inject
@@ -38,19 +40,19 @@ class UserAuthorizationHandler extends GroovyHandler {
             userRepository.findByApiToken(suppliedApiToken)
                 .onNull {
                     response.status(401)
-                    render json([message: "Invalid api token"])
+                    render json([message: ERROR_MSG_INVALID_API_TOKEN])
                 }.then { User user ->
                     if (isValidToken(user, suppliedApiToken)) {
                         if(pathUsername != user.credentials.username) {
                             response.status(403)
-                            render json([message: "Forbidden"])
+                            render json([message: ERROR_MSG_USERNAME_MISMATCH])
                         } else {
                             log.info "Valid token, proceeding with next"
                             next(Registry.single(User, user))
                         }
                     } else {
                         response.status(401)
-                        render json([message: "Api token has expired"])
+                        render json([message: ERROR_MSG_API_TOKEN_EXPIRED])
                     }
                 }
         }

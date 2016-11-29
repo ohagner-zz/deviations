@@ -15,14 +15,6 @@ import java.time.LocalDate
 
 class AdminAuthorizationHandlerSpec extends Specification {
 
-    /*
-        1. User found and authorized
-        2. User found but not authorized
-            a. Expired token and ADMIN
-            b. Not ADMIN and valid token
-            c. NOT ADMIN and expired token
-        3. User not found
-     */
     public static final String TOKEN = "abcd-1234"
     public static final Token VALID_TOKEN = new Token(value: TOKEN, expirationDate: LocalDate.now(Constants.ZONE_ID).plusWeeks(4))
     public static final Token EXPIRED_TOKEN = new Token(value: TOKEN, expirationDate: LocalDate.now(Constants.ZONE_ID).minusDays(1))

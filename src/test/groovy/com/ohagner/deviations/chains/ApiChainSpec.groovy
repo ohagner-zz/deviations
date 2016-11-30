@@ -1,8 +1,8 @@
-package com.ohagner.deviations.handlers
+package com.ohagner.deviations.chains
 
 import com.ohagner.deviations.chains.ApiChain
 import com.ohagner.deviations.domain.Deviation
-
+import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.repository.DeviationRepository
 import com.ohagner.deviations.repository.UserRepository
 import ratpack.jackson.JsonRender

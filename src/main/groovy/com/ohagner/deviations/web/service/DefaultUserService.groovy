@@ -10,6 +10,7 @@ import ratpack.server.PublicAddress
 
 @Slf4j
 class DefaultUserService implements UserService {
+    private static final def SUCCESS_RESPONSE_CODES = 200..299
 
     PublicAddress publicAddress
     HttpClient httpClient
@@ -32,7 +33,7 @@ class DefaultUserService implements UserService {
             return false
         }.map { response ->
             log.info("Update response : " + response.getBody()?.getText(Charsets.UTF_8))
-            def success = (200..299).contains(response.statusCode)
+            def success = SUCCESS_RESPONSE_CODES.contains(response.statusCode)
             log.info "Success: $success"
             return success
         }
@@ -40,16 +41,28 @@ class DefaultUserService implements UserService {
 
     @Override
     Promise<Boolean> create(Map user) {
-        httpClient.request(publicAddress.get("api/users/${user.username}")) { request ->
+        def requestBody = JsonOutput.toJson {
+            firstName user.firstName
+            lastName user.lastName
+            emailAddress user.emailAddress
+            credentials {
+                username user.username
+                password user.password
+            }
+        }
+        log.info "Sending ${JsonOutput.prettyPrint(requestBody)}"
+        httpClient.request(publicAddress.get("api/users")) { request ->
             request
                     .post()
-                    .body.text(user)
+                    .body.text(requestBody)
         }.mapError { t ->
             log.error("Failed to create user", t)
             return false
-        }.then { response ->
-            log.info(response.getBody()?.getText(Charsets.UTF_8))
-            return (200..299).contains(response.statusCode)
+        }.map { response ->
+            log.info("Create user response: ${response.statusCode}" + response.getBody()?.getText(Charsets.UTF_8))
+            def successValue = SUCCESS_RESPONSE_CODES.contains(response.statusCode)
+            log.info "Success: $successValue"
+            return successValue
         }
     }
 

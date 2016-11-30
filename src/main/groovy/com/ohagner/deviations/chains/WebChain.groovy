@@ -100,18 +100,15 @@ class WebChain extends GroovyChainAction {
                         log.info "Saving user"
                         parse(Form).flatMap { form ->
                             userService.create(form)
-                        }
-                        .onError { t ->
-                            log.error("Something went wrong", t)
-                            redirect "/?msg=Kunde inte spara användare"
-                        }.then { boolean success ->
+                        }.then { def success ->
+                            log.info "In Webchain, success $success"
                             if (success) {
                                 redirect "/?msg=Användare skapad"
                             } else {
-                                redirect "/?msg=Kunde inte spara användare"
+                                redirect "/?msg=Kunde+inte+spara+användare"
                             }
-
                         }
+
                     }
                 }
             }
@@ -125,11 +122,11 @@ class WebChain extends GroovyChainAction {
                 .then { user ->
                     log.info "User: ${user.dump()}"
                     WebUser webuser = WebUser.builder()
-                        .firstName(user.firstName)
-                        .lastName(user.lastName)
-                        .emailAddress(user.emailAddress)
-                        .username(user.username)
-                        .apiToken(user.apiToken).build()
+                            .firstName(user.firstName)
+                            .lastName(user.lastName)
+                            .emailAddress(user.emailAddress)
+                            .username(user.username)
+                            .apiToken(user.apiToken).build()
                     log.info "User exists, moving on"
                     next(Registry.single(WebUser, webuser))
                 }
@@ -159,11 +156,11 @@ class WebChain extends GroovyChainAction {
                                 .map { pair ->
                             def formUser = pair.left
                             def loggedInUser = pair.right
-                            [username: loggedInUser.username,
-                                apiToken: loggedInUser.apiToken,
-                                firstName: formUser.firstName,
-                                lastName: formUser.lastName,
-                                emailAddress: formUser.emailAddress]
+                            [username    : loggedInUser.username,
+                             apiToken    : loggedInUser.apiToken,
+                             firstName   : formUser.firstName,
+                             lastName    : formUser.lastName,
+                             emailAddress: formUser.emailAddress]
                         }.then { user ->
                             userService.update(user).then { success ->
                                 if (success) {

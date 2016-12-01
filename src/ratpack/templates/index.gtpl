@@ -1,5 +1,5 @@
 layout 'layout.gtpl',
-title: 'Deviation watcher',
+title: 'Trafikbevakaren',
 msg: msg,
 user: user,
 bodyContents: contents {

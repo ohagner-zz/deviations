@@ -1,7 +1,7 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.Role
 import com.ohagner.deviations.domain.user.User
+import com.ohagner.deviations.handlers.CreateUserHandler
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.UserHandler
 import com.ohagner.deviations.repository.UserRepository
@@ -39,24 +39,7 @@ class ApiChain extends GroovyChainAction {
                     render json(userRepository.retrieveAll())
                 }
                 post {
-                    request.getBody().then {
-                        String request = it.text
-                        def json = new JsonSlurper().parseText(request)
-                        String password = json.credentials.password
-                        User requestUser = User.fromJson(request)
-
-                        if (userRepository.userExists(requestUser.credentials.username)) {
-                            response.status(400)
-                            render json(["message": "User already exists"])
-                        } else {
-                            //validate user
-                            requestUser.credentials.apiToken = null
-                            requestUser.credentials.role = Role.USER
-                            User createdUser = userRepository.create(requestUser, password)
-                            response.status(201)
-                            render createdUser
-                        }
-                    }
+                    insert(new CreateUserHandler(userRepository))
                 }
             }
         }

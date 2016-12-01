@@ -32,11 +32,11 @@ class UserHandler extends GroovyHandler {
                     render user
                 }
                 put {
-                    log.info "Updating user ${user.credentials.username}"
+                    log.debug "Updating user ${user.credentials.username}"
                     UserRepository userRepository = context.get(UserRepository)
                     request.getBody().map {
                         String request = it.text
-                        log.info "User update request: $request"
+                        log.debug "User update request: $request"
                         User update = User.fromJson(request)
                         user.firstName = update.firstName
                         user.lastName = update.lastName

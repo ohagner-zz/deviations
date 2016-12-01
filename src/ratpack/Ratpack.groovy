@@ -6,6 +6,7 @@ import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.domain.renderer.UserRenderer
 import com.ohagner.deviations.errorhandling.DefaultServerErrorHandler
 import com.ohagner.deviations.handlers.AdminAuthorizationHandler
+import com.ohagner.deviations.handlers.CreateUserHandler
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.notification.SendNotificationHandler
 import com.ohagner.deviations.modules.*
@@ -53,6 +54,7 @@ ratpack {
         bind UserAuthorizationHandler
         bind AdminAuthorizationHandler
         bind SendNotificationHandler
+//        bind CreateUserHandler
         bindInstance(ServerErrorHandler, new DefaultServerErrorHandler())
     }
 

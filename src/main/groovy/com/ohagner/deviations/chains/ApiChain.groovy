@@ -1,16 +1,13 @@
 package com.ohagner.deviations.chains
 
 import com.ohagner.deviations.Role
-import com.ohagner.deviations.domain.Deviation
 import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.UserHandler
-import com.ohagner.deviations.repository.DeviationRepository
 import com.ohagner.deviations.repository.UserRepository
 import com.ohagner.deviations.security.AuthService
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
-import ratpack.exec.Promise
 import ratpack.groovy.handling.GroovyChainAction
 
 import static ratpack.jackson.Jackson.json
@@ -34,41 +31,7 @@ class ApiChain extends GroovyChainAction {
                 }
             }
         }
-        prefix("deviations") {
-            get("") {
-                DeviationRepository deviationRepo = context.get(DeviationRepository)
-                render json(deviationRepo.retrieveAll())
-            }
-            get(":transportType") {
-                DeviationRepository deviationRepo = context.get(DeviationRepository)
-                Promise.sync {
-                    Deviation.TransportMode transportMode = Deviation.TransportMode.valueOf(pathTokens.transportType)
-                    deviationRepo.retrieveAll().findAll { it.transportMode == transportMode }
-                }.onError { t ->
-                    log.warn("Failed to retrieve deviations for transport", t)
-                    response.status(500)
-                    render json([message: "Failed to retrieve deviations"])
-                }.then { deviationList ->
-                    render json(deviationList)
-                }
-            }
-            get(":transportType/:lineNumber") {
-                DeviationRepository deviationRepo = context.get(DeviationRepository)
-                Promise.sync {
-                    Deviation.TransportMode transportMode = Deviation.TransportMode.valueOf(pathTokens.transportType)
-                    String lineNumber = pathTokens.lineNumber
-                    deviationRepo.retrieveAll().findAll {
-                        it.transportMode == transportMode && it.lineNumbers.contains(lineNumber)
-                    }
-                }.onError { t ->
-                    log.warn("Failed to retrieve deviations for transport and linenumber", t)
-                    response.status(500)
-                    render json([message: "Failed to retrieve deviations"])
-                }.then { deviationList ->
-                    render json(deviationList)
-                }
-            }
-        }
+        prefix("deviations", DeviationsChain)
         path("users") { UserRepository userRepository ->
             byMethod {
                 //Remove this one later

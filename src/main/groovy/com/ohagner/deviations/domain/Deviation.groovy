@@ -1,6 +1,7 @@
 package com.ohagner.deviations.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -65,6 +66,7 @@ class Deviation {
         return mapper.writeValueAsString(this)
     }
 
+    @JsonIgnore
     Duration getDuration() {
         return Duration.between(from, to)
     }

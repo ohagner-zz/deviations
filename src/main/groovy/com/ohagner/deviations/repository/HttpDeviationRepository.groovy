@@ -27,9 +27,6 @@ class HttpDeviationRepository implements DeviationRepository {
         List<Deviation> deviationList = []
         try {
 
-            def response = trafikLabClient.get(query: [key: apiKey, transportMode: Deviation.TransportMode.TRAIN.toString()], accept: ContentType.JSON)
-            log.debug "Received ${response.json}"
-
             deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.TRAIN))
             deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.BUS))
             deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.SUBWAY))

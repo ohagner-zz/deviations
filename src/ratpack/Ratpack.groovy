@@ -1,17 +1,16 @@
 import com.ohagner.deviations.chains.AdminChain
+import com.ohagner.deviations.chains.ApiChain
+import com.ohagner.deviations.chains.DeviationsChain
 import com.ohagner.deviations.chains.WebChain
 import com.ohagner.deviations.config.MongoConfig
-import com.ohagner.deviations.chains.ApiChain
+import com.ohagner.deviations.domain.renderer.UserRenderer
 import com.ohagner.deviations.errorhandling.DefaultServerErrorHandler
 import com.ohagner.deviations.handlers.AdminAuthorizationHandler
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.notification.SendNotificationHandler
 import com.ohagner.deviations.modules.*
 import com.ohagner.deviations.scheduler.JobScheduler
-import com.ohagner.deviations.domain.renderer.UserRenderer
 import com.ohagner.deviations.security.AuthService
-import com.ohagner.deviations.web.service.DefaultUserService
-import com.ohagner.deviations.web.service.UserService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import ratpack.error.ServerErrorHandler
@@ -47,6 +46,7 @@ ratpack {
         add new AdminChain()
         add new ApiChain()
         add new WebChain()
+        bind DeviationsChain
         bind AuthService
         bind UserRenderer
         bind JobScheduler

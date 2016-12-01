@@ -4,6 +4,9 @@ import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
+import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.security.AuthenticationService
+import com.ohagner.deviations.security.DefaultAuthenticationService
 import com.ohagner.deviations.web.service.DefaultUserService
 import com.ohagner.deviations.web.service.UserService
 import groovy.transform.CompileStatic
@@ -24,6 +27,14 @@ class ServiceModule extends AbstractModule {
     @Inject
     UserService provideUserService(PublicAddress publicAddress, HttpClient httpClient) {
         return new DefaultUserService(publicAddress, httpClient)
+    }
+
+    @Provides
+    @CompileStatic
+    @Singleton
+    @Inject
+    AuthenticationService provideAuthenticationService(UserRepository userRepository) {
+        return new DefaultAuthenticationService(userRepository)
     }
 
 }

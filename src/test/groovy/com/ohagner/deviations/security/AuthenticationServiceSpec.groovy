@@ -1,7 +1,6 @@
 package com.ohagner.deviations.security
 
 import com.ohagner.deviations.Role
-import com.ohagner.deviations.config.Constants
 import com.ohagner.deviations.domain.user.Credentials
 import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.repository.UserRepository
@@ -13,7 +12,7 @@ import java.time.LocalDate
 
 import static com.ohagner.deviations.config.Constants.*
 
-class AuthServiceSpec extends Specification {
+class AuthenticationServiceSpec extends Specification {
 
     private static final String PASSWORD = "Password"
     private static final String PASSWORD_SALT = HashGenerator.createSalt()
@@ -34,7 +33,7 @@ class AuthServiceSpec extends Specification {
     ExecHarness execHarness = ExecHarness.harness()
 
     UserRepository userRepository = Mock(UserRepository)
-    AuthService authService = new AuthService(userRepository)
+    DefaultAuthenticationService authService = new DefaultAuthenticationService(userRepository)
 
     void 'should return authenticated user'() {
         when:

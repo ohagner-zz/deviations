@@ -15,22 +15,23 @@ import static com.ohagner.deviations.config.Constants.ZONE_ID
 
 @CompileStatic
 @Slf4j
-class AuthService {
+class DefaultAuthenticationService implements AuthenticationService {
 
     private UserRepository userRepository
 
     @Inject
-    AuthService(UserRepository userRepository) {
+    DefaultAuthenticationService(UserRepository userRepository) {
         this.userRepository = userRepository
     }
 
+    @Override
     Promise<User> authenticate(String username, String password) {
         return Promise.sync {
             return updateTokenIfMatch(username, password).orElse(null)
         }
     }
 
-
+    @Override
     Promise<User> authenticateAdministrator(String username, String password) {
 
         return Promise.sync {
@@ -41,7 +42,7 @@ class AuthService {
         }
     }
 
-    Optional<User> updateTokenIfMatch(String username, String password) {
+    private Optional<User> updateTokenIfMatch(String username, String password) {
             userRepository.findByUsername(username)
             .filter { User user ->
                 String passwordHash = HashGenerator.generateHash(password, user.credentials.passwordSalt)

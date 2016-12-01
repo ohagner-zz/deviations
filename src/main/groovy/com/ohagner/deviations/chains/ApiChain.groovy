@@ -1,12 +1,10 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.handlers.CreateUserHandler
+import com.ohagner.deviations.handlers.UserAuthenticationHandler
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.UserHandler
 import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.security.AuthService
-import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyChainAction
 
@@ -18,19 +16,7 @@ class ApiChain extends GroovyChainAction {
 
     @Override
     void execute() throws Exception {
-        post("authenticate") { AuthService authService ->
-            request.body.then { body ->
-                def jsonBody = new JsonSlurper().parseText(body.text)
-                log.info "Authenticating with user ${jsonBody.username}"
-                authService.authenticate(jsonBody.username, jsonBody.password).onNull {
-                    response.status(401)
-                    render json([message: "Invalid username and/or password"])
-                }.then { User user ->
-                    response.status(200)
-                    render user
-                }
-            }
-        }
+        post("authenticate", UserAuthenticationHandler)
         prefix("deviations", DeviationsChain)
         path("users") { UserRepository userRepository ->
             byMethod {
@@ -44,7 +30,6 @@ class ApiChain extends GroovyChainAction {
             }
         }
         prefix("users/:username") {
-            //Everything below here should have a security token header
             all(UserAuthorizationHandler)
             path("") {
                 insert(new UserHandler())

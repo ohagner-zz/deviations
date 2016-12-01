@@ -11,7 +11,7 @@ import static junit.framework.Assert.assertEquals
 import static org.hamcrest.CoreMatchers.hasItems
 import static org.hamcrest.MatcherAssert.assertThat
 
-class ScheduleTest extends Specification {
+class ScheduleSpec extends Specification {
 
     def 'create weekly schedule type from json'() {
         given:

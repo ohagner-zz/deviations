@@ -4,6 +4,7 @@ import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.domain.Watch
 import com.ohagner.deviations.domain.notification.Notification
 import com.ohagner.deviations.handlers.AdminAuthorizationHandler
+import com.ohagner.deviations.handlers.UpdateWatchHandler
 import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.notification.SendNotificationHandler
 import com.ohagner.deviations.notifications.NotificationService
@@ -26,7 +27,7 @@ class AdminChain extends GroovyChainAction {
             if(optUser.isPresent()) {
                 User user = optUser.get()
                 List<Watch> watches = watchRepository.findByUsername(user.credentials.username)
-                watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.name) }
+                watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.id) }
                 userRepository.delete(user)
                 render json(user)
             } else {
@@ -34,6 +35,9 @@ class AdminChain extends GroovyChainAction {
                 render json([message: "User could not be found"])
             }
 
+        }
+        put("watches/:id") { WatchRepository watchRepository ->
+            insert(new UpdateWatchHandler(watchRepository))
         }
     }
 }

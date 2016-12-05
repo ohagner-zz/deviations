@@ -11,7 +11,6 @@ import com.ohagner.deviations.handlers.UserAuthorizationHandler
 import com.ohagner.deviations.handlers.notification.SendNotificationHandler
 import com.ohagner.deviations.modules.*
 import com.ohagner.deviations.scheduler.JobScheduler
-import com.ohagner.deviations.security.AuthenticationService
 import com.ohagner.deviations.security.DefaultAuthenticationService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

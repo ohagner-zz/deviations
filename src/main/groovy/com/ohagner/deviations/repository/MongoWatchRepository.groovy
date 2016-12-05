@@ -78,8 +78,8 @@ class MongoWatchRepository implements WatchRepository {
     }
 
     Optional<Watch> delete(String username, long id) {
-        log.debug "Deleting watch for user $username with id $id"
-        optionalFrom watches.findAndRemove(new BasicDBObject(id:id as long, username:username))
+        log.info "Deleting watch for user $username with id $id"
+        optionalFrom watches.findAndRemove(new BasicDBObject(id:id, username:username))
     }
 
     boolean exists(String username, long id) {

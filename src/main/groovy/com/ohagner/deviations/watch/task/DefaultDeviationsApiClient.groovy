@@ -50,7 +50,7 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
     boolean update(Watch watch) {
         try {
             updateCredentialsIfNeeded()
-            Response updateResponse = client.put(path: "/api/users/${watch.username}/watches/${watch.id}", headers: [Authorization: apiToken]) {
+            Response updateResponse = client.put(path: "/admin/watches/${watch.id}", headers: [Authorization: apiToken]) {
                 type ContentType.JSON
                 text watch.toJson()
             }
@@ -65,7 +65,7 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
 
     private void updateCredentialsIfNeeded() {
         log.info "Checking to see if credentials should be updated"
-        if (!apiToken || tokenHasExpired()) {
+        if (!tokenIsValid()) {
             log.info "Updating credentials"
             try {
                 Response response = client.post(path: "/api/authenticate") {
@@ -83,7 +83,7 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
         }
     }
 
-    private boolean tokenHasExpired(LocalDate tokenExpirationDate) {
-        return tokenExpirationDate && tokenExpirationDate.isAfter(LocalDate.now(ZoneId.of(Constants.ZONE_ID)))
+    private boolean tokenIsValid() {
+        return apiToken && apiTokenExpirationDate && apiTokenExpirationDate.isAfter(LocalDate.now(Constants.ZONE_ID))
     }
 }

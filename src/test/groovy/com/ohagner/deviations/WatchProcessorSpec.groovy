@@ -55,7 +55,7 @@ class WatchProcessorSpec extends Specification {
             WatchProcessingResult result = watchProcessor.process(matchingWatch)
         then:
             0 * client.sendNotifications(_,_)
-            0 * client.update(_)
+            1 * client.update(_) >> true
             assert result.status == WatchProcessingStatus.NOT_TIME_TO_CHECK
             assert result.matchingDeviations.size() == 0
     }
@@ -67,7 +67,7 @@ class WatchProcessorSpec extends Specification {
             WatchProcessingResult result = watchProcessor.process(nonMatchingWatch)
         then:
             0 * client.sendNotifications(_,_)
-            0 * client.update(_)
+            1 * client.update(_) >> true
             assert result.status == WatchProcessingStatus.NO_MATCH
             assert result.matchingDeviations.size() == 0
     }

@@ -24,7 +24,7 @@ class UserHandler extends GroovyHandler {
                     WatchRepository watchRepository = context.get(WatchRepository)
                     log.debug "Deleting user"
                     List<Watch> watches = watchRepository.findByUsername(user.credentials.username)
-                    watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.name) }
+                    watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.id) }
                     userRepository.delete(user)
                     render user
                 }

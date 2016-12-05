@@ -2,6 +2,7 @@ package com.ohagner.deviations.chains
 
 import com.ohagner.deviations.domain.user.User
 import com.ohagner.deviations.domain.Watch
+import com.ohagner.deviations.handlers.UpdateWatchHandler
 import com.ohagner.deviations.repository.WatchRepository
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyChainAction
@@ -63,17 +64,7 @@ class WatchChain extends GroovyChainAction {
                     }
                 }
                 put {
-                    request.body.map { body ->
-                        Watch watchToUpdate = Watch.fromJson(body.text)
-                        assert watchToUpdate.id == watchId
-                        watchRepository.update(watchToUpdate)
-                    }.onError { t ->
-                        log.error("Failed to update watch", t)
-                    }.then {
-                        response.status(200)
-                        render json([message: "Successfully updated watch"])
-                    }
-
+                    insert(new UpdateWatchHandler(watchRepository))
                 }
             }
         }

@@ -47,15 +47,16 @@ class WatchProcessor {
                     watch.lastNotified = LocalDateTime.now(ZONE_ID)
                     result.matchingDeviations.each { watch.addDeviationId(it.id)}
 
-                    if(!deviationsApiClient.update(watch)) {
-                        result.status = WatchProcessingStatus.WATCH_UPDATE_FAILED
-                    }
                 } else {
                     result.status = WatchProcessingStatus.NO_MATCH
                     result.addMessage("No matching deviations found")
                 }
             } else {
                 result.status = WatchProcessingStatus.NOT_TIME_TO_CHECK
+            }
+            watch.lastProcessed = LocalDateTime.now(ZONE_ID)
+            if(!deviationsApiClient.update(watch)) {
+                result.status = WatchProcessingStatus.WATCH_UPDATE_FAILED
             }
         } catch(Exception e) {
             log.error("Watch processing failed for watch ${watch.id}", e)

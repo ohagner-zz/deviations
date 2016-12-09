@@ -1,5 +1,6 @@
 package com.ohagner.deviations.parser
 
+import com.ohagner.deviations.api.deviation.LineNumberParser
 import spock.lang.Specification
 
 import static org.junit.Assert.assertThat

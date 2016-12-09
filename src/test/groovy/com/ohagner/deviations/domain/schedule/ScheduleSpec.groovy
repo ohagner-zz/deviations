@@ -1,5 +1,8 @@
 package com.ohagner.deviations.domain.schedule
 
+import com.ohagner.deviations.api.watch.schedule.Schedule
+import com.ohagner.deviations.api.watch.schedule.SingleOccurrence
+import com.ohagner.deviations.api.watch.schedule.WeeklySchedule
 import groovy.json.JsonOutput
 import spock.lang.Specification
 

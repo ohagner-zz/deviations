@@ -4,9 +4,9 @@ import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
-import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.security.AuthenticationService
-import com.ohagner.deviations.security.DefaultAuthenticationService
+import com.ohagner.deviations.api.user.UserRepository
+import com.ohagner.deviations.api.user.security.AuthenticationService
+import com.ohagner.deviations.api.user.security.DefaultAuthenticationService
 import com.ohagner.deviations.web.service.DefaultUserService
 import com.ohagner.deviations.web.service.UserService
 import groovy.transform.CompileStatic

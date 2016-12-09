@@ -1,8 +1,9 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.domain.Deviation
-import com.ohagner.deviations.handlers.UserAuthorizationHandler
-import com.ohagner.deviations.repository.DeviationRepository
+import com.ohagner.deviations.api.deviation.DeviationsChain
+import com.ohagner.deviations.api.deviation.Deviation
+import com.ohagner.deviations.api.user.UserAuthorizationHandler
+import com.ohagner.deviations.api.deviation.DeviationRepository
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture
 import spock.lang.Specification

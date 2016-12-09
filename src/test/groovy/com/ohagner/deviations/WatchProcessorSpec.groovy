@@ -1,20 +1,18 @@
 package com.ohagner.deviations
 
-import com.ohagner.deviations.domain.Deviation
-import com.ohagner.deviations.domain.transport.Transport
+import com.ohagner.deviations.api.deviation.DeviationMatcher
+import com.ohagner.deviations.api.deviation.Deviation
+import com.ohagner.deviations.api.transport.Transport
 
-import com.ohagner.deviations.domain.Watch
-import com.ohagner.deviations.domain.notification.NotificationType
-import com.ohagner.deviations.domain.schedule.SingleOccurrence
-import com.ohagner.deviations.testutils.MockHTTPClient
-import com.ohagner.deviations.watch.WatchProcessor
-import com.ohagner.deviations.watch.task.DeviationsApiClient
-import com.ohagner.deviations.watch.task.WatchProcessingResult
-import com.ohagner.deviations.watch.task.WatchProcessingStatus
+import com.ohagner.deviations.api.watch.Watch
+import com.ohagner.deviations.api.notification.NotificationType
+import com.ohagner.deviations.api.watch.schedule.SingleOccurrence
+import com.ohagner.deviations.worker.watch.WatchProcessor
+import com.ohagner.deviations.worker.watch.task.DeviationsApiClient
+import com.ohagner.deviations.worker.watch.task.WatchProcessingResult
+import com.ohagner.deviations.worker.watch.task.WatchProcessingStatus
 import groovy.util.logging.Slf4j
 import spock.lang.Specification
-import wslite.http.HTTPResponse
-import wslite.rest.RESTClient
 
 import java.time.LocalDate
 import java.time.LocalDateTime

@@ -1,11 +1,12 @@
 package com.ohagner.deviations.handlers
 
-import com.ohagner.deviations.Role
+import com.ohagner.deviations.api.user.AdminAuthorizationHandler
+import com.ohagner.deviations.api.user.Role
 import com.ohagner.deviations.config.Constants
-import com.ohagner.deviations.domain.user.Credentials
-import com.ohagner.deviations.domain.user.Token
-import com.ohagner.deviations.domain.user.User
-import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.api.user.Credentials
+import com.ohagner.deviations.api.user.Token
+import com.ohagner.deviations.api.user.User
+import com.ohagner.deviations.api.user.UserRepository
 import ratpack.exec.Promise
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture

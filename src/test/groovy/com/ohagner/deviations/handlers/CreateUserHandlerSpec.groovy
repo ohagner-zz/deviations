@@ -1,8 +1,9 @@
 package com.ohagner.deviations.handlers
 
-import com.ohagner.deviations.Role
-import com.ohagner.deviations.domain.user.User
-import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.api.user.CreateUserHandler
+import com.ohagner.deviations.api.user.Role
+import com.ohagner.deviations.api.user.User
+import com.ohagner.deviations.api.user.UserRepository
 import groovy.json.JsonOutput
 import ratpack.groovy.test.handling.GroovyRequestFixture
 import spock.lang.Specification

@@ -1,5 +1,6 @@
 package com.ohagner.deviations.parser
 
+import com.ohagner.deviations.web.watch.WatchFormParser
 import spock.lang.Specification
 
 class WatchFormParserSpec extends Specification {

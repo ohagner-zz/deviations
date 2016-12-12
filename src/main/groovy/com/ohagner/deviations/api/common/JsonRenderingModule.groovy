@@ -1,4 +1,4 @@
-package com.ohagner.deviations.modules
+package com.ohagner.deviations.api.common
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.AbstractModule

@@ -1,3 +1,4 @@
+import com.ohagner.deviations.api.common.JsonRenderingModule
 import com.ohagner.deviations.api.deviation.DeviationsModule
 import com.ohagner.deviations.api.notification.NotificationsModule
 import com.ohagner.deviations.api.user.AdminChain

@@ -1,7 +1,7 @@
 package com.ohagner.deviations.chains
 
 import com.ohagner.deviations.web.WebChain
-import com.ohagner.deviations.web.service.UserService
+import com.ohagner.deviations.web.user.service.UserService
 import ratpack.exec.Promise
 import ratpack.session.Session
 import ratpack.test.handling.RequestFixture

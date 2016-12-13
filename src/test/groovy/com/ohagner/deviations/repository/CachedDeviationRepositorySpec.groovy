@@ -1,8 +1,8 @@
 package com.ohagner.deviations.repository
 
-import com.ohagner.deviations.api.deviation.CachedDeviationRepository
-import com.ohagner.deviations.api.deviation.Deviation
-import com.ohagner.deviations.api.deviation.DeviationRepository
+import com.ohagner.deviations.api.deviation.repository.CachedDeviationRepository
+import com.ohagner.deviations.api.deviation.domain.Deviation
+import com.ohagner.deviations.api.deviation.repository.DeviationRepository
 import spock.lang.Specification
 
 import java.time.Duration

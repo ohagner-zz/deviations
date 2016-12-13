@@ -1,16 +1,16 @@
 package com.ohagner.deviations
 
-import com.ohagner.deviations.api.deviation.DeviationMatcher
-import com.ohagner.deviations.api.deviation.Deviation
-import com.ohagner.deviations.api.transport.Transport
+import com.ohagner.deviations.api.deviation.service.DeviationMatcher
+import com.ohagner.deviations.api.deviation.domain.Deviation
+import com.ohagner.deviations.api.transport.domain.Transport
 
-import com.ohagner.deviations.api.watch.Watch
-import com.ohagner.deviations.api.notification.NotificationType
-import com.ohagner.deviations.api.watch.schedule.SingleOccurrence
-import com.ohagner.deviations.worker.watch.WatchProcessor
-import com.ohagner.deviations.worker.watch.task.DeviationsApiClient
-import com.ohagner.deviations.worker.watch.task.WatchProcessingResult
-import com.ohagner.deviations.worker.watch.task.WatchProcessingStatus
+import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.notification.domain.NotificationType
+import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
+import com.ohagner.deviations.worker.watch.service.WatchProcessor
+import com.ohagner.deviations.worker.deviation.service.DeviationsApiClient
+import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
+import com.ohagner.deviations.worker.watch.domain.WatchProcessingStatus
 import groovy.util.logging.Slf4j
 import spock.lang.Specification
 

@@ -4,11 +4,11 @@ import com.google.inject.AbstractModule
 import com.google.inject.Inject
 import com.google.inject.Provides
 import com.google.inject.Singleton
-import com.ohagner.deviations.api.user.UserRepository
-import com.ohagner.deviations.api.user.security.AuthenticationService
-import com.ohagner.deviations.api.user.security.DefaultAuthenticationService
-import com.ohagner.deviations.web.service.DefaultUserService
-import com.ohagner.deviations.web.service.UserService
+import com.ohagner.deviations.api.user.repository.UserRepository
+import com.ohagner.deviations.api.user.service.security.AuthenticationService
+import com.ohagner.deviations.api.user.service.security.DefaultAuthenticationService
+import com.ohagner.deviations.web.user.service.DefaultUserService
+import com.ohagner.deviations.web.user.service.UserService
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import ratpack.http.client.HttpClient

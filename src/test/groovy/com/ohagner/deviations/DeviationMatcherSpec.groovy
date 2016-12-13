@@ -1,10 +1,10 @@
 package com.ohagner.deviations
 
-import com.ohagner.deviations.api.deviation.DeviationMatcher
-import com.ohagner.deviations.api.deviation.Deviation
-import com.ohagner.deviations.api.transport.Transport
+import com.ohagner.deviations.api.deviation.service.DeviationMatcher
+import com.ohagner.deviations.api.deviation.domain.Deviation
+import com.ohagner.deviations.api.transport.domain.Transport
 
-import com.ohagner.deviations.api.watch.Watch
+import com.ohagner.deviations.api.watch.domain.Watch
 import spock.lang.Specification
 
 import java.time.LocalDateTime

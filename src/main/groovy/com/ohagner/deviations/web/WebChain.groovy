@@ -2,9 +2,9 @@ package com.ohagner.deviations.web
 
 import com.google.common.base.Charsets
 import com.ohagner.deviations.config.Constants
-import com.ohagner.deviations.web.user.WebUser
-import com.ohagner.deviations.web.watch.WatchFormParser
-import com.ohagner.deviations.web.service.UserService
+import com.ohagner.deviations.web.user.domain.WebUser
+import com.ohagner.deviations.web.watch.service.WatchFormParser
+import com.ohagner.deviations.web.user.service.UserService
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j

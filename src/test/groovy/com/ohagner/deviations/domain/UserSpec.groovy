@@ -1,9 +1,9 @@
 package com.ohagner.deviations.domain
 
-import com.ohagner.deviations.api.user.Role
-import com.ohagner.deviations.api.user.Credentials
-import com.ohagner.deviations.api.user.Token
-import com.ohagner.deviations.api.user.User
+import com.ohagner.deviations.api.user.domain.Role
+import com.ohagner.deviations.api.user.domain.Credentials
+import com.ohagner.deviations.api.user.domain.Token
+import com.ohagner.deviations.api.user.domain.User
 import spock.lang.Specification
 import java.time.LocalDate
 

@@ -1,18 +1,18 @@
 package com.ohagner.deviations.domain
 
-import com.ohagner.deviations.api.deviation.Deviation
-import com.ohagner.deviations.api.watch.Watch
-import com.ohagner.deviations.api.watch.schedule.Schedule
-import com.ohagner.deviations.api.watch.schedule.SingleOccurrence
-import com.ohagner.deviations.api.watch.schedule.WeeklySchedule
-import com.ohagner.deviations.api.transport.Transport
+import com.ohagner.deviations.api.deviation.domain.Deviation
+import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.watch.domain.schedule.Schedule
+import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
+import com.ohagner.deviations.api.watch.domain.schedule.WeeklySchedule
+import com.ohagner.deviations.api.transport.domain.Transport
 import spock.lang.Specification
 
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-import static com.ohagner.deviations.api.notification.NotificationType.*
+import static com.ohagner.deviations.api.notification.domain.NotificationType.*
 import static groovy.util.GroovyTestCase.assertEquals
 import static java.time.DayOfWeek.FRIDAY
 import static java.time.DayOfWeek.MONDAY

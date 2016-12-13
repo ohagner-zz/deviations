@@ -1,7 +1,7 @@
 package com.ohagner.deviations
 
-import com.ohagner.deviations.api.deviation.DeviationFilter
-import com.ohagner.deviations.api.deviation.Deviation
+import com.ohagner.deviations.api.deviation.repository.DeviationFilter
+import com.ohagner.deviations.api.deviation.domain.Deviation
 import spock.lang.Specification
 
 import java.time.LocalDateTime

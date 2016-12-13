@@ -1,6 +1,6 @@
 package com.ohagner.deviations.domain.schedule
 
-import com.ohagner.deviations.api.watch.schedule.SingleOccurrence
+import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
 import spock.lang.Specification
 
 import java.time.LocalDate

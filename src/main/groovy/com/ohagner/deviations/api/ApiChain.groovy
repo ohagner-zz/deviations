@@ -1,12 +1,12 @@
 package com.ohagner.deviations.api
 
-import com.ohagner.deviations.api.deviation.DeviationsChain
-import com.ohagner.deviations.api.watch.WatchChain
-import com.ohagner.deviations.api.user.CreateUserHandler
-import com.ohagner.deviations.api.user.UserAuthenticationHandler
-import com.ohagner.deviations.api.user.UserAuthorizationHandler
-import com.ohagner.deviations.api.user.UserHandler
-import com.ohagner.deviations.api.user.UserRepository
+import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
+import com.ohagner.deviations.api.watch.router.WatchChain
+import com.ohagner.deviations.api.user.endpoint.CreateUserHandler
+import com.ohagner.deviations.api.user.endpoint.UserAuthenticationHandler
+import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
+import com.ohagner.deviations.api.user.endpoint.UserHandler
+import com.ohagner.deviations.api.user.repository.UserRepository
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyChainAction
 

@@ -19,13 +19,31 @@ class LineNumberParserSpec extends Specification {
             assertThat(result, is(["35", "36", "37"]))
     }
 
+    void 'ignore when no match'() {
+        given:
+            def input = "Liljeholmen"
+        when:
+            def result = parser.extractLineNumbers(input)
+        then:
+            assertThat(result, is([]))
+    }
+
     def 'parse single line numbers'() {
         given:
-        def input = "Buss 745"
+            def input = "Buss 745"
         when:
-        def result = parser.extractLineNumbers(input)
+            def result = parser.extractLineNumbers(input)
         then:
-        assertThat(result, is(["745"]))
+            assertThat(result, is(["745"]))
+    }
+
+    def 'parse line numbers with letters'() {
+        given:
+            def input = "Buss 745B, 840, 842C"
+        when:
+            def result = parser.extractLineNumbers(input)
+        then:
+            assertThat(result, is(["745B", "840", "842C"]))
     }
 
 

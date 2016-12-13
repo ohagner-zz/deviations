@@ -9,8 +9,8 @@ import com.ohagner.deviations.api.watch.domain.Watch
 import com.ohagner.deviations.api.deviation.module.DeviationsModule
 import com.ohagner.deviations.modules.MessagingModule
 import com.ohagner.deviations.api.deviation.repository.DeviationRepository
-import com.ohagner.deviations.worker.deviation.service.DefaultDeviationsApiClient
-import com.ohagner.deviations.worker.deviation.service.DeviationsApiClient
+import com.ohagner.deviations.worker.api.service.DefaultDeviationsApiClient
+import com.ohagner.deviations.worker.api.service.DeviationsApiClient
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
 import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.Channel
@@ -34,7 +34,7 @@ class WatchProcessingWorker  {
     def static main(args) {
         String baseUrl = AppConfig.envOrProperty("DEVIATIONS_URL")
         if(!baseUrl) {
-            log.error "No url found for api. Exiting..."
+            log.error "No URL found for api. Exiting..."
             System.exit(-1)
         }
 

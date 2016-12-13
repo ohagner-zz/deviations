@@ -1,4 +1,4 @@
-package com.ohagner.deviations.worker.deviation.service
+package com.ohagner.deviations.worker.api.service
 
 import com.ohagner.deviations.config.AppConfig
 import com.ohagner.deviations.config.Constants

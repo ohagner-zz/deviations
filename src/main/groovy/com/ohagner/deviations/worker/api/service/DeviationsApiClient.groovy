@@ -1,4 +1,4 @@
-package com.ohagner.deviations.worker.deviation.service
+package com.ohagner.deviations.worker.api.service
 
 import com.ohagner.deviations.api.deviation.domain.Deviation
 import com.ohagner.deviations.api.watch.domain.Watch

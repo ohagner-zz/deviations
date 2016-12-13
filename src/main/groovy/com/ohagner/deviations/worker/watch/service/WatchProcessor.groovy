@@ -3,7 +3,7 @@ package com.ohagner.deviations.worker.watch.service
 import com.google.common.base.Stopwatch
 import com.ohagner.deviations.api.deviation.service.DeviationMatcher
 import com.ohagner.deviations.api.watch.domain.Watch
-import com.ohagner.deviations.worker.deviation.service.DeviationsApiClient
+import com.ohagner.deviations.worker.api.service.DeviationsApiClient
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingStatus
 import groovy.transform.TupleConstructor

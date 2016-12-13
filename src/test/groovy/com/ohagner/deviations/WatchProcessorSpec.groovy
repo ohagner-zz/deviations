@@ -8,7 +8,7 @@ import com.ohagner.deviations.api.watch.domain.Watch
 import com.ohagner.deviations.api.notification.domain.NotificationType
 import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.worker.watch.service.WatchProcessor
-import com.ohagner.deviations.worker.deviation.service.DeviationsApiClient
+import com.ohagner.deviations.worker.api.service.DeviationsApiClient
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingStatus
 import groovy.util.logging.Slf4j

@@ -37,7 +37,12 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
                 text notification.toJson()
             }
             log.debug "Notification response status ${notificationResponse.statusCode}"
-            return notificationResponse.statusCode ==~ /2\d\d/
+            if(notificationResponse.statusCode ==~ /2\d\d/) {
+                return true
+            } else {
+                log.error "Failed to send notification. Response: ${notificationResponse.statusCode} ${notificationResponse.contentAsString}"
+                return false
+            }
         } catch (Exception e) {
             log.error("Failed to send notification", e)
             return false

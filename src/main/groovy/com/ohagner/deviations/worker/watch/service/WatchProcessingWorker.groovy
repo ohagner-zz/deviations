@@ -11,7 +11,11 @@ import com.ohagner.deviations.modules.MessagingModule
 import com.ohagner.deviations.api.deviation.repository.DeviationRepository
 import com.ohagner.deviations.worker.api.service.DefaultDeviationsApiClient
 import com.ohagner.deviations.worker.api.service.DeviationsApiClient
-import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
+import com.ohagner.deviations.worker.watch.service.stage.DeviationMatchingStage
+import com.ohagner.deviations.worker.watch.service.stage.LoggingStage
+import com.ohagner.deviations.worker.watch.service.stage.NotificationStage
+import com.ohagner.deviations.worker.watch.service.stage.TimeToCheckStage
+import com.ohagner.deviations.worker.watch.service.stage.UpdatingStage
 import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Consumer
@@ -66,10 +70,17 @@ class WatchProcessingWorker  {
                 Watch watch = Watch.fromJson(message)
 
                 DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepository.retrieveAll())
-                WatchProcessor watchProcessor = WatchProcessor.builder().deviationsApiClient(apiClient).deviationMatcher(deviationMatcher).build()
-                WatchProcessingResult result = watchProcessor.process(watch)
-                log.info "Watchprocessor result for watch ${watch.id}:${watch.name}:"
-                log.info(result.toString())
+                WatchProcessingChain chain = new WatchProcessingChain()
+                chain.appendStage(new TimeToCheckStage())
+                chain.appendStage(new DeviationMatchingStage(deviationMatcher: deviationMatcher))
+                chain.appendStage(new NotificationStage(deviationsApiClient: apiClient))
+                chain.appendStage(new UpdatingStage(deviationsApiClient: apiClient))
+                chain.appendStage(new LoggingStage())
+                chain.process(watch)
+//                WatchProcessor watchProcessor = WatchProcessor.builder().deviationsApiClient(apiClient).deviationMatcher(deviationMatcher).build()
+//                WatchProcessingResult result = watchProcessor.process(watch)
+//                log.info "Watchprocessor result for watch ${watch.id}:${watch.name}:"
+//                log.info(result.toString())
             }
 
         }

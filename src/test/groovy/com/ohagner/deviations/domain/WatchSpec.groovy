@@ -54,6 +54,24 @@ class WatchSpec extends Specification {
             assertEquals(watch, expected)
     }
 
+    def 'assert processed deviations queue behaviour'() {
+        given:
+            Watch watch = new Watch()
+        when:
+            watch.addProcessedDeviationIds((1..20).toList())
+        then:
+            assert watch.processedDeviationIds.size() == 20
+        and:
+        when:
+            watch.addProcessedDeviationIds([21, 22])
+        then:
+            assert watch.processedDeviationIds.size() == 20
+            assert watch.processedDeviationIds.containsAll((3..22).toList())
+            assert watch.processedDeviationIds.contains(1) == false
+            assert watch.processedDeviationIds.contains(2) == false
+
+    }
+
 
     private Watch createWeeklyScheduleWatch() {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))

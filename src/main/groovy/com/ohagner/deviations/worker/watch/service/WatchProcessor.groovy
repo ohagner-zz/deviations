@@ -27,8 +27,9 @@ class WatchProcessor {
     DeviationMatcher deviationMatcher
     DeviationsApiClient deviationsApiClient
 
-
     WatchProcessingResult process(Watch watch) {
+
+
         WatchProcessingResult result = new WatchProcessingResult(status: WatchProcessingStatus.STARTED)
         Stopwatch timer = Stopwatch.createStarted()
         try {
@@ -45,7 +46,7 @@ class WatchProcessor {
                     }
                     result.status = WatchProcessingStatus.NOTIFIED
                     watch.lastNotified = LocalDateTime.now(ZONE_ID)
-                    result.matchingDeviations.each { watch.addDeviationId(it.id)}
+                    result.matchingDeviations.each { watch.addProcessedDeviationId(it.id)}
 
                 } else {
                     result.status = WatchProcessingStatus.NO_MATCH
@@ -56,7 +57,7 @@ class WatchProcessor {
             }
             watch.lastProcessed = LocalDateTime.now(ZONE_ID)
             if(!deviationsApiClient.update(watch)) {
-                result.status = WatchProcessingStatus.WATCH_UPDATE_FAILED
+                result.status = WatchProcessingStatus.UPDATE_FAILED
             }
         } catch(Exception e) {
             log.error("Watch processing failed for watch ${watch.id}", e)

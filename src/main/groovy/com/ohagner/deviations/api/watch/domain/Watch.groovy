@@ -10,6 +10,7 @@ import com.ohagner.deviations.config.Constants
 import com.ohagner.deviations.api.notification.domain.NotificationType
 import com.ohagner.deviations.api.watch.domain.schedule.Schedule
 import com.ohagner.deviations.api.transport.domain.Transport
+import groovy.transform.CompileStatic
 
 import java.time.LocalDateTime
 
@@ -20,6 +21,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
 class Watch {
 
     private static final ObjectMapper mapper
+    public static final int MAXIMUM_PROCESSED_DEVIATIONS_LIST_SIZE = 20
     static {
         mapper = new ObjectMapper()
         mapper.findAndRegisterModules()
@@ -59,9 +61,10 @@ class Watch {
         return mapper.writeValueAsString(this)
     }
 
-    void addDeviationId(String deviationId) {
-        processedDeviationIds.add(deviationId)
-        while(processedDeviationIds.size() > 20) {
+    @CompileStatic
+    void addProcessedDeviationIds(Collection<String> deviationIds) {
+        deviationIds.each { processedDeviationIds.add(it) }
+        while(processedDeviationIds.size() > MAXIMUM_PROCESSED_DEVIATIONS_LIST_SIZE) {
             processedDeviationIds.remove()
         }
     }

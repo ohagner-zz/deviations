@@ -24,6 +24,9 @@ class User {
 
     Credentials credentials
 
+    Webhook webhook
+    Webhook slackWebhook
+
     static User fromJson(String json) {
         return mapper.readValue(json, User)
     }
@@ -42,7 +45,8 @@ class User {
         if (emailAddress != user.emailAddress) return false
         if (firstName != user.firstName) return false
         if (lastName != user.lastName) return false
-
+        if (webhook != user.webhook) return false
+        if (slackWebhook != user.slackWebhook) return false
         return true
     }
 
@@ -52,6 +56,8 @@ class User {
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0)
         result = 31 * result + (emailAddress != null ? emailAddress.hashCode() : 0)
         result = 31 * result + (credentials != null ? credentials.hashCode() : 0)
+        result = 31 * result + (webhook != null ? webhook.hashCode() : 0)
+        result = 31 * result + (slackWebhook != null ? slackWebhook.hashCode() : 0)
         return result
     }
 }

@@ -8,6 +8,8 @@ import com.ohagner.deviations.api.notification.service.EmailNotifier
 import com.ohagner.deviations.api.notification.service.LogNotifier
 import com.ohagner.deviations.api.notification.service.NotificationService
 import com.ohagner.deviations.api.notification.service.Notifier
+import com.ohagner.deviations.api.notification.service.SlackNotifier
+import com.ohagner.deviations.api.notification.service.WebhookNotifier
 import wslite.http.auth.HTTPBasicAuthorization
 import wslite.rest.RESTClient
 
@@ -21,6 +23,7 @@ class NotificationsModule extends AbstractModule {
         Multibinder<Notifier> binder = Multibinder.newSetBinder(binder(), Notifier.class)
         binder.addBinding().to(EmailNotifier)
         binder.addBinding().to(LogNotifier)
+        binder.addBinding().to(WebhookNotifier)
     }
 
     static class Config {
@@ -58,6 +61,16 @@ class NotificationsModule extends AbstractModule {
     @Provides
     LogNotifier createLogNotifier() {
         return new LogNotifier()
+    }
+
+    @Provides
+    WebhookNotifier createWebhookNotifier() {
+        return new WebhookNotifier()
+    }
+
+    @Provides
+    SlackNotifier createSlackNotifier() {
+        return new SlackNotifier()
     }
 
 

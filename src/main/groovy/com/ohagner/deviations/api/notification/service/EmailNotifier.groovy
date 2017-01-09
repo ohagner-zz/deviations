@@ -28,6 +28,7 @@ class EmailNotifier implements Notifier {
         log.info "Sending email to ${user.emailAddress} about ${notification.header}"
 
         log.debug "Email text: ${notification.message}"
+
         Response response = restClient.post() {
             multipart 'to', "${user.emailAddress}".bytes
             multipart 'from', 'Deviation <postmaster@sandbox8e1378b0675e4dfeaf914d9d6b710afa.mailgun.org>'.bytes

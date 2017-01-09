@@ -1,5 +1,6 @@
 package com.ohagner.deviations.api.notification.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.api.deviation.domain.Deviation
 import groovy.transform.CompileStatic
@@ -9,6 +10,7 @@ class Notification {
 
     private static final ObjectMapper mapper = new ObjectMapper()
 
+    @JsonIgnore
     List<NotificationType> notificationTypes
 
     String header

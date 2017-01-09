@@ -11,5 +11,11 @@
       "expirationDate": "2016-10-10"
     },
     "role": "USER"
+  },
+  "webhook" : {
+    "url": "http://webhook"
+  },
+  "slackWebhook": {
+    "url": "http://slackwebhook"
   }
 }

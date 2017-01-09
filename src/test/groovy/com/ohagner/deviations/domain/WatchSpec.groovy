@@ -77,7 +77,7 @@ class WatchSpec extends Specification {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         List<Transport> transports = [new Transport(line:"35", transportMode: Deviation.TransportMode.TRAIN), new Transport(line:"807B", transportMode: Deviation.TransportMode.BUS)]
-        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports)
+        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG, WEBHOOK, SLACK], created: date, lastProcessed: date, transports: transports)
     }
 
     private Watch createSingleOccurrenceWatch() {

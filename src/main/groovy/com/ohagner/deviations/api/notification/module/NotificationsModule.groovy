@@ -30,15 +30,21 @@ class NotificationsModule extends AbstractModule {
 
         public static final String EMAIL_SERVICE_URL = "EMAIL_SERVICE_URL"
         public static final String EMAIL_SERVICE_API_KEY = "EMAIL_SERVICE_API_KEY"
+        public static final String EMAIL_SERVICE_SENDER = "EMAIL_SERVICE_SENDER"
+        public static final String EMAIL_SERVICE_SUBJECT = "EMAIL_SERVICE_SUBJECT"
 
         String emailServiceUrl
         String emailServiceApiKey
+        String emailServiceSender
+        String emailServiceSubject
 
         static NotificationsModule.Config getInstance() {
             NotificationsModule.Config instance = new NotificationsModule.Config()
             instance.with {
                 emailServiceUrl = envOrProperty(EMAIL_SERVICE_URL)
                 emailServiceApiKey = envOrProperty(EMAIL_SERVICE_API_KEY)
+                emailServiceSender = envOrProperty(EMAIL_SERVICE_SENDER)
+                emailServiceSubject = envOrProperty(EMAIL_SERVICE_SUBJECT)
             }
             return instance
         }
@@ -55,7 +61,7 @@ class NotificationsModule extends AbstractModule {
 
         RESTClient client = new RESTClient(config.emailServiceUrl)
         client.authorization = new HTTPBasicAuthorization('api', config.emailServiceApiKey)
-        return new EmailNotifier(client)
+        return new EmailNotifier(restClient: client, sender: config.emailServiceSender, subject: config.emailServiceSubject)
     }
 
     @Provides

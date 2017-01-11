@@ -28,9 +28,6 @@ dependencies {
     runtime 'com.lmax:disruptor:3.3.0'
 
     compile ratpack.dependency('session')
-//    compile ratpack.dependency('pac4j')
-//    compile "org.pac4j:pac4j-http:1.8.8"
-//    compile "commons-codec:commons-codec:1.10"
 
     compile 'com.rabbitmq:amqp-client:3.6.2'
     compile('com.gmongo:gmongo:1.5') {

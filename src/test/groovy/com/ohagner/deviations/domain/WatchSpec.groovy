@@ -6,6 +6,7 @@ import com.ohagner.deviations.api.watch.domain.schedule.Schedule
 import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.api.watch.domain.schedule.WeeklySchedule
 import com.ohagner.deviations.api.transport.domain.Transport
+import net.javacrumbs.jsonunit.core.Option
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -27,7 +28,7 @@ class WatchSpec extends Specification {
             String expected = new File("src/test/resources/watches/weeklyScheduleWatch.json").text
             Watch watch = createWeeklyScheduleWatch()
         expect:
-            assertThat(watch.toJson(), jsonEquals(expected))
+            assertThat(watch.toJson(), jsonEquals(expected).when(Option.IGNORING_ARRAY_ORDER))
     }
 
     def 'transform weekly schedule watch json to object'() {
@@ -43,7 +44,7 @@ class WatchSpec extends Specification {
             Watch watch = createSingleOccurrenceWatch()
         expect:
             String expected = new File("src/test/resources/watches/singleOccurrenceWatch.json").text
-            assertThat(watch.toJson(), jsonEquals(expected))
+            assertThat(watch.toJson(), jsonEquals(expected).when(Option.IGNORING_ARRAY_ORDER))
     }
 
     def 'transform single occurrence schedule watch json to object'() {
@@ -77,7 +78,7 @@ class WatchSpec extends Specification {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         List<Transport> transports = [new Transport(line:"35", transportMode: Deviation.TransportMode.TRAIN), new Transport(line:"807B", transportMode: Deviation.TransportMode.BUS)]
-        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG, WEBHOOK, SLACK], created: date, lastProcessed: date, transports: transports)
+        return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [SLACK, EMAIL, LOG, WEBHOOK], created: date, lastProcessed: date, transports: transports)
     }
 
     private Watch createSingleOccurrenceWatch() {

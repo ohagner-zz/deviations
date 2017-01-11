@@ -16,7 +16,6 @@ class EmailNotifier implements Notifier {
 
     private RESTClient restClient
     private String sender
-    private String subject
 
     boolean isApplicable(Collection<NotificationType> notificationTypes) {
         return !supportedNotificationTypes.intersect(notificationTypes).isEmpty()
@@ -31,7 +30,7 @@ class EmailNotifier implements Notifier {
 
         Response response = restClient.post() {
             multipart 'to', "${user.emailAddress}".bytes
-            multipart 'from', 'Deviation <postmaster@sandbox8e1378b0675e4dfeaf914d9d6b710afa.mailgun.org>'.bytes
+            multipart 'from', sender.bytes
             multipart 'subject', notification.header.bytes
             multipart 'text', notification.message.bytes
         }

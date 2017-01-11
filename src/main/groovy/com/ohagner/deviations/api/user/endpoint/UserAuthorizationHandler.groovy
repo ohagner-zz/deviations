@@ -43,7 +43,7 @@ class UserAuthorizationHandler extends GroovyHandler {
                     render json([message: ERROR_MSG_INVALID_API_TOKEN])
                 }.then { User user ->
                     if (isValidToken(user, suppliedApiToken)) {
-                        if(pathUsername != user.credentials.username) {
+                        if(tokenBelongsToOtherUser(user, pathUsername) && !user.isAdministrator()) {
                             response.status(403)
                             render json([message: ERROR_MSG_USERNAME_MISMATCH])
                         } else {
@@ -56,6 +56,10 @@ class UserAuthorizationHandler extends GroovyHandler {
                     }
                 }
         }
+    }
+
+    private boolean tokenBelongsToOtherUser(User tokenUser, String pathUsername) {
+        return pathUsername != tokenUser.credentials.username
     }
 
     private boolean isValidToken(User user, String suppliedToken) {

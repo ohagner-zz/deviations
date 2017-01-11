@@ -1,5 +1,6 @@
 package com.ohagner.deviations.api.user.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -59,5 +60,10 @@ class User {
         result = 31 * result + (webhook != null ? webhook.hashCode() : 0)
         result = 31 * result + (slackWebhook != null ? slackWebhook.hashCode() : 0)
         return result
+    }
+
+    @JsonIgnore
+    boolean isAdministrator() {
+        return this?.credentials?.role == Role.ADMIN
     }
 }

@@ -20,12 +20,12 @@ class JobScheduler implements Service, Runnable {
     private static final int MAX_NUM_OF_WATCHES = 50
 
     WatchRepository watchRepository
-    Channel channel
+    WatchProcessQueueingService queueingService
 
     @Inject
-    JobScheduler(WatchRepository watchRepository, Channel channel) {
+    JobScheduler(WatchRepository watchRepository, WatchProcessQueueingService queueingService) {
         this.watchRepository = watchRepository
-        this.channel = channel
+        this.queueingService = queueingService
     }
 
     @Override
@@ -45,9 +45,7 @@ class JobScheduler implements Service, Runnable {
             int pageNumber = 1
             while (watchesToProcess = watchRepository.retrieveRange(pageNumber, MAX_NUM_OF_WATCHES)) {
                 log.debug "Retrieving range with pageNumber $pageNumber, got ${watchesToProcess.size()} watches"
-                watchesToProcess.each {
-                    channel.basicPublish("", Constants.WATCHES_TO_PROCESS_QUEUE_NAME, null, it.toJson().bytes)
-                }
+                queueingService.enqueueForProcessing(watchesToProcess)
                 pageNumber++
                 log.info "Submitted ${watchesToProcess.size()} watches to watch processing queue"
             }

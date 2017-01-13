@@ -4,6 +4,7 @@ import com.ohagner.deviations.api.notification.module.NotificationsModule
 import com.ohagner.deviations.api.user.router.AdminChain
 import com.ohagner.deviations.api.ApiChain
 import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
+import com.ohagner.deviations.api.watch.service.WatchProcessQueueingService
 import com.ohagner.deviations.web.WebChain
 import com.ohagner.deviations.config.MongoConfig
 import com.ohagner.deviations.api.user.domain.UserRenderer
@@ -54,6 +55,7 @@ ratpack {
         bind DefaultAuthenticationService
         bind UserRenderer
         bind JobScheduler
+        bind WatchProcessQueueingService
         bind UserAuthorizationHandler
         bind AdminAuthorizationHandler
         bind SendNotificationHandler

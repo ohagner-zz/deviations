@@ -1,12 +1,16 @@
 package com.ohagner.deviations.api
 
 import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
-import com.ohagner.deviations.api.watch.router.WatchChain
+import com.ohagner.deviations.api.user.domain.User
 import com.ohagner.deviations.api.user.endpoint.CreateUserHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthenticationHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
 import com.ohagner.deviations.api.user.endpoint.UserHandler
 import com.ohagner.deviations.api.user.repository.UserRepository
+import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.watch.repository.WatchRepository
+import com.ohagner.deviations.api.watch.router.WatchChain
+import com.ohagner.deviations.api.watch.service.WatchProcessQueueingService
 import groovy.util.logging.Slf4j
 import ratpack.groovy.handling.GroovyChainAction
 
@@ -39,18 +43,13 @@ class ApiChain extends GroovyChainAction {
             prefix("watches") {
                 insert(new WatchChain())
             }
-            //A user should be able to trigger a watch check
-            /*path("check") { WatchRepository watchRepository, UserRepository userRepository ->
-                DeviationRepository deviationRepo = new HttpDeviationRepository()
-                DeviationMatcher deviationMatcher = new DeviationMatcher(deviationRepo.retrieveAll())
-                WatchProcessor processor = WatchProcessor.builder()
-                        .deviationMatcher(deviationMatcher)
-                        .deviationsApiClient(watchRepository).build()
-                log.info "Before blocking"
-                Blocking.exec { processor.process() }
-                log.info "After blocking"
-                render json(["message": "Checking user"])
-            }*/
+            post("deviationcheck") { WatchRepository watchRepository, WatchProcessQueueingService queueingService, User user ->
+                log.debug "Retrieving watches for user ${user.credentials.username}"
+                List<Watch> watchesToCheck = watchRepository.findByUsername(user.credentials.username)
+                queueingService.enqueueForProcessing(watchesToCheck)
+                String message = "Started deviation checking for ${watchesToCheck.size()} ${watchesToCheck.size() == 1 ? 'watch' : 'watches'}"
+                render json(["message": message])
+            }
         }
     }
 }

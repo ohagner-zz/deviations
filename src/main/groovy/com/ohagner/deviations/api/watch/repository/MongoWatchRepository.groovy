@@ -32,6 +32,7 @@ class MongoWatchRepository implements WatchRepository {
         log.debug "Retrieving watches for user $username"
         DBCursor cursor = watches.find(new BasicDBObject(username: username))
         List<Watch> watches = cursor.iterator().collect { Watch.fromJson(JSON.serialize(it)) }
+        log.debug "Found ${watches.size()} number of watches for user $username"
         return watches
     }
 

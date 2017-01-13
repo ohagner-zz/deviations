@@ -1,10 +1,11 @@
 package com.ohagner.deviations.handlers.notification
 
-import com.ohagner.deviations.domain.notification.Notification
-import com.ohagner.deviations.domain.user.Credentials
-import com.ohagner.deviations.domain.user.User
-import com.ohagner.deviations.notifications.NotificationService
-import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.api.notification.domain.Notification
+import com.ohagner.deviations.api.notification.endpoint.SendNotificationHandler
+import com.ohagner.deviations.api.user.domain.Credentials
+import com.ohagner.deviations.api.user.domain.User
+import com.ohagner.deviations.api.notification.service.NotificationService
+import com.ohagner.deviations.api.user.repository.UserRepository
 import ratpack.groovy.test.handling.GroovyRequestFixture
 import spock.lang.Specification
 import wslite.rest.RESTClientException

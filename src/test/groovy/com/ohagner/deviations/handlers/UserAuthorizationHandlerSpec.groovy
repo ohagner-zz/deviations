@@ -1,11 +1,12 @@
 package com.ohagner.deviations.handlers
 
-import com.ohagner.deviations.Role
+import com.ohagner.deviations.api.user.domain.Role
+import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
 import com.ohagner.deviations.config.Constants
-import com.ohagner.deviations.domain.user.Credentials
-import com.ohagner.deviations.domain.user.Token
-import com.ohagner.deviations.domain.user.User
-import com.ohagner.deviations.repository.UserRepository
+import com.ohagner.deviations.api.user.domain.Credentials
+import com.ohagner.deviations.api.user.domain.Token
+import com.ohagner.deviations.api.user.domain.User
+import com.ohagner.deviations.api.user.repository.UserRepository
 import ratpack.exec.Promise
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture
@@ -20,6 +21,7 @@ class UserAuthorizationHandlerSpec extends Specification {
     public static final Token VALID_TOKEN = new Token(value: TOKEN, expirationDate: LocalDate.now(Constants.ZONE_ID).plusWeeks(4))
     public static final Token EXPIRED_TOKEN = new Token(value: TOKEN, expirationDate: LocalDate.now(Constants.ZONE_ID).minusDays(1))
     public static final Credentials VALID_USER_CREDENTIALS = Credentials.builder().apiToken(VALID_TOKEN).role(Role.USER).username(USERNAME).build()
+    public static final Credentials ADMIN_USER_CREDENTIALS = Credentials.builder().apiToken(VALID_TOKEN).role(Role.ADMIN).username(USERNAME).build()
     public static final Credentials EXPIRED_USER_CREDENTIALS = Credentials.builder().apiToken(EXPIRED_TOKEN).role(Role.USER).username(USERNAME).build()
 
 
@@ -48,7 +50,7 @@ class UserAuthorizationHandlerSpec extends Specification {
             result.registry.maybeGet(User).isPresent()
     }
 
-    void 'should fail when apiToken user differs from username in path'() {
+    void 'should fail when apiToken user differs from username in path and user is not admin'() {
         when:
             def result = requestFixture.pathBinding(["username": "OTHER_USERNAME"])handle(handler)
         then:
@@ -56,6 +58,15 @@ class UserAuthorizationHandlerSpec extends Specification {
                     .credentials(VALID_USER_CREDENTIALS).build())
             result.status.code == 403
             result.rendered(JsonRender).object.message == UserAuthorizationHandler.ERROR_MSG_USERNAME_MISMATCH
+    }
+
+    void 'should pass when apiToken user differs from username in path and user is admin'() {
+        when:
+            def result = requestFixture.pathBinding(["username": "OTHER_USERNAME"])handle(handler)
+        then:
+            1 * userRepository.findByApiToken(TOKEN) >> Promise.value(User.builder()
+                    .credentials(ADMIN_USER_CREDENTIALS).build())
+            result.registry.maybeGet(User).isPresent()
     }
 
     void 'should fail when token has expired'() {

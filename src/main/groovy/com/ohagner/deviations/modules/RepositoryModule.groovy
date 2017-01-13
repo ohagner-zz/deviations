@@ -9,11 +9,11 @@ import com.mongodb.MongoClient
 import com.mongodb.MongoCredential
 import com.mongodb.ServerAddress
 import com.ohagner.deviations.config.MongoConfig
-import com.ohagner.deviations.repository.IncrementalCounter
-import com.ohagner.deviations.repository.MongoUserRepository
-import com.ohagner.deviations.repository.UserRepository
-import com.ohagner.deviations.repository.MongoWatchRepository
-import com.ohagner.deviations.repository.WatchRepository
+import com.ohagner.deviations.api.watch.repository.IncrementalCounter
+import com.ohagner.deviations.api.user.repository.MongoUserRepository
+import com.ohagner.deviations.api.user.repository.UserRepository
+import com.ohagner.deviations.api.watch.repository.MongoWatchRepository
+import com.ohagner.deviations.api.watch.repository.WatchRepository
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 

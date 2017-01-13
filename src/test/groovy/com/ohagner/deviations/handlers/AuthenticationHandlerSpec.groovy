@@ -1,7 +1,8 @@
 package com.ohagner.deviations.handlers
 
-import com.ohagner.deviations.domain.user.User
-import com.ohagner.deviations.security.AuthenticationService
+import com.ohagner.deviations.api.user.domain.User
+import com.ohagner.deviations.api.user.endpoint.UserAuthenticationHandler
+import com.ohagner.deviations.api.user.service.security.AuthenticationService
 import groovy.json.JsonOutput
 import ratpack.exec.Promise
 import ratpack.groovy.test.handling.GroovyRequestFixture

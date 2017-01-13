@@ -1,6 +1,6 @@
 package com.ohagner.deviations
 
-import com.ohagner.deviations.domain.Deviation
+import com.ohagner.deviations.api.deviation.domain.Deviation
 
 import spock.lang.Specification
 

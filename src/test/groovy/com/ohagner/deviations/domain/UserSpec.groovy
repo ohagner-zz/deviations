@@ -1,9 +1,10 @@
 package com.ohagner.deviations.domain
 
-import com.ohagner.deviations.Role
-import com.ohagner.deviations.domain.user.Credentials
-import com.ohagner.deviations.domain.user.Token
-import com.ohagner.deviations.domain.user.User
+import com.ohagner.deviations.api.user.domain.Role
+import com.ohagner.deviations.api.user.domain.Credentials
+import com.ohagner.deviations.api.user.domain.Token
+import com.ohagner.deviations.api.user.domain.User
+import com.ohagner.deviations.api.user.domain.Webhook
 import spock.lang.Specification
 import java.time.LocalDate
 
@@ -12,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat
 
 class UserSpec extends Specification {
 
-    def 'create json from User object'() {
+    void 'create json from User object'() {
         given:
             String expected = new File("src/test/resources/users/user.json").text
             User user = createUser()
@@ -20,7 +21,7 @@ class UserSpec extends Specification {
             assertThat(user.toJson(), jsonEquals(expected))
     }
 
-    def 'create User object from json'() {
+    void 'create User object from json'() {
         given:
             String userAsJson = new File("src/test/resources/users/user.json").text
             User expected = createUser()
@@ -40,6 +41,8 @@ class UserSpec extends Specification {
                 .firstName("firstName")
                 .lastName("lastName")
                 .emailAddress("emailAddress")
+                .webhook(Webhook.newInstance("http://webhook"))
+                .slackWebhook(Webhook.newInstance("http://slackwebhook"))
                 .build()
     }
 

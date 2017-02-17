@@ -24,6 +24,7 @@ class NotificationsModule extends AbstractModule {
         binder.addBinding().to(EmailNotifier)
         binder.addBinding().to(LogNotifier)
         binder.addBinding().to(WebhookNotifier)
+        binder.addBinding().to(SlackNotifier)
     }
 
     static class Config {

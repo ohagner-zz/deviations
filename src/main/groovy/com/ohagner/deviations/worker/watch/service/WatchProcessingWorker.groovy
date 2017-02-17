@@ -64,7 +64,6 @@ class WatchProcessingWorker  {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
-                log.debug "Matching deviation"
 
                 String message = new String(body, "UTF-8");
                 Watch watch = Watch.fromJson(message)
@@ -77,10 +76,6 @@ class WatchProcessingWorker  {
                 chain.appendStage(new UpdatingStage(deviationsApiClient: apiClient))
                 chain.appendStage(new LoggingStage())
                 chain.process(watch)
-//                WatchProcessor watchProcessor = WatchProcessor.builder().deviationsApiClient(apiClient).deviationMatcher(deviationMatcher).build()
-//                WatchProcessingResult result = watchProcessor.process(watch)
-//                log.info "Watchprocessor result for watch ${watch.id}:${watch.name}:"
-//                log.info(result.toString())
             }
 
         }

@@ -49,6 +49,16 @@ class DefaultUserService implements UserService {
                 username user.username
                 password user.password
             }
+            if(user.webhook) {
+                webhook {
+                    url user.webhook
+                }
+            }
+            if(user.slackWebhook) {
+                slackWebhook {
+                    url user.slackWebhook
+                }
+            }
         }
         log.info "Sending ${JsonOutput.prettyPrint(requestBody)}"
         httpClient.request(publicAddress.get("api/users")) { request ->

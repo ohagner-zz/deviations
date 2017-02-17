@@ -10,6 +10,8 @@ class WebUser implements Serializable {
     String lastName
     String emailAddress
     String apiToken
+    String slackWebhook
+    String webhook
 
     private Map properties = [:]
 

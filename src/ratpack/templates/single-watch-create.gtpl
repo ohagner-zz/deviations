@@ -69,8 +69,10 @@ layout 'layout.gtpl',
                         label(class: "checkbox-inline") {
                             input(type: "checkbox", name: "notifyByEmail", checked: "true", 'E-post')
                         }
-                        label(class: "checkbox-inline") {
-                            input(type: "checkbox", name: "notifyBySlack", 'Slack')
+                        if(user.slackWebhook) {
+                            label(class: "checkbox-inline") {
+                                input(type: "checkbox", name: "notifyBySlack", 'Slack')
+                            }
                         }
                     }
                 }

@@ -76,8 +76,10 @@ bodyContents: contents {
                 label(class:"checkbox-inline") {
                     input(type:"checkbox", name:"notifyByEmail", checked:"true", 'E-post')
                 }
-                label(class:"checkbox-inline") {
-                    input(type:"checkbox", name:"notifyBySlack", 'Slack')
+                if(user.slackWebhook) {
+                    label(class: "checkbox-inline") {
+                        input(type: "checkbox", name: "notifyBySlack", 'Slack')
+                    }
                 }
             }
         }
@@ -90,8 +92,8 @@ bodyContents: contents {
                 span(class:"help-block", 'Här anger du hur många timmar innan avresa du vill börja bevaka och få notifieringar')
             }
         }
-        div(class:"col-sm-offset-2 col-sm-10") {
-            button(class:"btn btn-default", type:"submit", 'Skapa')
+        div(class:"form-group") {
+            button(class: "btn btn-default", type: "submit", 'Skapa')
         }
     }
 }

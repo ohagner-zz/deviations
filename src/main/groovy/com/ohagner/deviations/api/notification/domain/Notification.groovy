@@ -1,21 +1,20 @@
 package com.ohagner.deviations.api.notification.domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.api.deviation.domain.Deviation
 import groovy.transform.CompileStatic
+import groovy.transform.EqualsAndHashCode
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
+@EqualsAndHashCode
 class Notification {
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     private static final ObjectMapper mapper = new ObjectMapper()
 
-    @JsonIgnore
     List<NotificationType> notificationTypes
 
     String header

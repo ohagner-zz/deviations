@@ -31,8 +31,10 @@ class JobScheduler implements Service, Runnable {
     @Override
     public void onStart(StartEvent startEvent) {
         ExecController execController = startEvent.getRegistry().get(ExecController.class);
+        long interval = AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 5) as long
         execController.getExecutor()
-                .scheduleAtFixedRate(this, 0, AppConfig.envOrDefault("RATPACK_WATCH_PROCESS_JOB_INTERVAL_MINUTES", 5), TimeUnit.MINUTES)
+                .scheduleAtFixedRate(this, 0, interval, TimeUnit.MINUTES)
+        log.info "Scheduler started to run every ${interval} minutes"
     }
 
     @Override

@@ -32,6 +32,7 @@ class SendNotificationHandler extends GroovyHandler {
             if(userOptional.present) {
                 User user = userOptional.get()
                 request.body.map { body ->
+                    log.info "Notification payload ${body.text}"
                     Notification notification = Notification.fromJson(body.text)
                     notificationService.sendNotification(user, notification)
                 }.onError { t ->

@@ -16,7 +16,7 @@ class EmailNotifierSpec extends Specification {
     public static final String PATH = "email"
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8089)
+    public WireMockRule wireMockRule = new WireMockRule(PORT)
 
     EmailNotifier emailNotifier
     User user = new User(emailAddress: "test@test.com")

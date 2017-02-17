@@ -64,7 +64,13 @@ class WebChain extends GroovyChainAction {
                                 def json = new JsonSlurper().parseText(response.body.getText(Charsets.UTF_8))
                                 log.info "Setting user ${json.credentials.username} in session"
                                 def user = [username : json.credentials.username,
-                                            firstName: json.firstName, lastName: json.lastName, emailAddress: json.emailAddress, apiToken: json.credentials.apiToken.value]
+                                            firstName: json.firstName,
+                                            lastName: json.lastName,
+                                            emailAddress: json.emailAddress,
+                                            apiToken: json.credentials.apiToken.value,
+                                            webhook: json?.webhook?.url,
+                                            slackWebhook: json?.slackWebhook?.url
+                                            ]
                                 session.set(Constants.Session.LOGGED_IN_USER, user).promise().then {
                                     redirect "/?msg=Logged+in"
                                 }
@@ -191,7 +197,10 @@ class WebChain extends GroovyChainAction {
                             .lastName(user.lastName)
                             .emailAddress(user.emailAddress)
                             .username(user.username)
-                            .apiToken(user.apiToken).build()
+                            .apiToken(user.apiToken)
+                            .webhook(user.webhook)
+                            .slackWebhook(user.slackWebhook)
+                            .build()
                     log.info "User exists, moving on"
                     next(Registry.single(WebUser, webuser))
                 }
@@ -234,7 +243,7 @@ class WebChain extends GroovyChainAction {
                     get {
                         render groovyMarkupTemplate("weekly-watch-create.gtpl",
                                 title: "Skapa bevakning",
-                                user: [username: webUser.username],
+                                user: webUser,
                                 msg: request.queryParams.msg ?: "")
                     }
                 }
@@ -276,7 +285,7 @@ class WebChain extends GroovyChainAction {
                     get {
                         render groovyMarkupTemplate("single-watch-create.gtpl",
                                 msg: request.queryParams.msg ?: "",
-                                user: [username: webUser.username],
+                                user: webUser,
                                 title: "Skapa bevakning")
                     }
                 }

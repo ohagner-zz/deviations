@@ -11,5 +11,8 @@ form(class:"form-user", method:"POST", action:"/user/create") {
     input(inputText('firstName', firstName, [placeholder:'First name'], disabledFields))
     input(inputText('lastName', lastName, [placeholder:'Last name'], disabledFields))
     input(id:'emailAddress', name:'emailAddress', class:'form-control', type:'email' ,placeholder:'Email address')
+    input(id:'webhook', name:'webhook', class:'form-control', type:'text' ,placeholder:'Webhook URL')
+    p('Vad är det här? Läs mer någonstans')
+    input(id:'slackWebhook', name:'slackWebhook', class:'form-control', type:'text' ,placeholder:'Slack webhook URL')
     button(type: "submit", class: "btn btn-lg btn-primary", buttonText)
 }

@@ -10,6 +10,7 @@ import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 import wslite.rest.ContentType
 import wslite.rest.RESTClient
+import wslite.rest.RESTClientException
 import wslite.rest.Response
 
 import java.time.LocalDate
@@ -43,6 +44,11 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
                 log.error "Failed to send notification. Response: ${notificationResponse.statusCode} ${notificationResponse.contentAsString}"
                 return false
             }
+        } catch (RESTClientException rce) {
+            if(rce.response.statusCode == 401) {
+                updateCredentials()
+            }
+            throw rce
         } catch (Exception e) {
             log.error("Failed to send notification", e)
             return false
@@ -58,6 +64,11 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
             }
             log.debug "Update watch response status ${updateResponse.statusCode}"
             return updateResponse.statusCode ==~ /2\d\d/
+        } catch (RESTClientException rce) {
+            if(rce.response.statusCode == 401) {
+                updateCredentials()
+            }
+            throw rce
         } catch (Exception e) {
             log.error("Failed to send notification", e)
             return false
@@ -68,20 +79,23 @@ class DefaultDeviationsApiClient implements DeviationsApiClient {
     private void updateCredentialsIfNeeded() {
         log.info "Checking to see if credentials should be updated"
         if (!tokenIsValid()) {
-            log.info "Updating credentials"
-            try {
-                Response response = client.post(path: "/api/authenticate") {
-                    type ContentType.JSON
-                    text JsonOutput.toJson([username: ADMIN_USERNAME, password: ADMIN_PASSWORD])
-                }
-                def user = new JsonSlurper().parse(response.data, "UTF-8")
-                apiToken = user.credentials.apiToken.value
-                apiTokenExpirationDate = LocalDate.parse(user.credentials.apiToken.expirationDate, ISO_LOCAL_DATE)
+            updateCredentials()
+        }
+    }
 
-            } catch (Exception e) {
-                log.error("Failed to authenticate admin user", e)
-                throw e
+    private void updateCredentials() {
+        log.info "Updating credentials"
+        try {
+            Response response = client.post(path: "/api/authenticate") {
+                type ContentType.JSON
+                text JsonOutput.toJson([username: ADMIN_USERNAME, password: ADMIN_PASSWORD])
             }
+            def user = new JsonSlurper().parse(response.data, "UTF-8")
+            apiToken = user.credentials.apiToken.value
+            apiTokenExpirationDate = LocalDate.parse(user.credentials.apiToken.expirationDate, ISO_LOCAL_DATE)
+        } catch (Exception e) {
+            log.error("Failed to authenticate admin user", e)
+            throw e
         }
     }
 

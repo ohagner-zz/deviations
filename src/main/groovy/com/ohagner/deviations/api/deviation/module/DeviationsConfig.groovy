@@ -11,7 +11,7 @@ class DeviationsConfig {
     String baseUrl
     String deviationsResourcePath
     String apiKey
-    int cacheTimeout
+    int cacheTimeoutInMinutes
 
     public static final String BASE_URL = "TRAFIKLAB_BASE_URL"
     public static final String DEVIATIONS_PATH = "TRAFIKLAB_DEVIATIONS_PATH"
@@ -24,10 +24,10 @@ class DeviationsConfig {
             baseUrl = envOrProperty(BASE_URL)
             deviationsResourcePath = envOrProperty(DEVIATIONS_PATH)
             apiKey = envOrProperty(API_KEY)
-            cacheTimeout = envOrDefault(CACHE_TIMEOUT_MINUTES, 30)
+            cacheTimeoutInMinutes = envOrDefault(CACHE_TIMEOUT_MINUTES, 30) as int
 
         }
-        log.debug "Initializing trafiklab client with config $instance"
+        log.info "Initializing trafiklab client with config $instance"
         return instance
     }
 
@@ -38,7 +38,7 @@ class DeviationsConfig {
                 "baseUrl='" + baseUrl + '\'' +
                 ", deviationsResourcePath='" + deviationsResourcePath + '\'' +
                 ", apiKey='" + apiKey + '\'' +
-                ", cacheTimeout='" + cacheTimeout + '\'' +
+                ", cacheTimeoutInMinutes='" + cacheTimeoutInMinutes + '\'' +
                 '}';
     }
 }

@@ -61,7 +61,7 @@ class RepositoryModule extends AbstractModule {
         MongoCredential credential = MongoCredential.createCredential(mongoConfig.username, mongoConfig.userDatabaseName, mongoConfig.password as char[])
         ServerAddress serverAddress = new ServerAddress(mongoConfig.host, mongoConfig.port)
         MongoClient mongoClient = new MongoClient(serverAddress, [credential])
-        return new GMongo(mongoClient).getDB(mongoConfig.databaseName) //.getDB(mongoConfig.databaseName)
+        return new GMongo(mongoClient).getDB(mongoConfig.databaseName)
     }
 
 }

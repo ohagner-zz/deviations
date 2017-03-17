@@ -67,7 +67,7 @@ ratpack {
 
         all RequestLogger.ncsa(log)
         get(".well-known/acme-challenge/emAP7DINlj8L9lh9g5sC-V8qd8jrpz9UZZY5l0QPGRg") {
-            render "emAP7DINlj8L9lh9g5sC-V8qd8jrpz9UZZY5l0QPGRg.V9ht_vzXbGHbidA9fOs2dsx4PRKXFrkbWM6s37AQ5Fc"
+            render(file("public/certauth.txt"))
         }
         prefix("admin") {
             all() {

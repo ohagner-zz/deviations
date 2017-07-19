@@ -42,16 +42,13 @@ class MongoUserRepository implements UserRepository {
         }
     }
 
-    List<User> retrieveAll() {
+    Promise<List<User>> retrieveAll() {
         DBCursor cursor = users.find()
         List<User> users = cursor.iterator().collect { User.fromJson(JSON.serialize(it)) }
-        users.each {
-            log.info "Retrieved: ${JsonOutput.prettyPrint(it.toJson())}"
-        }
-        return users
+        return Promise.value(users)
     }
 
-    User create(User user, String password) {
+    Promise<User> create(User user, String password) {
         user.credentials.passwordSalt = HashGenerator.createSalt()
         user.credentials.passwordHash = HashGenerator.generateHash(password, user.credentials.passwordSalt)
 
@@ -60,21 +57,23 @@ class MongoUserRepository implements UserRepository {
         if (result.getN() == 1) {
             log.debug "Successfully created user"
         }
-        return findByUsername(user.credentials.username).get()
+        return findByUsername(user.credentials.username)
     }
 
     void delete(User user) {
         users.remove(JSON.parse(user.toJson()))
     }
 
-    User update(String username, User update) {
-        DBObject mongoUpdate = JSON.parse(update.toJson())
-        DBObject updatedUser = users.findAndModify(new BasicDBObject('credentials.username': username), mongoUpdate)
-        return User.fromJson(JSON.serialize(updatedUser))
+    Promise<User> update(String username, User update) {
+        Promise.sync {
+            DBObject mongoUpdate = JSON.parse(update.toJson())
+            DBObject updatedUser = users.findAndModify(new BasicDBObject('credentials.username': username), mongoUpdate)
+            return User.fromJson(JSON.serialize(updatedUser))
+        }
     }
 
-    boolean userExists(String username) {
-        return users.count(new BasicDBObject('credentials.username': username)) > 0
+    Promise<Boolean> userExists(String username) {
+        return Promise.value(users.count(new BasicDBObject('credentials.username': username)) > 0)
     }
 
 }

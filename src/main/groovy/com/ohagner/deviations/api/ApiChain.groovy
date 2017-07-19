@@ -28,7 +28,9 @@ class ApiChain extends GroovyChainAction {
             byMethod {
                 //Remove this one later
                 get {
-                    render json(userRepository.retrieveAll())
+                    userRepository.retrieveAll().then { users ->
+                        render json(users)
+                    }
                 }
                 post {
                     insert(new CreateUserHandler(userRepository))

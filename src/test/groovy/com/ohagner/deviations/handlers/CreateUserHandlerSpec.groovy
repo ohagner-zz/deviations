@@ -5,7 +5,10 @@ import com.ohagner.deviations.api.user.domain.Role
 import com.ohagner.deviations.api.user.domain.User
 import com.ohagner.deviations.api.user.repository.UserRepository
 import groovy.json.JsonOutput
+import ratpack.exec.Promise
 import ratpack.groovy.test.handling.GroovyRequestFixture
+import ratpack.test.exec.ExecHarness
+import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 
@@ -37,8 +40,8 @@ class CreateUserHandlerSpec extends Specification {
         when:
             def result = requestFixture.body(VALID_USER, "application/json").handle(createUserHandler)
         then:
-            1 * userRepository.userExists("username") >> false
-            1 * userRepository.create(_, "password") >> expected
+            1 * userRepository.userExists("username") >> Promise.value(false)
+            1 * userRepository.create(_, "password") >> Promise.value(expected)
             result.rendered(User) == expected
             result.status.'2xx'
     }
@@ -47,7 +50,7 @@ class CreateUserHandlerSpec extends Specification {
         when:
             def result = requestFixture.body(VALID_USER, "application/json").handle(createUserHandler)
         then:
-            1 * userRepository.userExists("username") >> true
+            1 * userRepository.userExists("username") >> Promise.value(true)
             0 * userRepository.create(_, "password")
             result.status.code == 400
     }

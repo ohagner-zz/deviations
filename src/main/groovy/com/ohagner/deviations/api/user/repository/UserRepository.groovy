@@ -9,14 +9,14 @@ interface UserRepository {
 
     Promise<User> findByApiToken(String apiToken)
 
-    List<User> retrieveAll()
+    Promise<List<User>> retrieveAll()
 
-    User create(User user, String password)
+    Promise<User> create(User user, String password)
 
     void delete(User user)
 
-    User update(String username, User update)
+    Promise<User> update(String username, User update)
 
-    boolean userExists(String username)
+    Promise<Boolean> userExists(String username)
 
 }

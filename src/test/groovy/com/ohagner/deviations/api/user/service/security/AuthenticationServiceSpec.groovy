@@ -43,7 +43,7 @@ class AuthenticationServiceSpec extends Specification {
             }.value
         then:
             1 * userRepository.findByUsername(_) >> Promise.value(user)
-            1* userRepository.update(_, _) >> user
+            1* userRepository.update(_, _) >> Promise.value(user)
             assert authenticated != null
             assert authenticated.credentials.apiToken.value
             assert authenticated.credentials.apiToken.expirationDate == LocalDate.now(ZONE_ID).plusWeeks(4)
@@ -56,7 +56,7 @@ class AuthenticationServiceSpec extends Specification {
             }.value
         then:
             1 * userRepository.findByUsername(_) >> Optional.of(user)
-            0 * userRepository.update(_, _) >> user
+            0 * userRepository.update(_, _) >> Promise.value(user)
             assert authenticated == null
     }
 
@@ -78,7 +78,7 @@ class AuthenticationServiceSpec extends Specification {
             }.value
         then:
             1 * userRepository.findByUsername(_) >> Promise.value(adminUser)
-            1* userRepository.update(_, _) >> adminUser
+            1* userRepository.update(_, _) >> Promise.value(adminUser)
             assert authenticated != null
             assert authenticated.credentials.apiToken.value
             assert authenticated.credentials.apiToken.expirationDate == LocalDate.now(ZONE_ID).plusWeeks(4)

@@ -27,16 +27,20 @@ class CreateUserHandler extends GroovyHandler {
                 String password = json.credentials.password
                 User requestUser = User.fromJson(request)
 
-                if (userRepository.userExists(requestUser.credentials.username)) {
-                    response.status(400)
-                    render json(["message": "User already exists"])
-                } else {
-                    //validate user
-                    requestUser.credentials.apiToken = null
-                    requestUser.credentials.role = Role.USER
-                    User createdUser = userRepository.create(requestUser, password)
-                    response.status(201)
-                    render createdUser
+                userRepository.userExists(requestUser.credentials.username).then { Boolean userExists ->
+                    if (userExists) {
+                        response.status(400)
+                        render json(["message": "User already exists"])
+                    } else {
+                        //validate user
+                        requestUser.credentials.apiToken = null
+                        requestUser.credentials.role = Role.USER
+                        userRepository.create(requestUser, password).then { createdUser ->
+                            response.status(201)
+                            render createdUser
+                        }
+
+                    }
                 }
             }
         }

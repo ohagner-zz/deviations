@@ -12,26 +12,50 @@ import static org.junit.Assert.assertThat
 
 class DeviationFilterSpec extends Specification {
 
-    def "filter out deviation with long duration"() {
+    void "filter out deviation with long duration"() {
         given:
-            Deviation longDuration = Deviation.builder()
-                .from(LocalDateTime.now(ZONE_ID).minusHours(13))
-                .to(LocalDateTime.now(ZONE_ID).plusHours(1))
-                .created(LocalDateTime.now(ZONE_ID))
-                .build()
+            Deviation longDuration =longDuration()
         expect:
             assertThat(DeviationFilter.apply([longDuration]).size(), is(0))
     }
 
-    def "filter out deviations from the past"() {
+    void "filter out deviations from the past"() {
         given:
-            LocalDateTime now = LocalDateTime.now(ZONE_ID)
-            Deviation oldDeviation = Deviation.builder()
-                    .to(now.minusHours(1))
-                    .from(now.minusHours(3))
-                    .build()
+            Deviation oldDeviation = expired()
         expect:
             assertThat(DeviationFilter.apply([oldDeviation]).size(), is(0))
     }
+
+    void "keep valid deviations"() {
+        given:
+            List<Deviation> deviations = [expired(), longDuration(), valid()]
+        expect:
+            assertThat(DeviationFilter.apply(deviations).size(), is(1))
+    }
+
+    private Deviation longDuration() {
+        return Deviation.builder()
+                .from(LocalDateTime.now(ZONE_ID).minusHours(13))
+                .to(LocalDateTime.now(ZONE_ID).plusHours(1))
+                .created(LocalDateTime.now(ZONE_ID))
+                .build()
+    }
+
+    private Deviation expired() {
+        LocalDateTime now = LocalDateTime.now(ZONE_ID)
+        return Deviation.builder()
+                .to(now.minusHours(1))
+                .from(now.minusHours(3))
+                .build()
+    }
+
+    private Deviation valid() {
+        LocalDateTime now = LocalDateTime.now(ZONE_ID)
+        return Deviation.builder()
+                .to(now.plusHours(1))
+                .from(now.minusHours(3))
+                .build()
+    }
+
 
 }

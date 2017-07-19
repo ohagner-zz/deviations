@@ -6,6 +6,7 @@ import com.ohagner.deviations.api.user.domain.Credentials
 import com.ohagner.deviations.api.user.domain.User
 import com.ohagner.deviations.api.notification.service.NotificationService
 import com.ohagner.deviations.api.user.repository.UserRepository
+import ratpack.exec.Promise
 import ratpack.groovy.test.handling.GroovyRequestFixture
 import spock.lang.Specification
 import wslite.rest.RESTClientException
@@ -41,7 +42,7 @@ class SendNotificationHandlerSpec extends Specification {
                 body(notification.toJson(), "application/json")
             }
         then:
-            1 * userRepository.findByUsername(USERNAME) >> Optional.of(user)
+            1 * userRepository.findByUsername(USERNAME) >> Promise.value(user)
             1 * notificationsService.sendNotification(user, _)
             assert result.status.code == 204
             assert result.bodyText == ""
@@ -56,7 +57,7 @@ class SendNotificationHandlerSpec extends Specification {
                 body(notification.toJson(), "application/json")
             }
         then:
-            1 * userRepository.findByUsername(USERNAME) >> Optional.empty()
+            1 * userRepository.findByUsername(USERNAME) >> Promise.value(null)
             0 * notificationsService.sendNotification(_, _)
             assert result.status.code == 404
     }
@@ -71,7 +72,7 @@ class SendNotificationHandlerSpec extends Specification {
                 pathBinding(["username": USERNAME])
             }
         then:
-            1 * userRepository.findByUsername(USERNAME) >> Optional.of(user)
+            1 * userRepository.findByUsername(USERNAME) >> Promise.value(user)
             notificationsService.sendNotification(user,_) >> { throw new RESTClientException("Connection reset", null, null) }
             assert result.status.code == 500
     }

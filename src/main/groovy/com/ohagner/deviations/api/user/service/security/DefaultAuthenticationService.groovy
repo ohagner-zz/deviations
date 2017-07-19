@@ -26,34 +26,26 @@ class DefaultAuthenticationService implements AuthenticationService {
 
     @Override
     Promise<User> authenticate(String username, String password) {
-        return Promise.sync {
-            return updateTokenIfMatch(username, password).orElse(null)
+        userRepository.findByUsername(username)
+                .onNull { null }
+                .map { User user ->
+            String suppliedPasswordHash = HashGenerator.generateHash(password, user.credentials.passwordSalt)
+            if (user.credentials.passwordHash == suppliedPasswordHash) {
+                user.credentials.apiToken = new Token(value: UUID.randomUUID().toString(), expirationDate: LocalDate.now(ZONE_ID).plusWeeks(4))
+                log.info "Newly generated token : ${user.credentials.apiToken.value}"
+                userRepository.update(user.credentials.username, user)
+                return user
+            } else {
+                log.debug "Supplied password did not match"
+                return null
+            }
         }
     }
 
     @Override
     Promise<User> authenticateAdministrator(String username, String password) {
-
-        return Promise.sync {
-            updateTokenIfMatch(username, password)
-                .filter { User user ->
-                    user?.credentials?.role == Role.ADMIN
-                }.orElse(null)
+        authenticate(username, password).map { User user ->
+            user?.credentials?.role == Role.ADMIN ? user : null
         }
     }
-
-    private Optional<User> updateTokenIfMatch(String username, String password) {
-            userRepository.findByUsername(username)
-            .filter { User user ->
-                String passwordHash = HashGenerator.generateHash(password, user.credentials.passwordSalt)
-                user?.credentials?.passwordHash == passwordHash
-            }.map { User user->
-                user.credentials.apiToken = new Token(value: UUID.randomUUID().toString(), expirationDate: LocalDate.now(ZONE_ID).plusWeeks(4))
-                log.info "Newly generated token : ${user.credentials.apiToken.value}"
-                userRepository.update(user.credentials.username, user)
-                return user
-            }
-
-    }
-
 }

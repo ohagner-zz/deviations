@@ -28,9 +28,11 @@ class SendNotificationHandler extends GroovyHandler {
         context.with {
             String username = pathTokens.username
             log.info "Username: $username"
-            Optional<User> userOptional = userRepository.findByUsername(username)
-            if(userOptional.present) {
-                User user = userOptional.get()
+            userRepository.findByUsername(username)
+                    .onNull {
+                response.status(404)
+                render json([message: "Failed to send notifications. User $username could not be found"])
+            }.then { User user ->
                 request.body.map { body ->
                     log.info "Notification payload ${body.text}"
                     Notification notification = Notification.fromJson(body.text)
@@ -43,9 +45,6 @@ class SendNotificationHandler extends GroovyHandler {
                     response.status(204)
                     response.send()
                 }
-            } else {
-                response.status(404)
-                render json([message:"Failed to send notifications. User $username could not be found"])
             }
         }
     }

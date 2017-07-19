@@ -23,13 +23,12 @@ class MongoUserRepository implements UserRepository {
         log.info "UserRepository initialized"
     }
 
-    Optional<User> findByUsername(String username) {
+    Promise<User> findByUsername(String username) {
         log.debug "Retrieving data for user $username"
-        DBObject userObject = users.findOne(new BasicDBObject('credentials.username': username))
-        if (userObject) {
-            return Optional.of(User.fromJson(JSON.serialize(userObject)))
-        } else {
-            Optional.empty()
+
+        Promise.sync {
+            DBObject userObject = users.findOne(new BasicDBObject('credentials.username': username))
+            return userObject ? User.fromJson(JSON.serialize(userObject)) : null
         }
     }
 

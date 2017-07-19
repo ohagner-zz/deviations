@@ -4,6 +4,7 @@ import com.ohagner.deviations.api.user.domain.Role
 import com.ohagner.deviations.api.user.domain.Credentials
 import com.ohagner.deviations.api.user.domain.User
 import com.ohagner.deviations.api.user.repository.UserRepository
+import ratpack.exec.Promise
 import ratpack.test.exec.ExecHarness
 import spock.lang.AutoCleanup
 import spock.lang.Specification
@@ -41,7 +42,7 @@ class AuthenticationServiceSpec extends Specification {
                 authService.authenticate(user.credentials.username, PASSWORD)
             }.value
         then:
-            1 * userRepository.findByUsername(_) >> Optional.of(user)
+            1 * userRepository.findByUsername(_) >> Promise.value(user)
             1* userRepository.update(_, _) >> user
             assert authenticated != null
             assert authenticated.credentials.apiToken.value
@@ -65,7 +66,7 @@ class AuthenticationServiceSpec extends Specification {
                 authService.authenticate(user.credentials.username, PASSWORD)
             }.value
         then:
-            1 * userRepository.findByUsername(_) >> Optional.empty()
+            1 * userRepository.findByUsername(_) >> Promise.value(null)
             0 * userRepository.update(_, _) >> user
             assert authenticated == null
     }
@@ -76,7 +77,7 @@ class AuthenticationServiceSpec extends Specification {
                 authService.authenticateAdministrator(adminUser.credentials.username, PASSWORD)
             }.value
         then:
-            1 * userRepository.findByUsername(_) >> Optional.of(adminUser)
+            1 * userRepository.findByUsername(_) >> Promise.value(adminUser)
             1* userRepository.update(_, _) >> adminUser
             assert authenticated != null
             assert authenticated.credentials.apiToken.value
@@ -89,7 +90,7 @@ class AuthenticationServiceSpec extends Specification {
                 authService.authenticateAdministrator(adminUser.credentials.username, "Invalidpassword")
             }.value
         then:
-            1 * userRepository.findByUsername(_) >> Optional.of(adminUser)
+            1 * userRepository.findByUsername(_) >> Promise.value(adminUser)
             0 * userRepository.update(_, _)
             assert authenticated == null
     }

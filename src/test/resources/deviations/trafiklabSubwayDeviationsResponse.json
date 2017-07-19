@@ -1,0 +1,35 @@
+{
+  "StatusCode": 0,
+  "Message": null,
+  "ExecutionTime": 41,
+  "ResponseData": [
+    {
+      "Created": "2017-01-01T00:00:01.007+02:00",
+      "MainNews": false,
+      "SortOrder": 1,
+      "Header": "Tunnelbanan försenad",
+      "Details": "Troll på spåret",
+      "Scope": "Tunnelbanelinje 4",
+      "DevCaseGid": 70001,
+      "DevMessageVersionNumber": 2,
+      "ScopeElements": "BlåTunnelbanelinje 4",
+      "FromDateTime": "2017-01-01T00:01:00",
+      "UpToDateTime": "2017-01-01T23:59:00",
+      "Updated": "2017-01-01T00:05:50.007+02:00"
+    },
+    {
+      "Created": "2017-01-01T00:00:01.007+02:00",
+      "MainNews": false,
+      "SortOrder": 1,
+      "Header": "Tunnelbanan försenad",
+      "Details": "Troll på spåret",
+      "Scope": "Tunnelbanelinje 4",
+      "DevCaseGid": 70002,
+      "DevMessageVersionNumber": 2,
+      "ScopeElements": "BlåTunnelbanelinje 4",
+      "FromDateTime": "2017-01-01T00:01:00",
+      "UpToDateTime": "2017-01-01T06:01:00",
+      "Updated": "2017-01-01T00:05:50.007+02:00"
+    }
+  ]
+}

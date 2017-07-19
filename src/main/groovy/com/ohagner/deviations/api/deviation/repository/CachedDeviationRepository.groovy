@@ -1,6 +1,7 @@
 package com.ohagner.deviations.api.deviation.repository
 
 import com.ohagner.deviations.api.deviation.domain.Deviation
+import ratpack.exec.Promise
 
 import static com.ohagner.deviations.config.Constants.ZONE_ID
 
@@ -26,20 +27,24 @@ class CachedDeviationRepository implements DeviationRepository {
     }
 
     @Override
-    List<Deviation> retrieveAll() {
-        if(cachedResponse == null) {
-            cachedResponse = source.retrieveAll()
-            lastUpdated = LocalDateTime.now(ZONE_ID)
+    Promise<List<Deviation>> retrieveAll() {
+        if(cachedResponse == null || cacheHasExpired()) {
+            log.info "Updating cached deviations. Cache timeout is ${timeToCache.toMinutes()} minutes"
+            source.retrieveAll().map() { List<Deviation> deviations ->
+                lastUpdated = LocalDateTime.now(ZONE_ID)
+                cachedResponse = deviations
+            }
+
+        } else {
+            return Promise.value(cachedResponse)
         }
 
-        Duration timeSinceUpdate = Duration.between(lastUpdated, LocalDateTime.now(ZONE_ID))
-        if (timeSinceUpdate.compareTo(timeToCache) > 0) {
-            log.info "Updating cached deviations. Cache timeout is ${timeToCache.toMinutes()} minutes"
-            cachedResponse = source.retrieveAll()
-            lastUpdated = LocalDateTime.now(ZONE_ID)
-        }
-        return cachedResponse
+
     }
 
+    private boolean cacheHasExpired() {
+        Duration timeSinceUpdate = Duration.between(lastUpdated, LocalDateTime.now(ZONE_ID))
+        return timeSinceUpdate.compareTo(timeToCache) > 0
+    }
 
 }

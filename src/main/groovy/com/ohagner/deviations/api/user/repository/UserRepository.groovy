@@ -5,7 +5,7 @@ import ratpack.exec.Promise
 
 interface UserRepository {
 
-    Optional<User> findByUsername(String username)
+    Promise<User> findByUsername(String username)
 
     Promise<User> findByApiToken(String apiToken)
 

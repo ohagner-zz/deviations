@@ -4,6 +4,7 @@ import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
 import com.ohagner.deviations.api.deviation.domain.Deviation
 import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
 import com.ohagner.deviations.api.deviation.repository.DeviationRepository
+import ratpack.exec.Promise
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture
 import spock.lang.Specification
@@ -39,7 +40,7 @@ class DeviationsChainSpec extends Specification {
                     .method("GET")
                     .handleChain(new DeviationsChain(deviationRepository))
         then:
-            1 * deviationRepository.retrieveAll() >> allDeviations
+            1 * deviationRepository.retrieveAll() >> Promise.sync { allDeviations }
             assert result.status.'2xx'
             assert result.rendered(JsonRender).object == allDeviations
     }
@@ -51,7 +52,7 @@ class DeviationsChainSpec extends Specification {
                     .method("GET")
                     .handleChain(new DeviationsChain(deviationRepository))
         then:
-            1 * deviationRepository.retrieveAll() >> allDeviations
+            1 * deviationRepository.retrieveAll() >> Promise.sync { allDeviations }
             assert result.status.'2xx'
             assert result.rendered(JsonRender).object == [TRAIN]
     }
@@ -63,7 +64,7 @@ class DeviationsChainSpec extends Specification {
                     .method("GET")
                     .handleChain(new DeviationsChain(deviationRepository))
         then:
-            1 * deviationRepository.retrieveAll() >> allDeviations
+            1 * deviationRepository.retrieveAll() >> Promise.sync { allDeviations }
             assert result.status.'2xx'
             assert result.rendered(JsonRender).object == [BUS_1, BUS_2]
     }
@@ -75,7 +76,7 @@ class DeviationsChainSpec extends Specification {
                     .method("GET")
                     .handleChain(new DeviationsChain(deviationRepository))
         then:
-            1 * deviationRepository.retrieveAll() >> allDeviations
+            1 * deviationRepository.retrieveAll() >> Promise.sync { allDeviations }
             assert result.status.'2xx'
             assert result.rendered(JsonRender).object == [BUS_2]
     }

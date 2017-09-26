@@ -46,7 +46,7 @@ class WatchProcessor {
                     }
                     result.status = WatchProcessingStatus.NOTIFIED
                     watch.lastNotified = LocalDateTime.now(ZONE_ID)
-                    result.matchingDeviations.each { watch.addProcessedDeviationId(it.id)}
+                    watch.addProcessedDeviationIds(result.matchingDeviations.collect { it.id })
 
                 } else {
                     result.status = WatchProcessingStatus.NO_MATCH

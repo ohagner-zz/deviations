@@ -39,6 +39,7 @@ class UserAuthorizationHandler extends GroovyHandler {
 
             userRepository.findByApiToken(suppliedApiToken)
                 .onNull {
+                    log.error "No user found for token: ${suppliedApiToken ? suppliedApiToken : null}..."
                     response.status(401)
                     render json([message: ERROR_MSG_INVALID_API_TOKEN])
                 }.then { User user ->

@@ -1,4 +1,5 @@
 import com.ohagner.deviations.api.common.JsonRenderingModule
+import com.ohagner.deviations.api.deviation.endpoint.DeviationCheckHandler
 import com.ohagner.deviations.api.deviation.module.DeviationsModule
 import com.ohagner.deviations.api.notification.module.NotificationsModule
 import com.ohagner.deviations.api.user.router.AdminChain
@@ -60,6 +61,7 @@ ratpack {
         bind AdminAuthorizationHandler
         bind SendNotificationHandler
         bind UserAuthenticationHandler
+        bind DeviationCheckHandler
         bindInstance(ServerErrorHandler, new DefaultServerErrorHandler())
     }
 

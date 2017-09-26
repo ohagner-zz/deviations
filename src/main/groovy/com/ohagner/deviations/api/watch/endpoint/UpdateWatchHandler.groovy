@@ -23,7 +23,7 @@ class UpdateWatchHandler extends GroovyHandler {
     protected void handle(GroovyContext context) {
         context.with {
             long watchId = pathTokens.asLong('id')
-            request.body.map { body ->
+            request.body.flatMap { body ->
                 log.debug "Updating watch with ${body.text}"
                 Watch watchToUpdate = Watch.fromJson(body.text)
                 assert watchToUpdate.id == watchId

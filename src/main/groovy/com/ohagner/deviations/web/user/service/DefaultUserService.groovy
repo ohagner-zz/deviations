@@ -60,11 +60,11 @@ class DefaultUserService implements UserService {
                 }
             }
         }
-        log.info "Sending ${JsonOutput.prettyPrint(requestBody)}"
+        log.debug "Create user from web: ${JsonOutput.prettyPrint(requestBody)}"
         httpClient.request(publicAddress.get("api/users")) { request ->
             request
-                    .post()
-                    .body.text(requestBody)
+                .post()
+                .body.text(requestBody)
         }.mapError { t ->
             log.error("Failed to create user", t)
             return false

@@ -1,24 +1,25 @@
 package com.ohagner.deviations.api.watch.repository
 
 import com.ohagner.deviations.api.watch.domain.Watch
+import ratpack.exec.Promise
 
 interface WatchRepository {
 
-        Optional<Watch> findById(long id)
+        Promise<Optional<Watch>> findById(long id)
 
-        List<Watch> findByUsername(String username)
+        Promise<List<Watch>> findByUsername(String username)
 
-        Optional<Watch> findByUsernameAndId(String username, long id)
+        Promise<Optional<Watch>> findByUsernameAndId(String username, long id)
 
-        List<Watch> retrieveAll()
+        Promise<List<Watch>> retrieveAll()
 
         List<Watch> retrieveRange(int pageNumber, int maxNumPerPage)
 
-        Watch create(Watch watch)
+        Promise<Optional<Watch>> create(Watch watch)
 
-        Watch update(Watch watch)
+        Promise<Watch> update(Watch watch)
 
-        Optional<Watch> delete(String username, long id)
+        Promise<Optional<Watch>> delete(String username, long id)
 
         boolean exists(String username, long id)
 

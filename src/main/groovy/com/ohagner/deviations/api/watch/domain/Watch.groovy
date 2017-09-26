@@ -83,7 +83,7 @@ class Watch {
         if (notifyMaxHoursBefore != watch.notifyMaxHoursBefore) return false
         if (created != watch.created) return false
         if (name != watch.name) return false
-        if (!notifyBy.containsAll(watch.notifyBy)) return false
+        if (notifyBy != null && !notifyBy.containsAll(watch.notifyBy)) return false
         if (schedule != watch.schedule) return false
         if (transports != watch.transports) return false
         if (username != watch.username) return false

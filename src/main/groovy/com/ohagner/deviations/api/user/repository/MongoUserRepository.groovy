@@ -37,7 +37,9 @@ class MongoUserRepository implements UserRepository {
             return Promise.value(null)
         }
         Blocking.get {
+            log.info "Looking for user with apiToken $apiToken"
             DBObject userObject = users.findOne(new BasicDBObject('credentials.apiToken.value': apiToken))
+            log.info "User found: ${userObject != null}"
             return userObject ? User.fromJson(JSON.serialize(userObject)) : null
         }
     }
@@ -65,10 +67,12 @@ class MongoUserRepository implements UserRepository {
     }
 
     Promise<User> update(String username, User update) {
-        Promise.sync {
+        Blocking.get {
             DBObject mongoUpdate = JSON.parse(update.toJson())
             DBObject updatedUser = users.findAndModify(new BasicDBObject('credentials.username': username), mongoUpdate)
             return User.fromJson(JSON.serialize(updatedUser))
+        }.flatMap { user ->
+            findByUsername(user.credentials.username)
         }
     }
 

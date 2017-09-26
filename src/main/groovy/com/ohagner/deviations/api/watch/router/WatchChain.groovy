@@ -17,23 +17,36 @@ class WatchChain extends GroovyChainAction {
         path("") { WatchRepository watchRepository, User user ->
             context.byMethod {
                 post {
-                    request.body.map { body ->
-                        log.debug "Creating watch for user ${user.credentials.username}"
+                    log.info("Creating watch here")
+                    request.body.flatMap { body ->
+
                         Watch watch = Watch.fromJson(body.text)
                         watch.username = user.credentials.username
-                        response.status(201)
+                        log.info "Creating watch for user ${user.credentials.username}"
                         watchRepository.create(watch)
                     }.onError { throwable ->
                         log.error("Failed to create watch", throwable)
                         response.status(500)
                         render json(["message":"Failed to create watch"])
-                    }.then { Watch created ->
-                        response.status(201)
-                        render json(created)
+                    }.then { Optional<Watch> created ->
+                        if(created.present) {
+                            response.status(201)
+                            render json(created.get())
+                        } else {
+                            response.status(500)
+                            render json(["message":"Failed to create watch"])
+                        }
+
                     }
                 }
                 get {
-                    render json(watchRepository.findByUsername(user.credentials.username))
+                    watchRepository.findByUsername(user.credentials.username)
+                        .onError{ throwable ->
+                            log.error("Failed to get all watches", e)
+                            render json(["message": "Something went wrong"])
+                        }.then {
+                            render json(it)
+                        }
                 }
             }
         }
@@ -45,22 +58,25 @@ class WatchChain extends GroovyChainAction {
             long watchId = pathTokens.asLong('id')
             context.byMethod {
                 delete {
-                    Optional<Watch> deletedWatch = watchRepository.delete(user.credentials.username, watchId)
-                    if (deletedWatch.isPresent()) {
-                        render json(deletedWatch.get())
-                    } else {
-                        response.status(500)
-                        render json(["message": new String("Watch with id $watchId could not be deleted")])
+                    watchRepository.delete(user.credentials.username, watchId).then { Optional<Watch> deletedWatch ->
+                        if (deletedWatch.isPresent()) {
+                            render json(deletedWatch.get())
+                        } else {
+                            response.status(500)
+                            render json(["message": new String("Watch with id $watchId could not be deleted")])
+                        }
                     }
+
                 }
                 get {
-                    Optional<Watch> watch = watchRepository.findByUsernameAndId(user.credentials.username, watchId)
-                    if (watch.isPresent()) {
-                        render json(watch.get())
-                    } else {
-                        log.debug "Watch not found"
-                        response.status(404)
-                        render json(["message": new String("Watch with id $watchId does not exist")])
+                    watchRepository.findByUsernameAndId(user.credentials.username, watchId).then { Optional<Watch> watch ->
+                        if (watch.isPresent()) {
+                            render json(watch.get())
+                        } else {
+                            log.debug "Watch not found"
+                            response.status(404)
+                            render json(["message": new String("Watch with id $watchId does not exist")])
+                        }
                     }
                 }
                 put {

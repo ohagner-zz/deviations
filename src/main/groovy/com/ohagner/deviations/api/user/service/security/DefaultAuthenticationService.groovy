@@ -27,18 +27,17 @@ class DefaultAuthenticationService implements AuthenticationService {
     @Override
     Promise<User> authenticate(String username, String password) {
         userRepository.findByUsername(username)
-                .onNull { null }
-                .map { User user ->
-            String suppliedPasswordHash = HashGenerator.generateHash(password, user.credentials.passwordSalt)
-            if (user.credentials.passwordHash == suppliedPasswordHash) {
-                user.credentials.apiToken = new Token(value: UUID.randomUUID().toString(), expirationDate: LocalDate.now(ZONE_ID).plusWeeks(4))
-                log.info "Newly generated token : ${user.credentials.apiToken.value}"
-                userRepository.update(user.credentials.username, user)
-                return user
-            } else {
-                log.debug "Supplied password did not match"
-                return null
-            }
+            .onNull { Promise.value(null) }
+            .flatMap { User user ->
+                String suppliedPasswordHash = HashGenerator.generateHash(password, user.credentials.passwordSalt)
+                if (user.credentials.passwordHash == suppliedPasswordHash) {
+                    user.credentials.apiToken = new Token(value: UUID.randomUUID().toString(), expirationDate: LocalDate.now(ZONE_ID).plusWeeks(4))
+                    log.info "Newly generated token : ${user.credentials.apiToken.value}"
+                    return userRepository.update(user.credentials.username, user)
+                } else {
+                    log.info "Supplied password did not match"
+                    return Promise.value(null)
+                }
         }
     }
 

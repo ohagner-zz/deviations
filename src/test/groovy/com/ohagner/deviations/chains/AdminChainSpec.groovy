@@ -35,7 +35,7 @@ class AdminChainSpec extends Specification {
             WatchRepository watchRepository = Mock()
         when:
             userRepository.findByUsername(_) >> Promise.value(new User(credentials: new Credentials(username: "username")))
-            1 * userRepository.delete(_)
+            1 * userRepository.delete(_) >> Promise.value(new User(credentials: new Credentials(username: "username")))
             1 * watchRepository.findByUsername(_) >> Promise.value([new Watch(id: 111L), new Watch(id: 222L)])
             2 * watchRepository.delete(_, _) >> Promise.value(Optional.empty())
             def result = GroovyRequestFixture
@@ -71,6 +71,6 @@ class AdminChainSpec extends Specification {
                 registry.add(SendNotificationHandler, Handlers.post())
             }
         then:
-            assert result.status.code == 404
+            assert result.status.code == 204
     }
 }

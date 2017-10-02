@@ -28,15 +28,9 @@ class WatchChain extends GroovyChainAction {
                         log.error("Failed to create watch", throwable)
                         response.status(500)
                         render json(["message":"Failed to create watch"])
-                    }.then { Optional<Watch> created ->
-                        if(created.present) {
-                            response.status(201)
-                            render json(created.get())
-                        } else {
-                            response.status(500)
-                            render json(["message":"Failed to create watch"])
-                        }
-
+                    }.then { Watch created ->
+                        response.status(201)
+                        render json(created)
                     }
                 }
                 get {

@@ -1,11 +1,13 @@
 package com.ohagner.deviations.api.user.router
 
 import com.ohagner.deviations.api.notification.endpoint.SendNotificationHandler
+import com.ohagner.deviations.api.user.domain.User
 import com.ohagner.deviations.api.user.repository.UserRepository
 import com.ohagner.deviations.api.watch.domain.Watch
 import com.ohagner.deviations.api.watch.endpoint.UpdateWatchHandler
 import com.ohagner.deviations.api.watch.repository.WatchRepository
 import groovy.util.logging.Slf4j
+import ratpack.exec.Promise
 import ratpack.groovy.handling.GroovyChainAction
 
 import static ratpack.jackson.Jackson.json
@@ -22,17 +24,20 @@ class AdminChain extends GroovyChainAction {
             log.info "Deleting user"
             userRepository.findByUsername(username)
                 .onNull {
-                    response.status(404)
+                    response.status(204)
                     render json([message: "User could not be found"])
                 }.flatRight { user ->
                     log.info "flatRight here with user : ${user.credentials.username}"
                     watchRepository.findByUsername(user.credentials.username)
-                }.map { pair ->
-                    def watches = pair.right
-                    def user = pair.left
-                    watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.id) }
+                }.flatMap { pair ->
+                    List<Watch> watches = pair.right
+                    User user = pair.left
+                    watches.each { Watch watch ->
+                        watchRepository.delete(user.credentials.username, watch.id).then {
+                            log.info "Deleted watch ${watch.id}"
+                        }
+                    }
                     userRepository.delete(user)
-                    return user
                 }.then { user ->
                     render json(user)
                 }

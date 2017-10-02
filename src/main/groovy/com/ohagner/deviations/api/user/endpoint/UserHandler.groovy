@@ -21,13 +21,28 @@ class UserHandler extends GroovyHandler {
             User user = get(User)
             byMethod {
                 delete {
+                    //TODO: This should probably be moved to a service
                     UserRepository userRepository = context.get(UserRepository)
                     WatchRepository watchRepository = context.get(WatchRepository)
                     log.debug "Deleting user"
-                    List<Watch> watches = watchRepository.findByUsername(user.credentials.username)
-                    watches.each { Watch watch -> watchRepository.delete(user.credentials.username, watch.id) }
+                    watchRepository.findByUsername(user.credentials.username).then { watches ->
+                        watches.each { Watch watch ->
+                            watchRepository.delete(user.credentials.username, watch.id).then { Optional<Watch> optWatch ->
+                                log.info "Deleted watch: ${optWatch.present ?: optWatch.get().id } "
+                            }
+                        }
+                    }
+
                     userRepository.delete(user)
-                    render user
+                        .onError { t ->
+                            log.info("Failed to delete user ${user.credentials.username}", t)
+                            response.status(500)
+                            render json([message: "Failed to delete user"])
+                        }
+                        .then { User deletedUser ->
+                            render deletedUser
+                        }
+
                 }
                 get {
                     render user

@@ -13,7 +13,7 @@ interface UserRepository {
 
     Promise<User> create(User user, String password)
 
-    void delete(User user)
+    Promise<User> delete(User user)
 
     Promise<User> update(String username, User update)
 

@@ -19,7 +19,7 @@ class WatchChainSpec extends Specification {
     void 'should create watch'() {
         given:
             Watch toCreate = new Watch(id: 1, name: "TestWatch")
-            watchRepository.create(_) >> Promise.value(Optional.of(toCreate))
+            watchRepository.create(_) >> Promise.value(toCreate)
         when:
             HandlingResult result = fixture
                     .uri("")
@@ -38,7 +38,7 @@ class WatchChainSpec extends Specification {
     void 'should give 500 when watch could not be created'() {
         given:
             Watch toCreate = new Watch(name: "TestWatch")
-            watchRepository.create(_) >> Promise.value(Optional.empty())
+            watchRepository.create(_) >> new Exception("Something went wrong")
         when:
             HandlingResult result = fixture
                     .uri("")

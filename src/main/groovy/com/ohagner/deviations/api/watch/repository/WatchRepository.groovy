@@ -15,13 +15,11 @@ interface WatchRepository {
 
         List<Watch> retrieveRange(int pageNumber, int maxNumPerPage)
 
-        Promise<Optional<Watch>> create(Watch watch)
+        Promise<Watch> create(Watch watch)
 
         Promise<Watch> update(Watch watch)
 
         Promise<Optional<Watch>> delete(String username, long id)
-
-        boolean exists(String username, long id)
 
     }
 

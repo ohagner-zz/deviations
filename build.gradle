@@ -27,10 +27,9 @@ dependencies {
     compile ratpack.dependency('session')
 
     compile 'com.rabbitmq:amqp-client:3.6.2'
-    compile('com.gmongo:gmongo:1.5') {
-        exclude group: 'org.mongodb', module: 'mongo-java-driver'
-    }
-    compile 'org.mongodb:mongo-java-driver:3.4.0'
+    compile 'org.mongodb:mongo-java-driver:3.5.0'
+    compile 'org.mongodb:mongodb-driver-async:3.5.0'
+
     compile('com.github.groovy-wslite:groovy-wslite:1.1.0') {
         exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }

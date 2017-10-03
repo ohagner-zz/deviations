@@ -25,6 +25,7 @@ dependencies {
     runtime 'com.lmax:disruptor:3.3.0'
 
     compile ratpack.dependency('session')
+    compile ratpack.dependency('dropwizard-metrics')
 
     compile 'com.rabbitmq:amqp-client:3.6.2'
     compile 'org.mongodb:mongo-java-driver:3.5.0'

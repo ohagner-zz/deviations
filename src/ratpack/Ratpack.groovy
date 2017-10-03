@@ -1,24 +1,28 @@
+import com.ohagner.deviations.api.ApiChain
 import com.ohagner.deviations.api.common.JsonRenderingModule
 import com.ohagner.deviations.api.deviation.endpoint.DeviationCheckHandler
-import com.ohagner.deviations.api.deviation.module.DeviationsModule
-import com.ohagner.deviations.api.notification.module.NotificationsModule
-import com.ohagner.deviations.api.user.router.AdminChain
-import com.ohagner.deviations.api.ApiChain
 import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
-import com.ohagner.deviations.api.watch.service.WatchProcessQueueingService
-import com.ohagner.deviations.web.WebChain
-import com.ohagner.deviations.config.MongoConfig
-import com.ohagner.deviations.api.user.domain.UserRenderer
+import com.ohagner.deviations.api.deviation.module.DeviationsModule
 import com.ohagner.deviations.api.error.DefaultServerErrorHandler
+import com.ohagner.deviations.api.notification.endpoint.SendNotificationHandler
+import com.ohagner.deviations.api.notification.module.NotificationsModule
+import com.ohagner.deviations.api.user.domain.UserRenderer
 import com.ohagner.deviations.api.user.endpoint.AdminAuthorizationHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthenticationHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
-import com.ohagner.deviations.api.notification.endpoint.SendNotificationHandler
-import com.ohagner.deviations.modules.*
-import com.ohagner.deviations.api.watch.service.JobScheduler
+import com.ohagner.deviations.api.user.router.AdminChain
 import com.ohagner.deviations.api.user.service.security.DefaultAuthenticationService
+import com.ohagner.deviations.api.watch.service.JobScheduler
+import com.ohagner.deviations.api.watch.service.WatchProcessQueueingService
+import com.ohagner.deviations.config.MongoConfig
+import com.ohagner.deviations.modules.MessagingModule
+import com.ohagner.deviations.modules.RepositoryModule
+import com.ohagner.deviations.modules.ServiceModule
+import com.ohagner.deviations.web.WebChain
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import ratpack.dropwizard.metrics.DropwizardMetricsModule
+import ratpack.dropwizard.metrics.MetricsWebsocketBroadcastHandler
 import ratpack.error.ServerErrorHandler
 import ratpack.groovy.template.MarkupTemplateModule
 import ratpack.handling.RequestLogger
@@ -37,6 +41,9 @@ ratpack {
     }
 
     bindings {
+        module(DropwizardMetricsModule) { config ->
+            config.jvmMetrics(true)
+        }
         module(MarkupTemplateModule) { config ->
             config.autoIndent = true
             config.autoNewLine = true
@@ -68,6 +75,7 @@ ratpack {
     handlers {
 
         all RequestLogger.ncsa(log)
+        get('metrics-report', new MetricsWebsocketBroadcastHandler())
         get(".well-known/acme-challenge/emAP7DINlj8L9lh9g5sC-V8qd8jrpz9UZZY5l0QPGRg") {
             render(file("public/certauth.txt"))
         }
@@ -78,6 +86,7 @@ ratpack {
             }
             all(AdminAuthorizationHandler)
             insert(AdminChain)
+
         }
         prefix("api") {
             all() {

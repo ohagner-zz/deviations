@@ -31,7 +31,7 @@ class HttpDeviationRepository implements DeviationRepository {
 
             log.debug "Retrieved ${deviationList.size()} deviations"
         } catch (RESTClientException exception) {
-            log.error("Failed to retrieve deviations", exception)
+            log.error("Failed to retrieve deviations from URL: ${trafikLabClient.getUrl()}", exception)
             deviationList = []
             //TODO: Send some sort of notification
         }

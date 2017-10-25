@@ -32,13 +32,12 @@ class HttpDeviationRepository implements DeviationRepository {
                 deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.BUS))
                 deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.SUBWAY))
 
-                log.info "Retrieved ${deviationList.size()} deviations"
+
+                log.debug "Retrieved ${deviationList.size()} deviations"
             } catch (RESTClientException exception) {
-                log.error("Failed to retrieve deviations", exception)
+                log.error("Failed to retrieve deviations from URL: ${trafikLabClient.getUrl()}", exception)
                 deviationList = []
                 //TODO: Send some sort of notification
-            } catch(Exception e) {
-                log.error("ERROR", e)
             }
 
             return DeviationFilter.apply(deviationList).asImmutable()

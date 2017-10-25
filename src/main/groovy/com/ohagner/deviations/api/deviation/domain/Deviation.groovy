@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ohagner.deviations.api.deviation.service.LineNumberParser
+import com.ohagner.deviations.api.transport.domain.TransportMode
 import com.ohagner.deviations.config.Constants
-
 import groovy.json.JsonSlurper
 import groovy.transform.builder.Builder
 
@@ -118,7 +118,4 @@ class Deviation {
                 '}';
     }
 
-    static enum TransportMode {
-        TRAIN, BUS, SUBWAY
-    }
 }

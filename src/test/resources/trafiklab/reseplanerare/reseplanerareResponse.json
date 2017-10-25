@@ -1,0 +1,623 @@
+{
+  "Trip": [
+    {
+      "ServiceDays": [
+        {
+          "planningPeriodBegin": "2017-10-09",
+          "planningPeriodEnd": "2017-11-23",
+          "sDaysR": "täglich",
+          "sDaysI": "nicht 21., 22. Okt, 3. bis 5. Nov 2017, 23. Nov",
+          "sDaysB": "FFF3FF8FFFF8"
+        }
+      ],
+      "LegList": {
+        "Leg": [
+          {
+            "Origin": {
+              "name": "Spånga",
+              "type": "ST",
+              "id": "A=1@O=Spånga@X=17898737@Y=59383379@U=74@L=400106041@",
+              "extId": "400106041",
+              "lon": 17.898737,
+              "lat": 59.383379,
+              "prognosisType": "PROGNOSED",
+              "time": "12:49:00",
+              "date": "2017-10-10",
+              "track": "4",
+              "rtTime": "12:49:00",
+              "rtDate": "2017-10-10",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+              "mainMastExtId": "300109704"
+            },
+            "Destination": {
+              "name": "Segersäng",
+              "type": "ST",
+              "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+              "extId": "400106211",
+              "lon": 17.926109,
+              "lat": 59.028152,
+              "prognosisType": "PROGNOSED",
+              "time": "13:53:00",
+              "date": "2017-10-10",
+              "track": "2",
+              "rtTime": "13:53:00",
+              "rtDate": "2017-10-10",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+              "mainMastExtId": "300109724"
+            },
+            "JourneyDetailRef": {
+              "ref": "1|6962|0|74|10102017"
+            },
+            "JourneyStatus": "P",
+            "Product": {
+              "name": "PENDELTÅG  35",
+              "num": "12833",
+              "line": "35",
+              "catOut": "TRAIN   ",
+              "catIn": "TRN",
+              "catCode": "0",
+              "catOutS": "TRN",
+              "catOutL": "PENDELTÅG ",
+              "operatorCode": "SL",
+              "operator": "Storstockholms Lokaltrafik",
+              "admin": "104035"
+            },
+            "idx": "0",
+            "name": "PENDELTÅG  35",
+            "number": "12833",
+            "category": "TRN",
+            "type": "JNY",
+            "reachable": true,
+            "direction": "Nynäshamn"
+          }
+        ]
+      },
+      "TariffResult": {
+        "fareSetItem": [
+          {
+            "fareItem": [
+              {
+                "name": "Reskassa",
+                "desc": "Helt pris",
+                "price": 3000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Helt pris",
+                "price": 4300,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Helt pris",
+                "price": 6000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Reskassa",
+                "desc": "Reducerat pris",
+                "price": 2000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Reducerat pris",
+                "price": 2900,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Reducerat pris",
+                "price": 4000,
+                "cur": "SEK"
+              }
+            ],
+            "name": "ONEWAY",
+            "desc": "SL"
+          }
+        ]
+      },
+      "idx": 0,
+      "tripId": "C-0",
+      "ctxRecon": "T$A=1@O=Spånga@L=400106041@a=128@$A=1@O=Segersäng@L=400106211@a=128@$201710101249$201710101353$        $",
+      "duration": "PT1H4M",
+      "checksum": "1FE3754E_4"
+    },
+    {
+      "ServiceDays": [
+        {
+          "planningPeriodBegin": "2017-10-09",
+          "planningPeriodEnd": "2017-11-23",
+          "sDaysR": "täglich",
+          "sDaysI": "nicht 21., 22. Okt, 3. bis 5. Nov 2017, 23. Nov",
+          "sDaysB": "FFF3FF8FFFF8"
+        }
+      ],
+      "LegList": {
+        "Leg": [
+          {
+            "Origin": {
+              "name": "Spånga",
+              "type": "ST",
+              "id": "A=1@O=Spånga@X=17898737@Y=59383379@U=74@L=400106041@",
+              "extId": "400106041",
+              "lon": 17.898737,
+              "lat": 59.383379,
+              "prognosisType": "PROGNOSED",
+              "time": "13:19:00",
+              "date": "2017-10-10",
+              "track": "4",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+              "mainMastExtId": "300109704"
+            },
+            "Destination": {
+              "name": "Segersäng",
+              "type": "ST",
+              "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+              "extId": "400106211",
+              "lon": 17.926109,
+              "lat": 59.028152,
+              "prognosisType": "PROGNOSED",
+              "time": "14:23:00",
+              "date": "2017-10-10",
+              "track": "2",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+              "mainMastExtId": "300109724"
+            },
+            "JourneyDetailRef": {
+              "ref": "1|6953|4|74|10102017"
+            },
+            "JourneyStatus": "P",
+            "Product": {
+              "name": "PENDELTÅG  35",
+              "num": "12835",
+              "line": "35",
+              "catOut": "TRAIN   ",
+              "catIn": "TRN",
+              "catCode": "0",
+              "catOutS": "TRN",
+              "catOutL": "PENDELTÅG ",
+              "operatorCode": "SL",
+              "operator": "Storstockholms Lokaltrafik",
+              "admin": "103035"
+            },
+            "idx": "0",
+            "name": "PENDELTÅG  35",
+            "number": "12835",
+            "category": "TRN",
+            "type": "JNY",
+            "reachable": true,
+            "direction": "Nynäshamn"
+          }
+        ]
+      },
+      "TariffResult": {
+        "fareSetItem": [
+          {
+            "fareItem": [
+              {
+                "name": "Reskassa",
+                "desc": "Helt pris",
+                "price": 3000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Helt pris",
+                "price": 4300,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Helt pris",
+                "price": 6000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Reskassa",
+                "desc": "Reducerat pris",
+                "price": 2000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Reducerat pris",
+                "price": 2900,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Reducerat pris",
+                "price": 4000,
+                "cur": "SEK"
+              }
+            ],
+            "name": "ONEWAY",
+            "desc": "SL"
+          }
+        ]
+      },
+      "idx": 1,
+      "tripId": "C-1",
+      "ctxRecon": "T$A=1@O=Spånga@L=400106041@a=128@$A=1@O=Segersäng@L=400106211@a=128@$201710101319$201710101423$        $",
+      "duration": "PT1H4M",
+      "checksum": "3DE4934E_4"
+    },
+    {
+      "ServiceDays": [
+        {
+          "planningPeriodBegin": "2017-10-09",
+          "planningPeriodEnd": "2017-11-23",
+          "sDaysR": "täglich",
+          "sDaysI": "nicht 21., 22. Okt, 3. bis 5. Nov 2017, 23. Nov",
+          "sDaysB": "FFF3FF8FFFF8"
+        }
+      ],
+      "LegList": {
+        "Leg": [
+          {
+            "Origin": {
+              "name": "Spånga",
+              "type": "ST",
+              "id": "A=1@O=Spånga@X=17898737@Y=59383379@U=74@L=400106041@",
+              "extId": "400106041",
+              "lon": 17.898737,
+              "lat": 59.383379,
+              "prognosisType": "PROGNOSED",
+              "time": "13:49:00",
+              "date": "2017-10-10",
+              "track": "4",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+              "mainMastExtId": "300109704"
+            },
+            "Destination": {
+              "name": "Segersäng",
+              "type": "ST",
+              "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+              "extId": "400106211",
+              "lon": 17.926109,
+              "lat": 59.028152,
+              "prognosisType": "PROGNOSED",
+              "time": "14:53:00",
+              "date": "2017-10-10",
+              "track": "2",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+              "mainMastExtId": "300109724"
+            },
+            "JourneyDetailRef": {
+              "ref": "1|6963|0|74|10102017"
+            },
+            "JourneyStatus": "P",
+            "Product": {
+              "name": "PENDELTÅG  35",
+              "num": "12837",
+              "line": "35",
+              "catOut": "TRAIN   ",
+              "catIn": "TRN",
+              "catCode": "0",
+              "catOutS": "TRN",
+              "catOutL": "PENDELTÅG ",
+              "operatorCode": "SL",
+              "operator": "Storstockholms Lokaltrafik",
+              "admin": "103035"
+            },
+            "idx": "0",
+            "name": "PENDELTÅG  35",
+            "number": "12837",
+            "category": "TRN",
+            "type": "JNY",
+            "reachable": true,
+            "direction": "Nynäshamn"
+          }
+        ]
+      },
+      "TariffResult": {
+        "fareSetItem": [
+          {
+            "fareItem": [
+              {
+                "name": "Reskassa",
+                "desc": "Helt pris",
+                "price": 3000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Helt pris",
+                "price": 4300,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Helt pris",
+                "price": 6000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Reskassa",
+                "desc": "Reducerat pris",
+                "price": 2000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Reducerat pris",
+                "price": 2900,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Reducerat pris",
+                "price": 4000,
+                "cur": "SEK"
+              }
+            ],
+            "name": "ONEWAY",
+            "desc": "SL"
+          }
+        ]
+      },
+      "idx": 2,
+      "tripId": "C-2",
+      "ctxRecon": "T$A=1@O=Spånga@L=400106041@a=128@$A=1@O=Segersäng@L=400106211@a=128@$201710101349$201710101453$        $",
+      "duration": "PT1H4M",
+      "checksum": "5BE4B14E_4"
+    },
+    {
+      "ServiceDays": [
+        {
+          "planningPeriodBegin": "2017-10-09",
+          "planningPeriodEnd": "2017-11-23",
+          "sDaysR": "täglich",
+          "sDaysI": "nicht 21., 22. Okt, 3. bis 5. Nov 2017, 23. Nov",
+          "sDaysB": "FFF3FF8FFFF8"
+        }
+      ],
+      "LegList": {
+        "Leg": [
+          {
+            "Origin": {
+              "name": "Spånga",
+              "type": "ST",
+              "id": "A=1@O=Spånga@X=17898737@Y=59383379@U=74@L=400106041@",
+              "extId": "400106041",
+              "lon": 17.898737,
+              "lat": 59.383379,
+              "prognosisType": "PROGNOSED",
+              "time": "14:19:00",
+              "date": "2017-10-10",
+              "track": "4",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+              "mainMastExtId": "300109704"
+            },
+            "Destination": {
+              "name": "Segersäng",
+              "type": "ST",
+              "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+              "extId": "400106211",
+              "lon": 17.926109,
+              "lat": 59.028152,
+              "prognosisType": "PROGNOSED",
+              "time": "15:23:00",
+              "date": "2017-10-10",
+              "track": "2",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+              "mainMastExtId": "300109724"
+            },
+            "JourneyDetailRef": {
+              "ref": "1|6953|5|74|10102017"
+            },
+            "JourneyStatus": "P",
+            "Product": {
+              "name": "PENDELTÅG  35",
+              "num": "12839",
+              "line": "35",
+              "catOut": "TRAIN   ",
+              "catIn": "TRN",
+              "catCode": "0",
+              "catOutS": "TRN",
+              "catOutL": "PENDELTÅG ",
+              "operatorCode": "SL",
+              "operator": "Storstockholms Lokaltrafik",
+              "admin": "103035"
+            },
+            "idx": "0",
+            "name": "PENDELTÅG  35",
+            "number": "12839",
+            "category": "TRN",
+            "type": "JNY",
+            "reachable": true,
+            "direction": "Nynäshamn"
+          }
+        ]
+      },
+      "TariffResult": {
+        "fareSetItem": [
+          {
+            "fareItem": [
+              {
+                "name": "Reskassa",
+                "desc": "Helt pris",
+                "price": 3000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Helt pris",
+                "price": 4300,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Helt pris",
+                "price": 6000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Reskassa",
+                "desc": "Reducerat pris",
+                "price": 2000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Reducerat pris",
+                "price": 2900,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Reducerat pris",
+                "price": 4000,
+                "cur": "SEK"
+              }
+            ],
+            "name": "ONEWAY",
+            "desc": "SL"
+          }
+        ]
+      },
+      "idx": 3,
+      "tripId": "C-3",
+      "ctxRecon": "T$A=1@O=Spånga@L=400106041@a=128@$A=1@O=Segersäng@L=400106211@a=128@$201710101419$201710101523$        $",
+      "duration": "PT1H4M",
+      "checksum": "79E4CF4E_4"
+    },
+    {
+      "ServiceDays": [
+        {
+          "planningPeriodBegin": "2017-10-09",
+          "planningPeriodEnd": "2017-11-23",
+          "sDaysR": "täglich",
+          "sDaysI": "nicht 21., 22. Okt, 3. bis 5. Nov 2017, 23. Nov",
+          "sDaysB": "FFF3FF8FFFF8"
+        }
+      ],
+      "LegList": {
+        "Leg": [
+          {
+            "Origin": {
+              "name": "Spånga",
+              "type": "ST",
+              "id": "A=1@O=Spånga@X=17898737@Y=59383379@U=74@L=400106041@",
+              "extId": "400106041",
+              "lon": 17.898737,
+              "lat": 59.383379,
+              "prognosisType": "PROGNOSED",
+              "time": "14:49:00",
+              "date": "2017-10-10",
+              "track": "4",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+              "mainMastExtId": "300109704"
+            },
+            "Destination": {
+              "name": "Segersäng",
+              "type": "ST",
+              "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+              "extId": "400106211",
+              "lon": 17.926109,
+              "lat": 59.028152,
+              "prognosisType": "PROGNOSED",
+              "time": "15:53:00",
+              "date": "2017-10-10",
+              "track": "2",
+              "hasMainMast": true,
+              "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+              "mainMastExtId": "300109724"
+            },
+            "JourneyDetailRef": {
+              "ref": "1|6963|1|74|10102017"
+            },
+            "JourneyStatus": "P",
+            "Product": {
+              "name": "PENDELTÅG  35",
+              "num": "12841",
+              "line": "35",
+              "catOut": "TRAIN   ",
+              "catIn": "TRN",
+              "catCode": "0",
+              "catOutS": "TRN",
+              "catOutL": "PENDELTÅG ",
+              "operatorCode": "SL",
+              "operator": "Storstockholms Lokaltrafik",
+              "admin": "103035"
+            },
+            "idx": "0",
+            "name": "PENDELTÅG  35",
+            "number": "12841",
+            "category": "TRN",
+            "type": "JNY",
+            "reachable": true,
+            "direction": "Nynäshamn"
+          }
+        ]
+      },
+      "TariffResult": {
+        "fareSetItem": [
+          {
+            "fareItem": [
+              {
+                "name": "Reskassa",
+                "desc": "Helt pris",
+                "price": 3000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Helt pris",
+                "price": 4300,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Helt pris",
+                "price": 6000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Reskassa",
+                "desc": "Reducerat pris",
+                "price": 2000,
+                "cur": "SEK"
+              },
+              {
+                "name": "Övriga försäljningsställen",
+                "desc": "Reducerat pris",
+                "price": 2900,
+                "cur": "SEK"
+              },
+              {
+                "name": "Konduktör på Djurgårds- och Roslagsbanan",
+                "desc": "Reducerat pris",
+                "price": 4000,
+                "cur": "SEK"
+              }
+            ],
+            "name": "ONEWAY",
+            "desc": "SL"
+          }
+        ]
+      },
+      "idx": 4,
+      "tripId": "C-4",
+      "ctxRecon": "T$A=1@O=Spånga@L=400106041@a=128@$A=1@O=Segersäng@L=400106211@a=128@$201710101449$201710101553$        $",
+      "duration": "PT1H4M",
+      "checksum": "97E4ED4E_4"
+    }
+  ],
+  "serverVersion": "1.2",
+  "dialectVersion": "1.23",
+  "requestId": "1507632573837",
+  "scrB": "1|OB|MTµ11µ5089µ5089µ5153µ5153µ0µ0µ5µ5089µ1µ-2147483646µ0µ1µ2|PDHµe055a31ce00bd8ea83bd74717b8b0c89",
+  "scrF": "1|OF|MTµ11µ5209µ5209µ5273µ5273µ0µ0µ5µ5180µ5µ-2147483646µ0µ1µ2|PDHµe055a31ce00bd8ea83bd74717b8b0c89"
+}

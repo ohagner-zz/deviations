@@ -1,5 +1,7 @@
 package com.ohagner.deviations.config
 
+import com.ohagner.deviations.api.error.ConfigurationNotFoundException
+
 class AppConfig {
 
     static ConfigObject config = readProperties()
@@ -7,7 +9,11 @@ class AppConfig {
     static Map env = System.getenv()
 
     static envOrProperty(String key) {
-        return env."$key" ?: config."$key"
+        def value = env."$key" ?: config."$key"
+        if(!value) {
+            throw new ConfigurationNotFoundException("Configuration missing for property: $key")
+        }
+        return value
     }
 
     static envOrDefault(String key, Object defaultValue) {

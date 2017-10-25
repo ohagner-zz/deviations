@@ -1,6 +1,7 @@
 package com.ohagner.deviations.api.deviation.repository
 
 import com.ohagner.deviations.api.deviation.domain.Deviation
+import com.ohagner.deviations.api.transport.domain.TransportMode
 import groovy.json.JsonOutput
 import groovy.util.logging.Slf4j
 import ratpack.exec.Promise
@@ -28,13 +29,13 @@ class HttpDeviationRepository implements DeviationRepository {
             List<Deviation> deviationList = []
             try {
 
-                deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.TRAIN))
-                deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.BUS))
-                deviationList.addAll(retrieveDeviationsForTransport(Deviation.TransportMode.SUBWAY))
+                deviationList.addAll(retrieveDeviationsForTransport(TransportMode.TRAIN))
+                deviationList.addAll(retrieveDeviationsForTransport(TransportMode.BUS))
+                deviationList.addAll(retrieveDeviationsForTransport(TransportMode.METRO))
 
                 log.info "Retrieved ${deviationList.size()} deviations"
             } catch (RESTClientException exception) {
-                log.error("Failed to retrieve deviations", exception)
+                log.error("Failed to retrieve deviations calling URL ${trafikLabClient.getUrl()}", exception)
                 deviationList = []
                 //TODO: Send some sort of notification
             } catch(Exception e) {
@@ -45,7 +46,7 @@ class HttpDeviationRepository implements DeviationRepository {
         }
     }
 
-    List<Deviation> retrieveDeviationsForTransport(Deviation.TransportMode transportMode) {
+    List<Deviation> retrieveDeviationsForTransport(TransportMode transportMode) {
         Response response = trafikLabClient.get(query: [key: apiKey, transportMode: transportMode.toString()], accept: ContentType.JSON)
         log.debug "Received ${response.json} and response code ${response.statusCode}"
 

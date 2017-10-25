@@ -1,9 +1,10 @@
 package com.ohagner.deviations.chains
 
-import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
 import com.ohagner.deviations.api.deviation.domain.Deviation
-import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
+import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
 import com.ohagner.deviations.api.deviation.repository.DeviationRepository
+import com.ohagner.deviations.api.transport.domain.TransportMode
+import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
 import ratpack.exec.Promise
 import ratpack.jackson.JsonRender
 import ratpack.test.handling.RequestFixture
@@ -11,10 +12,10 @@ import spock.lang.Specification
 
 class DeviationsChainSpec extends Specification {
 
-    private static final Deviation BUS_1 = new Deviation(transportMode: Deviation.TransportMode.BUS, lineNumbers: ["800"])
-    private static final Deviation BUS_2 = new Deviation(transportMode: Deviation.TransportMode.BUS, lineNumbers: ["801"])
-    private static final Deviation TRAIN = new Deviation(transportMode: Deviation.TransportMode.TRAIN, lineNumbers: ["35", "36"])
-    private static final Deviation SUBWAY = new Deviation(transportMode: Deviation.TransportMode.SUBWAY, lineNumbers: ["1"])
+    private static final Deviation BUS_1 = new Deviation(transportMode: TransportMode.BUS, lineNumbers: ["800"])
+    private static final Deviation BUS_2 = new Deviation(transportMode: TransportMode.BUS, lineNumbers: ["801"])
+    private static final Deviation TRAIN = new Deviation(transportMode: TransportMode.TRAIN, lineNumbers: ["35", "36"])
+    private static final Deviation SUBWAY = new Deviation(transportMode: TransportMode.METRO, lineNumbers: ["1"])
 
     DeviationRepository deviationRepository
     RequestFixture requestFixture

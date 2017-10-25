@@ -3,6 +3,7 @@ package com.ohagner.deviations.api.deviation.endpoint
 import com.google.inject.Inject
 import com.ohagner.deviations.api.deviation.domain.Deviation
 import com.ohagner.deviations.api.deviation.repository.DeviationRepository
+import com.ohagner.deviations.api.transport.domain.TransportMode
 import groovy.util.logging.Slf4j
 import ratpack.exec.Promise
 import ratpack.groovy.handling.GroovyChainAction
@@ -32,7 +33,7 @@ class DeviationsChain extends GroovyChainAction {
                 }
         }
         get(":transportType") {
-            Deviation.TransportMode transportMode = Deviation.TransportMode.valueOf(pathTokens.transportType)
+            TransportMode transportMode = TransportMode.valueOf(pathTokens.transportType)
             retrieveDeviations() { it.transportMode == transportMode }
                 .onError { t ->
                     log.warn("Failed to retrieve deviations for transport", t)
@@ -43,7 +44,7 @@ class DeviationsChain extends GroovyChainAction {
                 }
         }
         get(":transportType/:lineNumber") {
-            Deviation.TransportMode transportMode = Deviation.TransportMode.valueOf(pathTokens.transportType)
+            TransportMode transportMode = TransportMode.valueOf(pathTokens.transportType)
             String lineNumber = pathTokens.lineNumber
             retrieveDeviations() {
                     it.transportMode == transportMode && it.lineNumbers.contains(lineNumber)

@@ -102,7 +102,7 @@ class WatchProcessorSpec extends Specification {
         deviation.id = 1
         deviation.header = "header"
         deviation.lineNumbers = ["35", "36"]
-        deviation.transportMode = Deviation.TransportMode.BUS
+        deviation.transportMode = TransportMode.BUS
         deviation.details = "details"
         deviation.from = now
         deviation.to = now.plusHours(1)
@@ -113,13 +113,13 @@ class WatchProcessorSpec extends Specification {
 
 
     private Watch createMatching() {
-        def matching = new Watch(name: "matching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "35", transportMode: Deviation.TransportMode.BUS)])
+        def matching = new Watch(name: "matching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "35", transportMode: TransportMode.BUS)])
         matching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5), dateOfEvent: LocalDate.now(ZONE_ID))
         return matching
     }
 
     private Watch createNonMatching() {
-        def nonMatching = new Watch(name: "nonMatching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "99", transportMode: Deviation.TransportMode.TRAIN)])
+        def nonMatching = new Watch(name: "nonMatching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "99", transportMode: TransportMode.TRAIN)])
         nonMatching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5l), dateOfEvent: LocalDate.now(ZONE_ID))
         return nonMatching
     }

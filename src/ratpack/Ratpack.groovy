@@ -6,6 +6,7 @@ import com.ohagner.deviations.api.deviation.module.DeviationsModule
 import com.ohagner.deviations.api.error.DefaultServerErrorHandler
 import com.ohagner.deviations.api.notification.endpoint.SendNotificationHandler
 import com.ohagner.deviations.api.notification.module.NotificationsModule
+import com.ohagner.deviations.api.stop.module.StopsModule
 import com.ohagner.deviations.api.user.domain.UserRenderer
 import com.ohagner.deviations.api.user.endpoint.AdminAuthorizationHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthenticationHandler
@@ -51,6 +52,7 @@ ratpack {
         module SessionModule
         module RepositoryModule
         module DeviationsModule
+        module StopsModule
         module MarkupTemplateModule
         module JsonRenderingModule
         module MessagingModule

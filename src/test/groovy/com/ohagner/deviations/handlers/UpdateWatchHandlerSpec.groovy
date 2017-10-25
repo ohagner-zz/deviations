@@ -26,14 +26,6 @@ class UpdateWatchHandlerSpec extends Specification {
             result.rendered(JsonRender).object.id == 1
     }
 
-    void 'should fail when id does not match'() {
-        when:
-            def result = requestFixture.pathBinding(["id":"999"]).handle(handler)
-        then:
-            0 * watchRepository.update(_)
-            result.status.'5xx'
-    }
-
     void 'should handle repository exception'() {
         when:
             def result = requestFixture.pathBinding(["id":"1"]).handle(handler)

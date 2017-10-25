@@ -1,0 +1,77 @@
+{
+  "StatusCode": 0,
+  "Message": null,
+  "ExecutionTime": 0,
+  "ResponseData": [
+    {
+      "Name": "Segersäng (Nynäshamn)",
+      "SiteId": "9724",
+      "Type": "Station",
+      "X": "17926783",
+      "Y": "59028647"
+    },
+    {
+      "Name": "Segersjö (Botkyrka)",
+      "SiteId": "7263",
+      "Type": "Station",
+      "X": "17812512",
+      "Y": "59195127"
+    },
+    {
+      "Name": "Segersbyvägen (på Kumla gårdsväg) (Botkyrka)",
+      "SiteId": "7258",
+      "Type": "Station",
+      "X": "17830976",
+      "Y": "59233574"
+    },
+    {
+      "Name": "Segersbyvägen (Botkyrka)",
+      "SiteId": "7247",
+      "Type": "Station",
+      "X": "17834419",
+      "Y": "59234706"
+    },
+    {
+      "Name": "Segersängs vägskäl (Nynäshamn)",
+      "SiteId": "8672",
+      "Type": "Station",
+      "X": "17966353",
+      "Y": "59016637"
+    },
+    {
+      "Name": "Erik Segersälls väg (Stockholm)",
+      "SiteId": "1653",
+      "Type": "Station",
+      "X": "17996935",
+      "Y": "59307870"
+    },
+    {
+      "Name": "Segeltorps centrum (Huddinge)",
+      "SiteId": "7090",
+      "Type": "Station",
+      "X": "17942820",
+      "Y": "59279464"
+    },
+    {
+      "Name": "Segeltorps industriområde (Huddinge)",
+      "SiteId": "7100",
+      "Type": "Station",
+      "X": "17947063",
+      "Y": "59284453"
+    },
+    {
+      "Name": "Segeltorpsgränsen (Stockholm)",
+      "SiteId": "1756",
+      "Type": "Station",
+      "X": "17961149",
+      "Y": "59279554"
+    },
+    {
+      "Name": "Seglarvägen (Lidingö)",
+      "SiteId": "2095",
+      "Type": "Station",
+      "X": "18196657",
+      "Y": "59344141"
+    }
+  ]
+}

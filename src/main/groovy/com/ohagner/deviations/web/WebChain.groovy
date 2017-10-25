@@ -363,6 +363,9 @@ class WebChain extends GroovyChainAction {
         get("metrics") {
             render groovyMarkupTemplate("metrics.gtpl", title: "Metrics")
         }
+        get("stops") {
+            render groovyMarkupTemplate("stops.gtpl", title: "Stops")
+        }
     }
 
     Promise getLoggedInUser(Session session) {

@@ -2,6 +2,8 @@ package com.ohagner.deviations.api
 
 import com.ohagner.deviations.api.deviation.endpoint.DeviationCheckHandler
 import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
+import com.ohagner.deviations.api.stop.endpoint.FindStopsHandler
+import com.ohagner.deviations.api.stop.repository.StopRepository
 import com.ohagner.deviations.api.user.endpoint.CreateUserHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthenticationHandler
 import com.ohagner.deviations.api.user.endpoint.UserAuthorizationHandler
@@ -33,6 +35,9 @@ class ApiChain extends GroovyChainAction {
                     insert(new CreateUserHandler(userRepository))
                 }
             }
+        }
+        get("stops") { StopRepository stopRepository ->
+            insert(new FindStopsHandler(stopRepository))
         }
         prefix("users/:username") {
             all(UserAuthorizationHandler)

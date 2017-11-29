@@ -1,0 +1,1031 @@
+{
+  "Trip": [{
+    "ServiceDays": [{
+      "planningPeriodBegin": "2017-11-02",
+      "planningPeriodEnd": "2017-12-17",
+      "sDaysR": "nicht täglich",
+      "sDaysI": "2. Nov bis 9. Dez 2017; nicht 3. bis 5. Nov 2017",
+      "sDaysB": "8FFFFFFFFC00"
+    }],
+    "LegList": {
+      "Leg": [{
+        "Origin": {
+          "name": "Segersäng",
+          "type": "ST",
+          "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+          "extId": "400106211",
+          "lon": 17.926109,
+          "lat": 59.028152,
+          "prognosisType": "PROGNOSED",
+          "time": "21:04:00",
+          "date": "2017-11-02",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+          "mainMastExtId": "300109724"
+        },
+        "Destination": {
+          "name": "Spånga",
+          "type": "ST",
+          "id": "A=1@O=Spånga@X=17896732@Y=59384314@U=74@L=400106042@",
+          "extId": "400106042",
+          "lon": 17.896732,
+          "lat": 59.384314,
+          "prognosisType": "PROGNOSED",
+          "time": "22:11:00",
+          "date": "2017-11-02",
+          "track": "3",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+          "mainMastExtId": "300109704"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|11512|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "PENDELTÅG  35",
+          "num": "12868",
+          "line": "35",
+          "catOut": "TRAIN   ",
+          "catIn": "TRN",
+          "catCode": "0",
+          "catOutS": "TRN",
+          "catOutL": "PENDELTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "100035"
+        },
+        "idx": "0",
+        "name": "PENDELTÅG  35",
+        "number": "12868",
+        "category": "TRN",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Bålsta"
+      }]
+    },
+    "TariffResult": {
+      "fareSetItem": [{
+        "fareItem": [{
+          "name": "Reskassa",
+          "desc": "Helt pris",
+          "price": 3000,
+          "cur": "SEK"
+        }, {
+          "name": "Övriga försäljningsställen",
+          "desc": "Helt pris",
+          "price": 4300,
+          "cur": "SEK"
+        }, {
+          "name": "Konduktör på Djurgårds- och Roslagsbanan",
+          "desc": "Helt pris",
+          "price": 6000,
+          "cur": "SEK"
+        }, {
+          "name": "Reskassa",
+          "desc": "Reducerat pris",
+          "price": 2000,
+          "cur": "SEK"
+        }, {
+          "name": "Övriga försäljningsställen",
+          "desc": "Reducerat pris",
+          "price": 2900,
+          "cur": "SEK"
+        }, {
+          "name": "Konduktör på Djurgårds- och Roslagsbanan",
+          "desc": "Reducerat pris",
+          "price": 4000,
+          "cur": "SEK"
+        }],
+        "name": "ONEWAY",
+        "desc": "SL"
+      }]
+    },
+    "idx": 0,
+    "tripId": "C-0",
+    "ctxRecon": "T$A=1@O=Segersäng@L=400106211@a=128@$A=1@O=Spånga@L=400106042@a=128@$201711022104$201711022211$        $",
+    "duration": "PT1H7M",
+    "checksum": "6F67C7D2_4"
+  }, {
+    "ServiceDays": [{
+      "planningPeriodBegin": "2017-11-02",
+      "planningPeriodEnd": "2017-12-17",
+      "sDaysR": "nicht täglich",
+      "sDaysI": "2. bis 24. Nov 2017 Mo - Fr",
+      "sDaysB": "CF9F3E000000"
+    }],
+    "LegList": {
+      "Leg": [{
+        "Origin": {
+          "name": "Segersäng",
+          "type": "ST",
+          "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+          "extId": "400106211",
+          "lon": 17.926109,
+          "lat": 59.028152,
+          "prognosisType": "PROGNOSED",
+          "time": "22:04:00",
+          "date": "2017-11-02",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+          "mainMastExtId": "300109724"
+        },
+        "Destination": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029107@Y=59300022@U=74@L=400105136@",
+          "extId": "400105136",
+          "lon": 18.029107,
+          "lat": 59.300022,
+          "prognosisType": "PROGNOSED",
+          "time": "22:49:00",
+          "date": "2017-11-02",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|11798|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "PENDELTÅG  35",
+          "num": "12872",
+          "line": "35",
+          "catOut": "TRAIN   ",
+          "catIn": "TRN",
+          "catCode": "0",
+          "catOutS": "TRN",
+          "catOutL": "PENDELTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "102035"
+        },
+        "idx": "0",
+        "name": "PENDELTÅG  35",
+        "number": "12872",
+        "category": "TRN",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Sundbyberg"
+      }, {
+        "Origin": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029107@Y=59300022@U=74@L=400105136@",
+          "extId": "400105136",
+          "lon": 18.029107,
+          "lat": 59.300022,
+          "time": "22:50:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "Destination": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029422@Y=59299474@U=74@L=400104511@",
+          "extId": "400104511",
+          "lon": 18.029422,
+          "lat": 59.299474,
+          "time": "22:53:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "idx": "1",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT3M",
+        "dist": 64,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029422@Y=59299474@U=74@L=400104511@",
+          "extId": "400104511",
+          "lon": 18.029422,
+          "lat": 59.299474,
+          "prognosisType": "PROGNOSED",
+          "time": "22:55:00",
+          "date": "2017-11-02",
+          "track": "1",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "Destination": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980233@Y=59333705@U=74@L=400104525@",
+          "extId": "400104525",
+          "lon": 17.980233,
+          "lat": 59.333705,
+          "prognosisType": "PROGNOSED",
+          "time": "23:09:00",
+          "date": "2017-11-02",
+          "track": "5",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|9789|1|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "LOKALTÅG  22",
+          "num": "12236",
+          "line": "22",
+          "catOut": "TRAM    ",
+          "catIn": "TRM",
+          "catCode": "2",
+          "catOutS": "TRM",
+          "catOutL": "LOKALTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "101022"
+        },
+        "idx": "2",
+        "name": "LOKALTÅG  22",
+        "number": "12236",
+        "category": "TRM",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Solna station"
+      }, {
+        "Origin": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980233@Y=59333705@U=74@L=400104525@",
+          "extId": "400104525",
+          "lon": 17.980233,
+          "lat": 59.333705,
+          "time": "23:10:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "Destination": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980601@Y=59332815@U=74@L=400112143@",
+          "extId": "400112143",
+          "lon": 17.980601,
+          "lat": 59.332815,
+          "time": "23:12:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "idx": "3",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT2M",
+        "dist": 101,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980601@Y=59332815@U=74@L=400112143@",
+          "extId": "400112143",
+          "lon": 17.980601,
+          "lat": 59.332815,
+          "prognosisType": "PROGNOSED",
+          "time": "23:20:00",
+          "date": "2017-11-02",
+          "track": "C",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "Destination": {
+          "name": "Spånga station",
+          "type": "ST",
+          "id": "A=1@O=Spånga station@X=17899564@Y=59382597@U=74@L=400112324@",
+          "extId": "400112324",
+          "lon": 17.899564,
+          "lat": 59.382597,
+          "prognosisType": "PROGNOSED",
+          "time": "23:43:00",
+          "date": "2017-11-02",
+          "track": "G",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+          "mainMastExtId": "300109704"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|19534|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "BUSS  112",
+          "num": "40435",
+          "line": "112",
+          "catOut": "BUS     ",
+          "catIn": "BUS",
+          "catCode": "3",
+          "catOutS": "BUS",
+          "catOutL": "BUSS ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "100112"
+        },
+        "idx": "4",
+        "name": "BUSS  112",
+        "number": "40435",
+        "category": "BUS",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Spånga station"
+      }]
+    },
+    "idx": 1,
+    "tripId": "C-1",
+    "ctxRecon": "T$A=1@O=Segersäng@L=400106211@a=128@$A=1@O=Årstaberg@L=400105136@a=128@$201711022204$201711022249$        $§W$A=1@O=Årstaberg@L=400105136@a=128@$A=1@O=Årstaberg@L=400104511@a=128@$201711022250$201711022253$$§T$A=1@O=Årstaberg@L=400104511@a=128@$A=1@O=Alvik@L=400104525@a=128@$201711022255$201711022309$        $§W$A=1@O=Alvik@L=400104525@a=128@$A=1@O=Alvik@L=400112143@a=128@$201711022310$201711022312$$§T$A=1@O=Alvik@L=400112143@a=128@$A=1@O=Spånga station@L=400112324@a=128@$201711022320$201711022343$        $",
+    "duration": "PT1H39M",
+    "checksum": "F0A49C7A_4"
+  }, {
+    "ServiceDays": [{
+      "planningPeriodBegin": "2017-11-02",
+      "planningPeriodEnd": "2017-12-17",
+      "sDaysR": "nicht täglich",
+      "sDaysI": "2. bis 25. Nov 2017",
+      "sDaysB": "FFFFFF000000"
+    }],
+    "LegList": {
+      "Leg": [{
+        "Origin": {
+          "name": "Segersäng",
+          "type": "ST",
+          "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+          "extId": "400106211",
+          "lon": 17.926109,
+          "lat": 59.028152,
+          "prognosisType": "PROGNOSED",
+          "time": "23:04:00",
+          "date": "2017-11-02",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+          "mainMastExtId": "300109724"
+        },
+        "Destination": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029107@Y=59300022@U=74@L=400105136@",
+          "extId": "400105136",
+          "lon": 18.029107,
+          "lat": 59.300022,
+          "prognosisType": "PROGNOSED",
+          "time": "23:49:00",
+          "date": "2017-11-02",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|11798|1|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "PENDELTÅG  35",
+          "num": "12876",
+          "line": "35",
+          "catOut": "TRAIN   ",
+          "catIn": "TRN",
+          "catCode": "0",
+          "catOutS": "TRN",
+          "catOutL": "PENDELTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "102035"
+        },
+        "idx": "0",
+        "name": "PENDELTÅG  35",
+        "number": "12876",
+        "category": "TRN",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Sundbyberg"
+      }, {
+        "Origin": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029107@Y=59300022@U=74@L=400105136@",
+          "extId": "400105136",
+          "lon": 18.029107,
+          "lat": 59.300022,
+          "time": "23:50:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "Destination": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029422@Y=59299474@U=74@L=400104511@",
+          "extId": "400104511",
+          "lon": 18.029422,
+          "lat": 59.299474,
+          "time": "23:53:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "idx": "1",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT3M",
+        "dist": 64,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Årstaberg",
+          "type": "ST",
+          "id": "A=1@O=Årstaberg@X=18029422@Y=59299474@U=74@L=400104511@",
+          "extId": "400104511",
+          "lon": 18.029422,
+          "lat": 59.299474,
+          "prognosisType": "PROGNOSED",
+          "time": "23:55:00",
+          "date": "2017-11-02",
+          "track": "1",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Årstaberg (Stockholm)@X=18030231@Y=59299231@U=74@L=300109531@",
+          "mainMastExtId": "300109531"
+        },
+        "Destination": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980233@Y=59333705@U=74@L=400104525@",
+          "extId": "400104525",
+          "lon": 17.980233,
+          "lat": 59.333705,
+          "prognosisType": "PROGNOSED",
+          "time": "00:09:00",
+          "date": "2017-11-03",
+          "track": "5",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|9716|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "LOKALTÅG  22",
+          "num": "12336",
+          "line": "22",
+          "catOut": "TRAM    ",
+          "catIn": "TRM",
+          "catCode": "2",
+          "catOutS": "TRM",
+          "catOutL": "LOKALTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "101022"
+        },
+        "idx": "2",
+        "name": "LOKALTÅG  22",
+        "number": "12336",
+        "category": "TRM",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Johannesfred"
+      }, {
+        "Origin": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980233@Y=59333705@U=74@L=400104525@",
+          "extId": "400104525",
+          "lon": 17.980233,
+          "lat": 59.333705,
+          "time": "00:10:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "Destination": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980601@Y=59332815@U=74@L=400112143@",
+          "extId": "400112143",
+          "lon": 17.980601,
+          "lat": 59.332815,
+          "time": "00:12:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "idx": "3",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT2M",
+        "dist": 101,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Alvik",
+          "type": "ST",
+          "id": "A=1@O=Alvik@X=17980601@Y=59332815@U=74@L=400112143@",
+          "extId": "400112143",
+          "lon": 17.980601,
+          "lat": 59.332815,
+          "prognosisType": "PROGNOSED",
+          "time": "00:21:00",
+          "date": "2017-11-03",
+          "track": "C",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Alvik (Stockholm)@X=17980628@Y=59332940@U=74@L=300109112@",
+          "mainMastExtId": "300109112"
+        },
+        "Destination": {
+          "name": "Spånga station",
+          "type": "ST",
+          "id": "A=1@O=Spånga station@X=17899564@Y=59382597@U=74@L=400112324@",
+          "extId": "400112324",
+          "lon": 17.899564,
+          "lat": 59.382597,
+          "prognosisType": "PROGNOSED",
+          "time": "00:43:00",
+          "date": "2017-11-03",
+          "track": "G",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+          "mainMastExtId": "300109704"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|19535|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "BUSS  112",
+          "num": "40441",
+          "line": "112",
+          "catOut": "BUS     ",
+          "catIn": "BUS",
+          "catCode": "3",
+          "catOutS": "BUS",
+          "catOutL": "BUSS ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "100112"
+        },
+        "idx": "4",
+        "name": "BUSS  112",
+        "number": "40441",
+        "category": "BUS",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Spånga station"
+      }]
+    },
+    "idx": 2,
+    "tripId": "C-2",
+    "ctxRecon": "T$A=1@O=Segersäng@L=400106211@a=128@$A=1@O=Årstaberg@L=400105136@a=128@$201711022304$201711022349$        $§W$A=1@O=Årstaberg@L=400105136@a=128@$A=1@O=Årstaberg@L=400104511@a=128@$201711022350$201711022353$$§T$A=1@O=Årstaberg@L=400104511@a=128@$A=1@O=Alvik@L=400104525@a=128@$201711022355$201711030009$        $§W$A=1@O=Alvik@L=400104525@a=128@$A=1@O=Alvik@L=400112143@a=128@$201711030010$201711030012$$§T$A=1@O=Alvik@L=400112143@a=128@$A=1@O=Spånga station@L=400112324@a=128@$201711030021$201711030043$        $",
+    "duration": "PT1H39M",
+    "checksum": "A31D53F3_4"
+  }, {
+    "ServiceDays": [{
+      "planningPeriodBegin": "2017-11-02",
+      "planningPeriodEnd": "2017-12-17",
+      "sDaysR": "nicht täglich",
+      "sDaysI": "2. Nov bis 7. Dez 2017 Mo - Do, So",
+      "sDaysB": "9F3E7CF9F000"
+    }],
+    "LegList": {
+      "Leg": [{
+        "Origin": {
+          "name": "Segersäng",
+          "type": "ST",
+          "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+          "extId": "400106211",
+          "lon": 17.926109,
+          "lat": 59.028152,
+          "prognosisType": "PROGNOSED",
+          "time": "23:04:00",
+          "date": "2017-11-02",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+          "mainMastExtId": "300109724"
+        },
+        "Destination": {
+          "name": "Stockholm City",
+          "type": "ST",
+          "id": "A=1@O=Stockholm City@X=18059392@Y=59331143@U=74@L=400105310@",
+          "extId": "400105310",
+          "lon": 18.059392,
+          "lat": 59.331143,
+          "prognosisType": "PROGNOSED",
+          "time": "23:56:00",
+          "date": "2017-11-02",
+          "track": "1",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|11798|1|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "PENDELTÅG  35",
+          "num": "12876",
+          "line": "35",
+          "catOut": "TRAIN   ",
+          "catIn": "TRN",
+          "catCode": "0",
+          "catOutS": "TRN",
+          "catOutL": "PENDELTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "102035"
+        },
+        "idx": "0",
+        "name": "PENDELTÅG  35",
+        "number": "12876",
+        "category": "TRN",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Sundbyberg"
+      }, {
+        "Origin": {
+          "name": "Stockholm City",
+          "type": "ST",
+          "id": "A=1@O=Stockholm City@X=18059392@Y=59331143@U=74@L=400105310@",
+          "extId": "400105310",
+          "lon": 18.059392,
+          "lat": 59.331143,
+          "time": "23:57:00",
+          "date": "2017-11-02",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "Destination": {
+          "name": "Vattugatan",
+          "type": "ST",
+          "id": "A=1@O=Vattugatan@X=18061477@Y=59329884@U=74@L=400180200@",
+          "extId": "400180200",
+          "lon": 18.061477,
+          "lat": 59.329884,
+          "time": "00:05:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "idx": "1",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT8M",
+        "dist": 183,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Vattugatan",
+          "type": "ST",
+          "id": "A=1@O=Vattugatan@X=18061477@Y=59329884@U=74@L=400180200@",
+          "extId": "400180200",
+          "lon": 18.061477,
+          "lat": 59.329884,
+          "time": "00:05:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "Destination": {
+          "name": "Centralen (Vasagatan)",
+          "type": "ST",
+          "id": "A=1@O=Centralen (Vasagatan)@X=18059895@Y=59330082@U=74@L=400152307@",
+          "extId": "400152307",
+          "lon": 18.059895,
+          "lat": 59.330082,
+          "time": "00:15:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "idx": "2",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT10M",
+        "dist": 92,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Centralen (Vasagatan)",
+          "type": "ST",
+          "id": "A=1@O=Centralen (Vasagatan)@X=18059895@Y=59330082@U=74@L=400152307@",
+          "extId": "400152307",
+          "lon": 18.059895,
+          "lat": 59.330082,
+          "prognosisType": "PROGNOSED",
+          "time": "00:49:00",
+          "date": "2017-11-03",
+          "track": "D",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "Destination": {
+          "name": "Spånga station",
+          "type": "ST",
+          "id": "A=1@O=Spånga station@X=17898107@Y=59383217@U=74@L=400150080@",
+          "extId": "400150080",
+          "lon": 17.898107,
+          "lat": 59.383217,
+          "prognosisType": "PROGNOSED",
+          "time": "01:13:00",
+          "date": "2017-11-03",
+          "track": "A",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+          "mainMastExtId": "300109704"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|40310|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "BUSS  591",
+          "num": "1",
+          "line": "591",
+          "catOut": "BUS     ",
+          "catIn": "BUS",
+          "catCode": "3",
+          "catOutS": "BUS",
+          "catOutL": "BUSS ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "101591"
+        },
+        "idx": "3",
+        "name": "BUSS  591",
+        "number": "1",
+        "category": "BUS",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Livgardet"
+      }]
+    },
+    "idx": 3,
+    "tripId": "C-3",
+    "ctxRecon": "T$A=1@O=Segersäng@L=400106211@a=128@$A=1@O=Stockholm City@L=400105310@a=128@$201711022304$201711022356$        $§W$A=1@O=Stockholm City@L=400105310@a=128@$A=1@O=Vattugatan@L=400180200@a=128@$201711022357$201711030005$$§W$A=1@O=Vattugatan@L=400180200@a=128@$A=1@O=Centralen (Vasagatan)@L=400152307@a=128@$201711030005$201711030015$$§T$A=1@O=Centralen (Vasagatan)@L=400152307@a=128@$A=1@O=Spånga station@L=400150080@a=128@$201711030049$201711030113$        $",
+    "duration": "PT2H9M",
+    "checksum": "EB4BF07C_4"
+  }, {
+    "ServiceDays": [{
+      "planningPeriodBegin": "2017-11-02",
+      "planningPeriodEnd": "2017-12-17",
+      "sDaysR": "nicht täglich",
+      "sDaysI": "3., 6. Nov, 27. Nov bis 1. Dez 2017, 4. bis 8. Dez 2017",
+      "sDaysB": "4800007CF800"
+    }],
+    "LegList": {
+      "Leg": [{
+        "Origin": {
+          "name": "Segersäng",
+          "type": "ST",
+          "id": "A=1@O=Segersäng@X=17926109@Y=59028152@U=74@L=400106211@",
+          "extId": "400106211",
+          "lon": 17.926109,
+          "lat": 59.028152,
+          "prognosisType": "PROGNOSED",
+          "time": "00:04:00",
+          "date": "2017-11-03",
+          "track": "2",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Segersäng (Nynäshamn)@X=17926783@Y=59028647@U=74@L=300109724@",
+          "mainMastExtId": "300109724"
+        },
+        "Destination": {
+          "name": "Stockholm City",
+          "type": "ST",
+          "id": "A=1@O=Stockholm City@X=18059500@Y=59331143@U=74@L=400105313@",
+          "extId": "400105313",
+          "lon": 18.0595,
+          "lat": 59.331143,
+          "prognosisType": "PROGNOSED",
+          "time": "00:56:00",
+          "date": "2017-11-03",
+          "track": "4",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|11658|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "PENDELTÅG  35",
+          "num": "12880",
+          "line": "35",
+          "catOut": "TRAIN   ",
+          "catIn": "TRN",
+          "catCode": "0",
+          "catOutS": "TRN",
+          "catOutL": "PENDELTÅG ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "105035"
+        },
+        "idx": "0",
+        "name": "PENDELTÅG  35",
+        "number": "12880",
+        "category": "TRN",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Stockholm City"
+      }, {
+        "Origin": {
+          "name": "Stockholm City",
+          "type": "ST",
+          "id": "A=1@O=Stockholm City@X=18059500@Y=59331143@U=74@L=400105313@",
+          "extId": "400105313",
+          "lon": 18.0595,
+          "lat": 59.331143,
+          "time": "00:57:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "Destination": {
+          "name": "Vattugatan",
+          "type": "ST",
+          "id": "A=1@O=Vattugatan@X=18061477@Y=59329884@U=74@L=400180200@",
+          "extId": "400180200",
+          "lon": 18.061477,
+          "lat": 59.329884,
+          "time": "01:05:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "idx": "1",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT8M",
+        "dist": 179,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Vattugatan",
+          "type": "ST",
+          "id": "A=1@O=Vattugatan@X=18061477@Y=59329884@U=74@L=400180200@",
+          "extId": "400180200",
+          "lon": 18.061477,
+          "lat": 59.329884,
+          "time": "01:05:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "Destination": {
+          "name": "Centralen (Vasagatan)",
+          "type": "ST",
+          "id": "A=1@O=Centralen (Vasagatan)@X=18059895@Y=59330082@U=74@L=400152307@",
+          "extId": "400152307",
+          "lon": 18.059895,
+          "lat": 59.330082,
+          "time": "01:15:00",
+          "date": "2017-11-03",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "idx": "2",
+        "name": "",
+        "type": "WALK",
+        "duration": "PT10M",
+        "dist": 92,
+        "hide": true
+      }, {
+        "Origin": {
+          "name": "Centralen (Vasagatan)",
+          "type": "ST",
+          "id": "A=1@O=Centralen (Vasagatan)@X=18059895@Y=59330082@U=74@L=400152307@",
+          "extId": "400152307",
+          "lon": 18.059895,
+          "lat": 59.330082,
+          "prognosisType": "PROGNOSED",
+          "time": "01:19:00",
+          "date": "2017-11-03",
+          "track": "D",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Centralen (Stockholm)@X=18057657@Y=59331134@U=74@L=300101002@",
+          "mainMastExtId": "300101002"
+        },
+        "Destination": {
+          "name": "Spånga station",
+          "type": "ST",
+          "id": "A=1@O=Spånga station@X=17898107@Y=59383217@U=74@L=400150080@",
+          "extId": "400150080",
+          "lon": 17.898107,
+          "lat": 59.383217,
+          "prognosisType": "PROGNOSED",
+          "time": "01:43:00",
+          "date": "2017-11-03",
+          "track": "A",
+          "hasMainMast": true,
+          "mainMastId": "A=1@O=Spånga (Stockholm)@X=17898934@Y=59382849@U=74@L=300109704@",
+          "mainMastExtId": "300109704"
+        },
+        "JourneyDetailRef": {
+          "ref": "1|40335|0|74|2112017"
+        },
+        "JourneyStatus": "P",
+        "Product": {
+          "name": "BUSS  591",
+          "num": "3",
+          "line": "591",
+          "catOut": "BUS     ",
+          "catIn": "BUS",
+          "catCode": "3",
+          "catOutS": "BUS",
+          "catOutL": "BUSS ",
+          "operatorCode": "SL",
+          "operator": "Storstockholms Lokaltrafik",
+          "admin": "101591"
+        },
+        "idx": "3",
+        "name": "BUSS  591",
+        "number": "3",
+        "category": "BUS",
+        "type": "JNY",
+        "reachable": true,
+        "direction": "Råby"
+      }]
+    },
+    "TariffResult": {
+      "fareSetItem": [{
+        "fareItem": [{
+          "name": "Reskassa",
+          "desc": "Helt pris",
+          "price": 3000,
+          "cur": "SEK"
+        }, {
+          "name": "Övriga försäljningsställen",
+          "desc": "Helt pris",
+          "price": 4300,
+          "cur": "SEK"
+        }, {
+          "name": "Konduktör på Djurgårds- och Roslagsbanan",
+          "desc": "Helt pris",
+          "price": 6000,
+          "cur": "SEK"
+        }, {
+          "name": "Reskassa",
+          "desc": "Reducerat pris",
+          "price": 2000,
+          "cur": "SEK"
+        }, {
+          "name": "Övriga försäljningsställen",
+          "desc": "Reducerat pris",
+          "price": 2900,
+          "cur": "SEK"
+        }, {
+          "name": "Konduktör på Djurgårds- och Roslagsbanan",
+          "desc": "Reducerat pris",
+          "price": 4000,
+          "cur": "SEK"
+        }],
+        "name": "ONEWAY",
+        "desc": "SL"
+      }]
+    },
+    "idx": 4,
+    "tripId": "C-4",
+    "ctxRecon": "T$A=1@O=Segersäng@L=400106211@a=128@$A=1@O=Stockholm City@L=400105313@a=128@$201711030004$201711030056$        $§W$A=1@O=Stockholm City@L=400105313@a=128@$A=1@O=Vattugatan@L=400180200@a=128@$201711030057$201711030105$$§W$A=1@O=Vattugatan@L=400180200@a=128@$A=1@O=Centralen (Vasagatan)@L=400152307@a=128@$201711030105$201711030115$$§T$A=1@O=Centralen (Vasagatan)@L=400152307@a=128@$A=1@O=Spånga station@L=400150080@a=128@$201711030119$201711030143$        $",
+    "duration": "PT1H39M",
+    "checksum": "46C64BF3_4"
+  }],
+  "serverVersion": "1.2",
+  "dialectVersion": "1.23",
+  "requestId": "1509652164096",
+  "scrB": "1|OB|MTµ11µ4144µ4144µ4211µ4211µ0µ0µ5µ4129µ1µ-2147483646µ0µ1µ2|PDHµ829bd4aacebef22fa76161940545b8e0",
+  "scrF": "1|OF|MTµ11µ4324µ4324µ4423µ4423µ0µ0µ285µ4265µ5µ-2147483646µ0µ1µ2|PDHµ829bd4aacebef22fa76161940545b8e0"
+}

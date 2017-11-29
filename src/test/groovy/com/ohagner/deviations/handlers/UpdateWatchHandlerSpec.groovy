@@ -1,7 +1,7 @@
 package com.ohagner.deviations.handlers
 
-import com.ohagner.deviations.api.watch.endpoint.UpdateWatchHandler
 import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.watch.endpoint.UpdateWatchHandler
 import com.ohagner.deviations.api.watch.repository.WatchRepository
 import ratpack.exec.Promise
 import ratpack.groovy.test.handling.GroovyRequestFixture
@@ -24,14 +24,6 @@ class UpdateWatchHandlerSpec extends Specification {
             1 * watchRepository.update(_) >> Promise.value(new Watch(id: 1l))
             result.status.'2xx'
             result.rendered(JsonRender).object.id == 1
-    }
-
-    void 'should fail when id does not match'() {
-        when:
-            def result = requestFixture.pathBinding(["id":"999"]).handle(handler)
-        then:
-            0 * watchRepository.update(_)
-            result.status.'5xx'
     }
 
     void 'should handle repository exception'() {

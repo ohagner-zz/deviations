@@ -26,7 +26,8 @@ class UpdateWatchHandler extends GroovyHandler {
             request.body.flatMap { body ->
                 log.debug "Updating watch with ${body.text}"
                 Watch watchToUpdate = Watch.fromJson(body.text)
-                assert watchToUpdate.id == watchId
+                watchToUpdate.id = watchId
+                //TODO: Maybe update should take a watchId so Watch can be immutable
                 watchRepository.update(watchToUpdate)
             }.onError { t ->
                 log.error("Failed to update watch", t)

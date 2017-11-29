@@ -36,9 +36,9 @@ class HttpDeviationRepositorySpec extends Specification {
                         .replaceAll('<IN_ONE_HOUR>', inOneHour)
             wireMockRule.stubFor(get(anyUrl())
                     .willReturn(aResponse()
-                    .withHeader("Content-Type", "application/json")
-                    .withBody(mockedBackendResponse)
-                    .withStatus(200)))
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(mockedBackendResponse)
+                        .withStatus(200)))
         expect:
             List<Deviation> allDeviations = execHarness.yieldSingle {
                 repository.retrieveAll()

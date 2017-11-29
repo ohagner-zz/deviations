@@ -28,4 +28,5 @@ final class Constants {
         public static final String SHORT_DATE_FORMAT = "yyyy-MM-dd"
         public static final String TIME_FORMAT = "HH:mm"
     }
+
 }

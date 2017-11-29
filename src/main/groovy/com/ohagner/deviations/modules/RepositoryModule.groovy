@@ -27,7 +27,7 @@ class RepositoryModule extends AbstractModule {
     }
 
     @Provides
-//    @CompileStatic
+    @CompileStatic
     @Singleton
     UserRepository provideUserRepository() {
         try {
@@ -62,9 +62,6 @@ class RepositoryModule extends AbstractModule {
     @CompileStatic
     private MongoDatabase connectToDatabase(MongoConfig mongoConfig) {
         log.info "Initializing DB with connection to host: ${mongoConfig.host}"
-//        MongoCredential credential = MongoCredential.createCredential(mongoConfig.username, mongoConfig.userDatabaseName, mongoConfig.password as char[])
-//        ServerAddress serverAddress = new ServerAddress(mongoConfig.host, mongoConfig.port)
-//        MongoClient mongoClient = new MongoClient(serverAddress, [credential])
         MongoClient mongoClient = MongoClients.create("mongodb://${mongoConfig.username}:${mongoConfig.password}@${mongoConfig.host}:${mongoConfig.port}/${mongoConfig.userDatabaseName}")
         return mongoClient.getDatabase(mongoConfig.databaseName)
     }

@@ -1,11 +1,11 @@
 package com.ohagner.deviations.domain
 
-import com.ohagner.deviations.api.deviation.domain.Deviation
+import com.ohagner.deviations.api.transport.domain.Transport
+import com.ohagner.deviations.api.transport.domain.TransportMode
 import com.ohagner.deviations.api.watch.domain.Watch
 import com.ohagner.deviations.api.watch.domain.schedule.Schedule
 import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.api.watch.domain.schedule.WeeklySchedule
-import com.ohagner.deviations.api.transport.domain.Transport
 import net.javacrumbs.jsonunit.core.Option
 import spock.lang.Specification
 
@@ -17,9 +17,8 @@ import static com.ohagner.deviations.api.notification.domain.NotificationType.*
 import static groovy.util.GroovyTestCase.assertEquals
 import static java.time.DayOfWeek.FRIDAY
 import static java.time.DayOfWeek.MONDAY
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static org.hamcrest.MatcherAssert.assertThat
-import static net.javacrumbs.jsonunit.JsonMatchers.*
-
 
 class WatchSpec extends Specification {
 
@@ -77,7 +76,7 @@ class WatchSpec extends Specification {
     private Watch createWeeklyScheduleWatch() {
         Schedule schedule = new WeeklySchedule(weekDays: MONDAY..FRIDAY, timeOfEvent: LocalTime.of(10,45))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
-        List<Transport> transports = [new Transport(line:"35", transportMode: Deviation.TransportMode.TRAIN), new Transport(line:"807B", transportMode: Deviation.TransportMode.BUS)]
+        List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
         return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [SLACK, EMAIL, LOG, WEBHOOK], created: date, lastProcessed: date, transports: transports)
     }
 
@@ -85,7 +84,7 @@ class WatchSpec extends Specification {
         Schedule schedule = new SingleOccurrence(dateOfEvent: LocalDate.of(2016,10,10), timeOfEvent: LocalTime.of(10,10))
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         Queue<String> processedDeviationIds = new LinkedList(["1", "2"])
-        List<Transport> transports = [new Transport(line:"35", transportMode: Deviation.TransportMode.TRAIN), new Transport(line:"807B", transportMode: Deviation.TransportMode.BUS)]
+        List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
         return new Watch(id:99,name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports, processedDeviationIds: processedDeviationIds )
     }
 

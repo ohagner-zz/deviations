@@ -12,7 +12,9 @@ import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import static com.github.tomakehurst.wiremock.client.WireMock.anyUrl
@@ -41,7 +43,7 @@ class HttpJourneyRepositorySpec extends Specification {
                     .withHeader("Content-Type", "application/json")
                     .withBody(mockedBackendResponse)
                     .withStatus(200)))
-            JourneySearch journeySearch = new JourneySearch(origin: new Stop(externalId: "1234"), destination: new Stop(externalId: "2345"), from: LocalDateTime.now(), to: LocalDateTime.now())
+            JourneySearch journeySearch = new JourneySearch(origin: new Stop(id: "1234"), destination: new Stop(id: "2345"), date: LocalDate.now(), time: LocalTime.now(), timeRelatesTo:  JourneySearch.TimeSearchType.EARLIEST_DEPARTURE)
         expect:
             ExecResult<List<Journey>> result = execHarness.yieldSingle {
                 repository.search(journeySearch)

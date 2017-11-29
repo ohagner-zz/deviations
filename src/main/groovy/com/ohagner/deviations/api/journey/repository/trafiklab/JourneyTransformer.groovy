@@ -17,15 +17,17 @@ class JourneyTransformer {
         def journeys = []
         jsonResponse.Trip.each { trip ->
             Journey journey = new Journey()
-            journey.origin = new Stop(name: "Segersäng")
-            journey.destination = new Stop(name: "Spånga")
-            trip.LegList.Leg.each { leg ->
-                Leg journeyLeg = new Leg(origin: new Stop(name: leg.Origin.name), destination: new Stop(name: leg.Destination.name))
-                journeyLeg.transport = new Transport(transportMode: TransportMode.valueOf(leg.Product.catOut.trim()), line: leg.Product.line)
-                journeyLeg.departure = LocalDateTime.parse("${leg.Origin.date}T${leg.Origin.time}", DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                journeyLeg.arrival = LocalDateTime.parse("${leg.Destination.date}T${leg.Destination.time}", DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                journey.legs.add(journeyLeg)
-            }
+            journey.origin = new Stop(name: trip.LegList.Leg[0].Origin.name)
+            journey.destination = new Stop(name: trip.LegList.Leg[-1].Destination.name)
+            trip.LegList.Leg
+                .findAll { leg -> leg.Product }
+                .each { leg ->
+                    Leg journeyLeg = new Leg(origin: new Stop(name: leg.Origin.name), destination: new Stop(name: leg.Destination.name))
+                    journeyLeg.transport = new Transport(transportMode: TransportMode.valueOf(leg.Product.catOut.trim()), line: leg.Product.line)
+                    journeyLeg.departure = LocalDateTime.parse("${leg.Origin.date}T${leg.Origin.time}", DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    journeyLeg.arrival = LocalDateTime.parse("${leg.Destination.date}T${leg.Destination.time}", DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    journey.legs.add(journeyLeg)
+                }
             journey.departure = journey.legs[0].departure
             journey.arrival = journey.legs[-1].arrival
             journeys.add(journey)

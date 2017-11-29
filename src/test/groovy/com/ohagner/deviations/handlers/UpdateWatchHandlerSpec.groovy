@@ -1,7 +1,7 @@
 package com.ohagner.deviations.handlers
 
-import com.ohagner.deviations.api.watch.endpoint.UpdateWatchHandler
 import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.watch.endpoint.UpdateWatchHandler
 import com.ohagner.deviations.api.watch.repository.WatchRepository
 import ratpack.exec.Promise
 import ratpack.groovy.test.handling.GroovyRequestFixture

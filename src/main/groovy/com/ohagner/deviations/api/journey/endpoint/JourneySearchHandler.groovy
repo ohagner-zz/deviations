@@ -1,7 +1,5 @@
 package com.ohagner.deviations.api.journey.endpoint
 
-import com.google.inject.Inject
-import com.ohagner.deviations.api.journey.domain.Journey
 import com.ohagner.deviations.api.journey.domain.JourneySearch
 import com.ohagner.deviations.api.journey.repository.JourneyRepository
 import groovy.util.logging.Slf4j
@@ -14,7 +12,6 @@ class JourneySearchHandler extends GroovyHandler {
 
     JourneyRepository journeyRepository
 
-    @Inject
     JourneySearchHandler(JourneyRepository journeyRepository) {
         this.journeyRepository = journeyRepository
     }
@@ -22,9 +19,12 @@ class JourneySearchHandler extends GroovyHandler {
     @Override
     protected void handle(GroovyContext context) {
         context.with {
-            //parse(JourneySearch.class).flatMap { journeySearch ->
-            request.body.flatMap { body ->
-                journeyRepository.search(new JourneySearch())
+            parse(JourneySearch.class).flatMap { journeySearch ->
+                journeyRepository.search(journeySearch)
+            }.onError { Throwable t ->
+                log.error("Failed to search for journey", t)
+                response.status 500
+                render Jackson.json([message: "Journey search failed"])
             }.then { journeys ->
                 render Jackson.json(journeys)
             }

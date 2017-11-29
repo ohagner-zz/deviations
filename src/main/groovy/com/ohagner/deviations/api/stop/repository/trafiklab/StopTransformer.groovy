@@ -9,7 +9,7 @@ class StopTransformer {
         def response = new JsonSlurper().parseText(stopResponseJsonString)
         List<Stop> stopList = []
         response.ResponseData.each { externalStop ->
-            stopList.add(new Stop(externalId: externalStop.SiteId, name: externalStop.Name))
+            stopList.add(new Stop(id: externalStop.SiteId, name: externalStop.Name))
         }
         return stopList
     }

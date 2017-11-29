@@ -4,6 +4,8 @@ import com.ohagner.deviations.api.deviation.endpoint.DeviationCheckHandler
 import com.ohagner.deviations.api.deviation.endpoint.DeviationsChain
 import com.ohagner.deviations.api.deviation.module.DeviationsModule
 import com.ohagner.deviations.api.error.DefaultServerErrorHandler
+import com.ohagner.deviations.api.journey.module.JourneyModule
+import com.ohagner.deviations.api.journey.router.JourneyChain
 import com.ohagner.deviations.api.notification.endpoint.SendNotificationHandler
 import com.ohagner.deviations.api.notification.module.NotificationsModule
 import com.ohagner.deviations.api.stop.module.StopsModule
@@ -58,10 +60,12 @@ ratpack {
         module MessagingModule
         module NotificationsModule
         module ServiceModule
+        module JourneyModule
         add new AdminChain()
         add new ApiChain()
         add new WebChain()
         bind DeviationsChain
+        bind JourneyChain
         bind DefaultAuthenticationService
         bind UserRenderer
         bind JobScheduler

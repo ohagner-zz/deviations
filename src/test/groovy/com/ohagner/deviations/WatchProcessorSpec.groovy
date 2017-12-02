@@ -1,20 +1,20 @@
 package com.ohagner.deviations
 
-import com.ohagner.deviations.api.deviation.service.DeviationMatcher
 import com.ohagner.deviations.api.deviation.domain.Deviation
-import com.ohagner.deviations.api.transport.domain.Transport
-
-import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.deviation.service.DeviationMatcher
 import com.ohagner.deviations.api.notification.domain.NotificationType
-import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
-import com.ohagner.deviations.worker.watch.service.WatchProcessor
+import com.ohagner.deviations.api.transport.domain.Transport
+import com.ohagner.deviations.api.watch.domain.Watch
+import com.ohagner.deviations.api.watch.domain.schedule.WeeklySchedule
 import com.ohagner.deviations.worker.api.service.DeviationsApiClient
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingStatus
+import com.ohagner.deviations.worker.watch.service.WatchProcessor
 import groovy.util.logging.Slf4j
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -45,19 +45,6 @@ class WatchProcessorSpec extends Specification {
             1 * client.update(_) >> true
             assert result.status == WatchProcessingStatus.NOTIFIED
             assert result.matchingDeviations.size() == 1
-    }
-
-    def 'should not be time to check'() {
-        given:
-            def matchingWatch = createMatching()
-             matchingWatch.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).minusMinutes(5), dateOfEvent: LocalDate.now(ZONE_ID))
-        when:
-            WatchProcessingResult result = watchProcessor.process(matchingWatch)
-        then:
-            0 * client.sendNotifications(_,_)
-            1 * client.update(_) >> true
-            assert result.status == WatchProcessingStatus.NOT_TIME_TO_CHECK
-            assert result.matchingDeviations.size() == 0
     }
 
     def 'should not match deviations'() {
@@ -113,14 +100,18 @@ class WatchProcessorSpec extends Specification {
 
 
     private Watch createMatching() {
+        DayOfWeek today = LocalDate.now().dayOfWeek
+        LocalTime inFiveMinutes = LocalTime.now().plusMinutes(5)
         def matching = new Watch(name: "matching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "35", transportMode: TransportMode.BUS)])
-        matching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5), dateOfEvent: LocalDate.now(ZONE_ID))
+        matching.schedule = new WeeklySchedule(timeOfEvent: inFiveMinutes, weekDays: [today])
         return matching
     }
 
     private Watch createNonMatching() {
+        DayOfWeek tomorrow = LocalDate.now().plusDays(1).dayOfWeek
+        LocalTime now = LocalTime.now()
         def nonMatching = new Watch(name: "nonMatching", notifyMaxHoursBefore: 1, notifyBy: [NotificationType.LOG], transports: [new Transport(line: "99", transportMode: TransportMode.TRAIN)])
-        nonMatching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5l), dateOfEvent: LocalDate.now(ZONE_ID))
+        nonMatching.schedule = new WeeklySchedule(timeOfEvent: now, weekDays: [tomorrow])
         return nonMatching
     }
 

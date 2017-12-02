@@ -3,7 +3,6 @@ title: title,
 msg: msg,
 user: user,
 weeklyWatches: weeklyWatches,
-singleOccurrenceWatches: singleOccurrenceWatches,
 bodyContents: contents {
     if (username) {
         p(class: "navbar-text navbar-right") {
@@ -44,38 +43,4 @@ bodyContents: contents {
         }
     }
 
-    h2('Bevakningar för enkelresor')
-    if(singleOccurrenceWatches) {
-        table(class: "table table-striped") {
-            thead {
-                tr {
-                    ['Namn', 'Avresetid', 'Avresedag', 'Transportsätt', 'Starta bevakning'].each {
-                        th(it)
-                    }
-                }
-            }
-            tbody {
-                singleOccurrenceWatches.each { watch ->
-                    tr {
-                        td(watch.name)
-                        td(watch.schedule.timeOfEvent)
-                        td(watch.schedule.dateOfEvent)
-                        td {
-                            watch.transports.each {
-                                yield "$it.transportMode: $it.line\n"
-                            }
-                        }
-                        td("${watch.notifyMaxHoursBefore}h innan avresetid")
-                        td {
-                            form(action: "/watches/delete/${watch.id}", method: 'post', style: 'display: inline') {
-                                input(type: "submit", name: "delete", value: "Radera", class: "btn btn-danger ", '')
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        p('Inga enkelresor funna')
-    }
 }

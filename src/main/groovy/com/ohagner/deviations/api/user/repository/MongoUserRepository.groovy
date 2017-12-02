@@ -61,9 +61,10 @@ class MongoUserRepository implements UserRepository {
     }
 
     Promise<User> delete(User user) {
-        deleteOne(eq('credentials.username', user.credentials.username)).map { Document userDocument ->
-            User.fromJson(userDocument.toJson())
-        }
+        deleteOne(eq('credentials.username', user.credentials.username))
+            .map { Document userDocument ->
+                User.fromJson(userDocument.toJson())
+            }
 
     }
 
@@ -196,7 +197,7 @@ class MongoUserRepository implements UserRepository {
                     if(t) {
                         down.error(t)
                     }
-                    log.info "Deleted ${result.dump()}"
+                    log.debug "Deleted ${result.dump()}"
                     down.success(result)
                 }
             })

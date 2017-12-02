@@ -16,6 +16,7 @@ import static ratpack.jackson.Jackson.json
 class AdminChain extends GroovyChainAction {
     @Override
     void execute() throws Exception {
+
         post("users/:username/notification", SendNotificationHandler)
 
         //TODO: Move to handler

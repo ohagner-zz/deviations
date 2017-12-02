@@ -4,12 +4,10 @@ import com.ohagner.deviations.api.transport.domain.Transport
 import com.ohagner.deviations.api.transport.domain.TransportMode
 import com.ohagner.deviations.api.watch.domain.Watch
 import com.ohagner.deviations.api.watch.domain.schedule.Schedule
-import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
 import com.ohagner.deviations.api.watch.domain.schedule.WeeklySchedule
 import net.javacrumbs.jsonunit.core.Option
 import spock.lang.Specification
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -38,22 +36,6 @@ class WatchSpec extends Specification {
             assertEquals(watch, expected)
     }
 
-    def 'transform watch with single occurrence schedule to json'() {
-        given:
-            Watch watch = createSingleOccurrenceWatch()
-        expect:
-            String expected = new File("src/test/resources/watches/singleOccurrenceWatch.json").text
-            assertThat(watch.toJson(), jsonEquals(expected).when(Option.IGNORING_ARRAY_ORDER))
-    }
-
-    def 'transform single occurrence schedule watch json to object'() {
-        given:
-            Watch watch = Watch.fromJson(new File("src/test/resources/watches/singleOccurrenceWatch.json").text)
-        expect:
-            Watch expected = createSingleOccurrenceWatch()
-            assertEquals(watch, expected)
-    }
-
     def 'assert processed deviations queue behaviour'() {
         given:
             Watch watch = new Watch()
@@ -78,14 +60,6 @@ class WatchSpec extends Specification {
         LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
         List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
         return new Watch(name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [SLACK, EMAIL, LOG, WEBHOOK], created: date, lastProcessed: date, transports: transports)
-    }
-
-    private Watch createSingleOccurrenceWatch() {
-        Schedule schedule = new SingleOccurrence(dateOfEvent: LocalDate.of(2016,10,10), timeOfEvent: LocalTime.of(10,10))
-        LocalDateTime date = LocalDateTime.of(2016,10,10, 10, 10)
-        Queue<String> processedDeviationIds = new LinkedList(["1", "2"])
-        List<Transport> transports = [new Transport(line:"35", transportMode: TransportMode.TRAIN), new Transport(line:"807B", transportMode: TransportMode.BUS)]
-        return new Watch(id:99,name:"name", username: "username", notifyMaxHoursBefore: 2, schedule: schedule, notifyBy: [EMAIL, LOG], created: date, lastProcessed: date, transports: transports, processedDeviationIds: processedDeviationIds )
     }
 
 }

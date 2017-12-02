@@ -52,8 +52,7 @@ class WebChain extends GroovyChainAction {
                         }
                         httpClient.post(publicAddress.get("api/authenticate")) { request ->
                             request.body.text(loginRequest)
-                        }
-                        .map { ReceivedResponse response ->
+                        }.map { ReceivedResponse response ->
                             log.info("Response status: ${response.statusCode}, body: ${response.getBody().getText(Charsets.UTF_8)}")
                             response
                         }.mapError { t ->
@@ -63,6 +62,7 @@ class WebChain extends GroovyChainAction {
                             if (response.statusCode ==~ /2\d\d/) {
                                 def json = new JsonSlurper().parseText(response.body.getText(Charsets.UTF_8))
                                 log.info "Setting user ${json.credentials.username} in session"
+                                //TODO: Webuser here
                                 def user = [username : json.credentials.username,
                                             firstName: json.firstName,
                                             lastName: json.lastName,
@@ -248,48 +248,6 @@ class WebChain extends GroovyChainAction {
                     }
                 }
             }
-            path("single") { HttpClient httpClient, PublicAddress publicAddress, WebUser webUser ->
-                byMethod {
-                    post {
-                        //Hämta användare här också
-                        log.info "Creating watch"
-                        parse(Form).then { form ->
-                            log.info "Form as json ${toJson(form)}"
-
-                            def watchRequest = JsonOutput.toJson {
-                                name form.name
-                                notifyMaxHoursBefore form.notifyMaxHoursBefore
-                                schedule {
-                                    dateOfEvent form.dateOfEvent
-                                    timeOfEvent form.timeOfEvent
-                                    type "SINGLE"
-                                }
-                                transports(WatchFormParser.getTransports(form))
-                                notifyBy(WatchFormParser.getNotificationTypes(form))
-                            }
-                            log.info "Created json: ${JsonOutput.prettyPrint(watchRequest)}"
-                            httpClient.post(publicAddress.get("api/users/${webUser.username}/watches")) { request ->
-                                request.headers.add(USER_TOKEN, webUser.apiToken)
-                                request.body.text(watchRequest)
-                            }
-                            .map { response ->
-                                log.info(response.getBody().getText(Charsets.UTF_8))
-                            }.mapError { t ->
-                                log.error("Something went wrong", t)
-                                redirect "/watch/create/single?msg=Failed+to+create+watch"
-                            }.then {
-                                redirect "/watches?msg=Watch+created"
-                            }
-                        }
-                    }
-                    get {
-                        render groovyMarkupTemplate("single-watch-create.gtpl",
-                                msg: request.queryParams.msg ?: "",
-                                user: webUser,
-                                title: "Skapa bevakning")
-                    }
-                }
-            }
 
         }
         prefix("watches") {
@@ -325,15 +283,13 @@ class WebChain extends GroovyChainAction {
                     log.info "Response: ${response?.body?.text}"
                     def json = new JsonSlurper().parseText(response.body.text)
                     def weeklyWatches = json.findAll { it.schedule.type == 'WEEKLY' }
-                    def singleOccurrenceWatches = json.findAll { it.schedule.type == 'SINGLE' }
                     log.info "weekly watches size: ${weeklyWatches.size()}"
                     render groovyMarkupTemplate("list-watches.gtpl",
                             title: "Bevakningslista",
                             username: "",
                             user: [username: webUser.username],
                             msg: request.queryParams.msg ?: "",
-                            weeklyWatches: weeklyWatches,
-                            singleOccurrenceWatches: singleOccurrenceWatches)
+                            weeklyWatches: weeklyWatches)
                 }
 
             }
@@ -362,9 +318,6 @@ class WebChain extends GroovyChainAction {
         }
         get("metrics") {
             render groovyMarkupTemplate("metrics.gtpl", title: "Metrics")
-        }
-        get("stops") {
-            render groovyMarkupTemplate("stops.gtpl", title: "Stops")
         }
     }
 

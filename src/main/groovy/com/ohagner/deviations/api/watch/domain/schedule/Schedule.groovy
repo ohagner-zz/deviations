@@ -13,7 +13,6 @@ import java.time.LocalDateTime
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes([
-        @JsonSubTypes.Type(value = SingleOccurrence.class, name = "SINGLE"),
         @JsonSubTypes.Type(value = WeeklySchedule.class, name = "WEEKLY")
 ])
 @Slf4j
@@ -30,8 +29,6 @@ class Schedule {
 
         if(schedule.type == 'WEEKLY') {
             return mapper.readValue(json, WeeklySchedule.class)
-        } else if(schedule.type == 'SINGLE') {
-            return mapper.readValue(json, SingleOccurrence.class)
         } else {
             throw new IllegalArgumentException("Invalid schedule type")
         }

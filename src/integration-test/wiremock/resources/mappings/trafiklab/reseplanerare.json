@@ -1,0 +1,14 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPattern": "/api2/TravelplannerV3/trip.json.*"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "trafiklab/reseplanerarResponse.json",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "fixedDelayMilliseconds": 16
+    }
+}

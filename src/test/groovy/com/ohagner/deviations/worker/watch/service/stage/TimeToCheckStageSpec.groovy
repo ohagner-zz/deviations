@@ -1,7 +1,7 @@
 package com.ohagner.deviations.worker.watch.service.stage
 
 import com.ohagner.deviations.api.watch.domain.Watch
-import com.ohagner.deviations.api.watch.domain.schedule.SingleOccurrence
+import com.ohagner.deviations.api.watch.domain.schedule.WeeklySchedule
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingData
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingResult
 import com.ohagner.deviations.worker.watch.domain.WatchProcessingStatus
@@ -36,13 +36,13 @@ class TimeToCheckStageSpec extends Specification {
 
     private Watch timeToCheckWatch() {
         def matching = new Watch(name: "matching", notifyMaxHoursBefore: 1)
-        matching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5), dateOfEvent: LocalDate.now(ZONE_ID))
+        matching.schedule = new WeeklySchedule(timeOfEvent: LocalTime.now(ZONE_ID).plusMinutes(5), weekDays: [LocalDate.now(ZONE_ID).dayOfWeek])
         return matching
     }
 
     private Watch notTimeToCheckWatch() {
         def nonMatching = new Watch(name: "nonMatching", notifyMaxHoursBefore: 1)
-        nonMatching.schedule = new SingleOccurrence(timeOfEvent: LocalTime.now(ZONE_ID).plusHours(2), dateOfEvent: LocalDate.now(ZONE_ID))
+        nonMatching.schedule = new WeeklySchedule(timeOfEvent: LocalTime.now(ZONE_ID).plusHours(2), weekDays: [LocalDate.now(ZONE_ID).dayOfWeek])
         return nonMatching
     }
 
